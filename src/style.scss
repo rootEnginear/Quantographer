@@ -1,0 +1,136 @@
+body {
+	overflow: hidden;
+
+	font-family: 'IBM Plex Sans', sans-serif;
+	line-height: 1.17;
+	letter-spacing: 0.7px;
+
+	width: 100vw;
+	height: 100vh;
+}
+
+#app {
+	display: flex;
+	flex-direction: column;
+
+	height: 100%;
+	width: 100%;
+}
+
+.u {
+	text-decoration: underline;
+}
+
+.menu-bar {
+	width: 100%;
+	height: 48px;
+
+	background: linear-gradient(90deg, #0061ff 0%, #8a3ffc 100%), #0061ff;
+
+	display: flex;
+
+	padding: 0 16px 0 4px;
+
+	color: #ffffff;
+
+	> .left {
+		flex: 1 1 0;
+
+		display: flex;
+		list-style: none;
+
+		display: flex;
+
+		margin: 0;
+
+		> li {
+			display: flex;
+			align-items: center;
+
+			cursor: default;
+
+			padding: 0 12px;
+
+			&:hover {
+				background: rgba(255, 255, 255, 0.25);
+			}
+		}
+	}
+
+	> .center {
+		display: flex;
+		align-items: center;
+		justify-content: center;
+	}
+
+	> .right {
+		flex: 1 1 0;
+
+		display: flex;
+		align-items: center;
+		justify-content: flex-end;
+	}
+}
+
+.toolbar {
+	width: 100%;
+	height: 48px;
+
+	border-bottom: 2px #0061ff solid;
+
+	background: linear-gradient(90deg, rgba(255, 255, 255, 0) 0%, rgba(255, 255, 255, 0.5) 100%),
+		#f2f7ff;
+
+	display: flex;
+	align-items: stretch;
+	gap: 8px;
+
+	padding: 8px 16px;
+}
+
+.toolbar-separator {
+	width: 2px;
+	background: #0061ff;
+	border-radius: 2px;
+}
+
+.toolbar-btn {
+	appearance: none;
+	box-sizing: border-box;
+
+	background: #ffffff;
+	border: 3px solid #0061ff;
+	border-radius: 6px;
+
+	color: #0061ff;
+	font-weight: 600;
+	font-size: 1rem;
+	line-height: 1;
+
+	display: flex;
+	align-items: center;
+	justify-content: center;
+
+	aspect-ratio: 1;
+
+	&.ghost {
+		background: transparent;
+		border: none;
+		font-size: 1.5rem;
+	}
+}
+
+.workspace {
+	flex: 1 1 0;
+}
+
+.status-bar {
+	background: #f2f7ff;
+	border-top: 2px solid #0061ff;
+
+	height: 32px;
+	padding: 4px 16px;
+
+	display: flex;
+	align-items: center;
+}

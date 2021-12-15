@@ -1,0 +1,22 @@
+{
+	"name": "quantographer",
+	"version": "0.0.0",
+	"scripts": {
+		"dev": "vite",
+		"build": "tsc && vite build",
+		"preview": "vite preview"
+	},
+	"dependencies": {},
+	"devDependencies": {
+		"sass": "^1.45.0",
+		"typescript": "^4.4.4",
+		"vite": "^2.7.2"
+	},
+	"repository": "https://github.com/rootEnginear/Quantographer.git",
+	"contributors": [
+		"rootEnginear <suthep.chanchuphol@outlook.com>",
+		"casperx",
+		"shalulian"
+	],
+	"license": "GPL-3.0-only"
+}
