@@ -125,10 +125,12 @@ body {
 
 .workspace {
 	flex: 1 1 0;
+	min-height: 0;
 }
 
-#circuit-canvas {
-	width: 100%;
+.overflow {
+	overflow: auto;
+	height: 100%;
 }
 
 .status-bar {

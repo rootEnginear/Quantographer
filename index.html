@@ -8,7 +8,7 @@
 
   <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/reseter.css" />
   <link rel="stylesheet" href="https://unicons.iconscout.com/release/v4.0.0/css/line.css">
-  <link rel="stylesheet" href="/src/style.scss">
+  <link rel="stylesheet" href="src/style.scss">
 
   <title>Untitled1 &mdash; Quantographer</title>
 </head>
@@ -49,7 +49,11 @@
       <button class="toolbar-btn gate" draggable="true">RX</button>
       <button class="toolbar-btn gate" draggable="true">U<sub>3</sub></button>
     </div>
-    <div class="workspace"><canvas id="circuit-canvas"></canvas></div>
+    <div class="workspace">
+      <div class="overflow">
+        <canvas id="circuit-canvas"></canvas>
+      </div>
+    </div>
     <div class="status-bar">
       Ready
     </div>
