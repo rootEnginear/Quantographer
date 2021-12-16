@@ -8,6 +8,7 @@
 
   <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/reseter.css" />
   <link rel="stylesheet" href="https://unicons.iconscout.com/release/v4.0.0/css/line.css">
+  <link rel="stylesheet" href="/src/style.scss">
 
   <title>Untitled1 &mdash; Quantographer</title>
 </head>
@@ -38,17 +39,17 @@
       <div class="toolbar-btn ghost"><i class="uil uil-upload"></i></div>
     </div>
     <div class="toolbar">
-      <button class="toolbar-btn">Z</button>
-      <button class="toolbar-btn">Y</button>
-      <button class="toolbar-btn">X</button>
-      <button class="toolbar-btn">H</button>
+      <button class="toolbar-btn gate" draggable="true">Z</button>
+      <button class="toolbar-btn gate" draggable="true">Y</button>
+      <button class="toolbar-btn gate" draggable="true">X</button>
+      <button class="toolbar-btn gate" draggable="true">H</button>
       <div class="toolbar-separator"></div>
-      <button class="toolbar-btn">RZ</button>
-      <button class="toolbar-btn">RY</button>
-      <button class="toolbar-btn">RX</button>
-      <button class="toolbar-btn">U<sub>3</sub></button>
+      <button class="toolbar-btn gate" draggable="true">RZ</button>
+      <button class="toolbar-btn gate" draggable="true">RY</button>
+      <button class="toolbar-btn gate" draggable="true">RX</button>
+      <button class="toolbar-btn gate" draggable="true">U<sub>3</sub></button>
     </div>
-    <div class="workspace">Workspace area</div>
+    <div class="workspace"><canvas id="circuit-canvas"></canvas></div>
     <div class="status-bar">
       Ready
     </div>
