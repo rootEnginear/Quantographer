@@ -29,7 +29,7 @@ body {
 
 	display: flex;
 
-	padding: 0 16px 0 4px;
+	padding: 0 16px 0 0;
 
 	color: #ffffff;
 
@@ -85,7 +85,7 @@ body {
 	align-items: stretch;
 	gap: 8px;
 
-	padding: 8px 16px;
+	padding: 8px 12px;
 }
 
 .toolbar-separator {
@@ -111,7 +111,10 @@ body {
 	align-items: center;
 	justify-content: center;
 
-	aspect-ratio: 1;
+	aspect-ratio: 1/1;
+	padding: 0;
+
+	height: 100%;
 
 	&.ghost {
 		background: transparent;
@@ -122,10 +125,12 @@ body {
 
 .workspace {
 	flex: 1 1 0;
+	min-height: 0;
 }
 
-#circuit-canvas {
-	width: 100%;
+.overflow {
+	overflow: auto;
+	height: 100%;
 }
 
 .status-bar {
@@ -133,7 +138,7 @@ body {
 	border-top: 2px solid #0061ff;
 
 	height: 32px;
-	padding: 4px 16px;
+	padding: 4px 12px;
 
 	display: flex;
 	align-items: center;

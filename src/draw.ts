@@ -63,7 +63,7 @@ const roundRect = (
 }
 
 export const updateSize = () => {
-  const {width, height} = canvasElement.getBoundingClientRect()
+  const {width, height} = canvasElement.parentElement!.getBoundingClientRect()
   canvasElement.width = width
   canvasElement.height = height
 }
