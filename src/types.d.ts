@@ -28,7 +28,7 @@ type ControlGate = {
 
 type MeasureGate = {
   type: 'm'
-  bit: number
+  assign: number
 }
 
 type BarrierGate = {

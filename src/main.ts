@@ -1,25 +1,38 @@
 import {gateButtons, canvasElement} from './element'
-import {findTarget, drawCircuit, updateSize, clearCanvas, drawHighlight} from './draw'
+import {drawCanvas, clearCanvas, updateSize} from './render'
 
 window.addEventListener(
   'resize',
   () => {
     updateSize()
-    drawCircuit()
+    clearCanvas()
+    drawCanvas()
   }
 )
 
-updateSize()
-drawCircuit()
+document.fonts.addEventListener(
+  'loadingdone',
+  () => {
+    updateSize()
+    clearCanvas()
+    drawCanvas()
+  }
+)
 
 for (const gateButton of gateButtons)
   gateButton.addEventListener(
     'dragstart',
     (e) => {
       const {target, dataTransfer} = e
+
       const node = target as Node
       const transfer = dataTransfer as DataTransfer
-      transfer.setData('text/plain', node.textContent ?? 'what')
+
+      const data =  node.textContent ?? '?'
+
+      transfer.setData('text/plain', data)
+
+      console.log('dragstart', data)
     }
   )
 
@@ -27,12 +40,8 @@ canvasElement.addEventListener(
   'dragover',
   (e) => {
     e.preventDefault()
-    const target = findTarget(e.offsetX, e.offsetY)
-    clearCanvas()
-    drawCircuit()
-    if (target === undefined) return
-    const [track, layer] = target
-    drawHighlight(track, layer)
+
+    console.log('dragover', e.offsetX, e.offsetY)
   }
 )
 
@@ -40,8 +49,11 @@ canvasElement.addEventListener(
   'drop',
   (e) => {
     e.preventDefault()
+
     const {dataTransfer} = e
     const transfer = dataTransfer as DataTransfer
     const data = transfer.getData('text/plain')
+
+    console.log('drop', data)
   }
 )
