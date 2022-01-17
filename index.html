@@ -17,14 +17,14 @@
   <div id="app">
     <div class="menu-bar">
       <ul class="left">
-        <li><span class="u">F</span>ile</li>
-        <li><span class="u">E</span>dit</li>
-        <li><span class="u">V</span>iew</li>
-        <li><span class="u">I</span>nsert</li>
-        <li>E<span class="u">x</span>ecute</li>
-        <li><span class="u">T</span>ools</li>
-        <li><span class="u">W</span>indows</li>
-        <li><span class="u">H</span>elp</li>
+        <li>File</li>
+        <li>Edit</li>
+        <li>View</li>
+        <li>Insert</li>
+        <li>Execute</li>
+        <li>Tools</li>
+        <li>Windows</li>
+        <li>Help</li>
       </ul>
       <div class="center">Untitled1 &mdash; Quantographer</div>
       <div class="right">
@@ -39,15 +39,55 @@
       <div class="toolbar-btn ghost"><i class="uil uil-upload"></i></div>
     </div>
     <div class="toolbar">
-      <button class="toolbar-btn gate" draggable="true">Z</button>
-      <button class="toolbar-btn gate" draggable="true">Y</button>
-      <button class="toolbar-btn gate" draggable="true">X</button>
-      <button class="toolbar-btn gate" draggable="true">H</button>
+      <button class="toolbar-btn gate" draggable="true"
+        data-title="Z Gate"
+        data-description="Lorem ipsum dolor sit amet."
+        data-gateid="z">
+        Z
+      </button>
+      <button class="toolbar-btn gate" draggable="true"
+        data-title="Y Gate"
+        data-description="Lorem ipsum dolor sit amet."
+        data-gateid="y">
+        Y
+      </button>
+      <button class="toolbar-btn gate" draggable="true"
+        data-title="X Gate"
+        data-description="Lorem ipsum dolor sit amet."
+        data-gateid="x">
+        X
+      </button>
+      <button class="toolbar-btn gate" draggable="true"
+        data-title="H Gate"
+        data-description="Lorem ipsum dolor sit amet."
+        data-gateid="h">
+        H
+      </button>
       <div class="toolbar-separator"></div>
-      <button class="toolbar-btn gate" draggable="true">RZ</button>
-      <button class="toolbar-btn gate" draggable="true">RY</button>
-      <button class="toolbar-btn gate" draggable="true">RX</button>
-      <button class="toolbar-btn gate" draggable="true">U<sub>3</sub></button>
+      <button class="toolbar-btn gate" draggable="true"
+        data-title="RZ Gate"
+        data-description="Lorem ipsum dolor sit amet."
+        data-gateid="rz">
+        RZ
+      </button>
+      <button class="toolbar-btn gate" draggable="true"
+        data-title="RY Gate"
+        data-description="Lorem ipsum dolor sit amet."
+        data-gateid="ry">
+        RY
+      </button>
+      <button class="toolbar-btn gate" draggable="true"
+        data-title="RX Gate"
+        data-description="Lorem ipsum dolor sit amet."
+        data-gateid="rx">
+        RX
+      </button>
+      <button class="toolbar-btn gate" draggable="true"
+        data-title="U3 Gate"
+        data-description="Lorem ipsum dolor sit amet."
+        data-gateid="u3">
+        U<sub>3</sub>
+      </button>
     </div>
     <div class="workspace">
       <div class="overflow">
@@ -58,6 +98,8 @@
       Ready
     </div>
   </div>
+
+  <div id="tooltip"></div>
 
   <script type="module" src="/src/main.ts"></script>
 </body>

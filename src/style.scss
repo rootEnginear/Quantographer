@@ -100,7 +100,7 @@ body {
 
 	background: #ffffff;
 	border: 3px solid #0061ff;
-	border-radius: 6px;
+	// border-radius: 6px;
 
 	color: #0061ff;
 	font-weight: 600;
@@ -142,4 +142,20 @@ body {
 
 	display: flex;
 	align-items: center;
+}
+
+#tooltip {
+	display: none;
+	position: absolute;
+
+	background: #f3f8ff;
+	border: 2px solid #0061ff;
+	box-sizing: border-box;
+	border-radius: 4px;
+
+	font-size: 0.8rem;
+
+	padding: 4px;
+
+	pointer-events: none;
 }

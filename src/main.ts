@@ -1,5 +1,6 @@
 import {gateButtons, canvasElement} from './element'
 import {findTarget, drawCircuit, updateSize, clearCanvas, drawHighlight} from './draw'
+import './tooltip'
 
 window.addEventListener(
   'resize',

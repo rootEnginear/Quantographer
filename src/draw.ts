@@ -129,23 +129,23 @@ export const drawCircuit = () => {
       trackCenterY
     )
 
-    for (let layerNum = 0; layerNum < 5; layerNum += 1) {
-      const layerStartX = trackLineX + gateBoxDistance + layerNum * (gateBoxWidth + gateBoxDistance)
+    // for (let layerNum = 0; layerNum < 5; layerNum += 1) {
+    //   const layerStartX = trackLineX + gateBoxDistance + layerNum * (gateBoxWidth + gateBoxDistance)
 
-      canvasContext.fillStyle = 'white'
-      canvasContext.strokeStyle = 'blue'
-      canvasContext.lineWidth = 2.4
-      roundRect(
-        canvasContext,
-        layerStartX,
-        trackY,
-        gateBoxWidth,
-        gateBoxHeight,
-        5,
-        true,
-        true
-      )
-    }
+    //   canvasContext.fillStyle = 'white'
+    //   canvasContext.strokeStyle = 'blue'
+    //   canvasContext.lineWidth = 2.4
+    //   roundRect(
+    //     canvasContext,
+    //     layerStartX,
+    //     trackY,
+    //     gateBoxWidth,
+    //     gateBoxHeight,
+    //     5,
+    //     true,
+    //     true
+    //   )
+    // }
   }
 }
 
@@ -153,17 +153,22 @@ export const drawHighlight = (track: number, layer: number) => {
   const x =  qBitTrackStartX + qBitTrackLabelWidth + gateBoxDistance + layer * (gateBoxWidth + gateBoxDistance)
   const y = qBitTrackStartY + track * (gateBoxHeight + gateBoxDistance)
 
-  canvasContext.fillStyle = 'yellow'
-  canvasContext.strokeStyle = 'blue'
+  canvasContext.fillStyle = '#0061FF33'
+  // canvasContext.strokeStyle = 'blue'
   canvasContext.lineWidth = 2.4
-  roundRect(
+  fillRect(
     canvasContext,
-    x,
-    y,
-    gateBoxWidth,
-    gateBoxHeight,
-    5,
-    true,
-    true
+    x-2,
+    y-2,
+    gateBoxWidth+4,
+    gateBoxHeight+4,
   )
+  // roundRect(
+  //   canvasContext,
+  //   x,
+  //   y,
+  //   5,
+  //   true,
+  //   false
+  // )
 }
