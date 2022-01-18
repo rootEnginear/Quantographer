@@ -10,8 +10,7 @@ window.addEventListener(
   }
 )
 
-document.fonts.addEventListener(
-  'loadingdone',
+document.fonts.ready.then(
   () => {
     updateSize()
     clearCanvas()
