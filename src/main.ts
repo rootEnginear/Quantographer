@@ -8,7 +8,7 @@ window.addEventListener('resize', () => {
 	drawCanvas()
 })
 
-document.fonts.addEventListener('loadingdone', () => {
+document.fonts.ready.then(() => {
 	updateSize()
 	clearCanvas()
 	drawCanvas()
