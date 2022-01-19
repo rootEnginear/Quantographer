@@ -10,7 +10,7 @@ const getTooltipContent = (title: string, description: string) => {
 const updateTooltip = (target: HTMLElement | { getBoundingClientRect: () => any }) => {
 	computePosition(target, tooltip!, {
 		placement: 'bottom-start',
-		middleware: [shift({ padding: 4 }), offset(4)],
+		middleware: [shift(), offset(4)],
 	}).then(({ x, y }) => {
 		Object.assign(tooltip!.style, {
 			left: `${x}px`,

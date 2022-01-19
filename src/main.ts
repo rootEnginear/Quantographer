@@ -1,6 +1,8 @@
 import { gateButtons, canvasElement } from './element'
 import { drawCanvas, clearCanvas, updateSize } from './render'
-import './tooltip'
+
+import './ui/gate_tooltip'
+import './ui/menubar_dropdown'
 
 window.addEventListener('resize', () => {
 	updateSize()

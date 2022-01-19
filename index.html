@@ -17,14 +17,21 @@
   <div id="app">
     <div class="menu-bar">
       <ul class="left">
-        <li>File</li>
-        <li>Edit</li>
-        <li>View</li>
-        <li>Insert</li>
-        <li>Execute</li>
-        <li>Tools</li>
-        <li>Windows</li>
-        <li>Help</li>
+        <li class="menubar-btn file" tabindex="0">
+          File
+          <ul class="menu-dropdown" id="dropdown-file-menu">
+            <li>New Circuit</li>
+            <li>Open Circuit</li>
+            <li>Save Circuit</li>
+          </ul>
+        </li>
+        <li class="menubar-btn" tabindex="0">Edit</li>
+        <li class="menubar-btn" tabindex="0">View</li>
+        <li class="menubar-btn" tabindex="0">Insert</li>
+        <li class="menubar-btn" tabindex="0">Execute</li>
+        <li class="menubar-btn" tabindex="0">Tools</li>
+        <li class="menubar-btn" tabindex="0">Windows</li>
+        <li class="menubar-btn" tabindex="0">Help</li>
       </ul>
       <div class="center">Untitled1 &mdash; Quantographer</div>
       <div class="right">
@@ -39,6 +46,12 @@
       <div class="toolbar-btn ghost"><i class="uil uil-upload"></i></div>
     </div>
     <div class="toolbar">
+      <button class="toolbar-btn"
+        id="btn-toggle-palette"
+        onclick="togglePalette()">
+        <i class="uil uil-create-dashboard"></i>
+      </button>
+      <div class="toolbar-separator"></div>
       <button class="toolbar-btn gate" draggable="true"
         data-title="Z Gate"
         data-description="Lorem ipsum dolor sit amet."
@@ -88,11 +101,19 @@
         data-gateid="u3">
         U<sub>3</sub>
       </button>
+      <div class="toolbar-flex"></div>
+      <button class="toolbar-btn"
+        id="btn-toggle-palette"
+        onclick="toggleCode()">
+        <i class="uil uil-brackets-curly"></i>
+      </button>
     </div>
     <div class="workspace">
-      <div class="overflow">
+      <div class="pallette" id="pallette"></div>
+      <div class="space">
         <canvas id="workbench"></canvas>
       </div>
+      <div class="code" id="code"></div>
     </div>
     <div class="status-bar">
       Ready
@@ -102,6 +123,15 @@
   <div id="tooltip"></div>
 
   <script type="module" src="/src/main.ts"></script>
+  <script>
+    function togglePalette() {
+      document.getElementById('pallette')?.classList.toggle('open')
+    }
+
+    function toggleCode() {
+      document.getElementById('code')?.classList.toggle('open')
+    }
+  </script>
 </body>
 
 </html>
