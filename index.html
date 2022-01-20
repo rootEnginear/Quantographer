@@ -33,29 +33,35 @@
     <div class="toolbar">
       <button class="toolbar-btn"
         id="btn-toggle-palette"
-        onclick="togglePalette()">
+        onclick="togglePalette()"
+        data-tooltip
+        data-description="Toggle Palette">
         <i class="uil uil-create-dashboard"></i>
       </button>
       <div class="toolbar-separator"></div>
       <button class="toolbar-btn gate" draggable="true"
+        data-tooltip
         data-title="Z Gate"
         data-description="Lorem ipsum dolor sit amet."
         data-gateid="z">
         Z
       </button>
       <button class="toolbar-btn gate" draggable="true"
+        data-tooltip
         data-title="Y Gate"
         data-description="Lorem ipsum dolor sit amet."
         data-gateid="y">
         Y
       </button>
       <button class="toolbar-btn gate" draggable="true"
+        data-tooltip
         data-title="X Gate"
         data-description="Lorem ipsum dolor sit amet."
         data-gateid="x">
         X
       </button>
       <button class="toolbar-btn gate" draggable="true"
+        data-tooltip
         data-title="H Gate"
         data-description="Lorem ipsum dolor sit amet."
         data-gateid="h">
@@ -63,24 +69,28 @@
       </button>
       <div class="toolbar-separator"></div>
       <button class="toolbar-btn gate" draggable="true"
+        data-tooltip
         data-title="RZ Gate"
         data-description="Lorem ipsum dolor sit amet."
         data-gateid="rz">
         RZ
       </button>
       <button class="toolbar-btn gate" draggable="true"
+        data-tooltip
         data-title="RY Gate"
         data-description="Lorem ipsum dolor sit amet."
         data-gateid="ry">
         RY
       </button>
       <button class="toolbar-btn gate" draggable="true"
+        data-tooltip
         data-title="RX Gate"
         data-description="Lorem ipsum dolor sit amet."
         data-gateid="rx">
         RX
       </button>
       <button class="toolbar-btn gate" draggable="true"
+        data-tooltip
         data-title="U3 Gate"
         data-description="Lorem ipsum dolor sit amet."
         data-gateid="u3">
@@ -107,16 +117,8 @@
 
   <div id="tooltip"></div>
 
-  <script type="module" src="/src/main.ts"></script>
-  <script>
-    function togglePalette() {
-      document.getElementById('pallette')?.classList.toggle('open')
-    }
-
-    function toggleCode() {
-      document.getElementById('code')?.classList.toggle('open')
-    }
-  </script>
+  <script defer type="module" src="/src/main.ts"></script>
+  <script defer src="./src/main-dom.ts"></script>
 </body>
 
 </html>
