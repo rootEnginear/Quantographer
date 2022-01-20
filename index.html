@@ -29,6 +29,13 @@
       <div class="toolbar-btn ghost"><i class="uil uil-folder"></i></div>
       <div class="toolbar-btn ghost"><i class="uil uil-save"></i></div>
       <div class="toolbar-btn ghost"><i class="uil uil-upload"></i></div>
+      <div class="toolbar-flex"></div>
+      <button class="toolbar-btn"
+        onclick="execute()"
+        data-tooltip
+        data-description="Toggle Palette">
+        E
+      </button>
     </div>
     <div class="toolbar">
       <button class="toolbar-btn"
@@ -117,8 +124,12 @@
 
   <div id="tooltip"></div>
 
-  <script defer type="module" src="/src/main.ts"></script>
-  <script defer src="./src/main-dom.ts"></script>
+  <script
+    src="https://rawcdn.githack.com/nextapps-de/winbox/0.2.0/dist/js/winbox.min.js"></script>
+  <link rel="stylesheet"
+    href="https://rawcdn.githack.com/nextapps-de/winbox/0.2.0/dist/css/winbox.min.css">
+
+  <script type="module" src="/src/main.ts"></script>
 </body>
 
 </html>

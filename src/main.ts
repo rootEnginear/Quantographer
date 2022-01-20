@@ -51,3 +51,23 @@ canvasElement.addEventListener('drop', (e) => {
 
 	console.log('drop', data)
 })
+
+// -----------------------------------------------------------------------------
+// DOM
+// -----------------------------------------------------------------------------
+function togglePalette() {
+	document.getElementById('pallette')?.classList.toggle('open')
+}
+
+function toggleCode() {
+	document.getElementById('code')?.classList.toggle('open')
+}
+
+const execute = () => {
+	new window.WinBox({
+		class: ['no-full'],
+		title: 'Basic Window',
+	})
+}
+
+Object.assign(window, { execute, togglePalette, toggleCode })

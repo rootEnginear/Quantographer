@@ -51,6 +51,11 @@
   dependencies:
     "@floating-ui/core" "^0.3.0"
 
+"@types/winbox@^0.2.1":
+  version "0.2.1"
+  resolved "https://registry.yarnpkg.com/@types/winbox/-/winbox-0.2.1.tgz#cfab903a7021058271a72ded4965a9348e710349"
+  integrity sha512-fN/UQjitix7v3yDmpvzKSnDyKIiOhU5LdAj5Wcf/eRpGapoLwBELAwvVZY/2OBw23PyPKwGZ07oZxBHyIO/e3A==
+
 "@vitejs/plugin-vue@^2.0.0":
   version "2.0.1"
   resolved "https://registry.yarnpkg.com/@vitejs/plugin-vue/-/plugin-vue-2.0.1.tgz#db0e5eacf96358e04cc501c9008079b25a70a4ac"
