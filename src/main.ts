@@ -1,7 +1,7 @@
-// import {createApp} from 'vue'
-// import App from './App.vue'
+import { createApp } from 'vue'
+import Menubar from './components/Menubar.vue'
 
-// createApp(App).mount('#vue')
+createApp(Menubar).mount('#menubar')
 
 import './styles/main.scss'
 
@@ -9,7 +9,6 @@ import { gateButtons, canvasElement } from './element'
 import { drawCanvas, clearCanvas, updateSize } from './render'
 
 import './ui/gate_tooltip'
-import './ui/menubar_dropdown'
 
 window.addEventListener('resize', () => {
 	updateSize()
@@ -52,3 +51,23 @@ canvasElement.addEventListener('drop', (e) => {
 
 	console.log('drop', data)
 })
+
+// -----------------------------------------------------------------------------
+// DOM
+// -----------------------------------------------------------------------------
+function togglePalette() {
+	document.getElementById('pallette')?.classList.toggle('open')
+}
+
+function toggleCode() {
+	document.getElementById('code')?.classList.toggle('open')
+}
+
+const execute = () => {
+	new window.WinBox({
+		class: ['no-full'],
+		title: 'Basic Window',
+	})
+}
+
+Object.assign(window, { execute, togglePalette, toggleCode })

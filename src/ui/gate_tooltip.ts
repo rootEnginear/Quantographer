@@ -1,9 +1,10 @@
 import { computePosition, shift, offset } from '@floating-ui/dom'
 
-const toolbar_gates = [...document.querySelectorAll<HTMLElement>('.toolbar-btn.gate')]
+const toolbar_gates = [...document.querySelectorAll<HTMLElement>('[data-tooltip]')]
 const tooltip = document.querySelector<HTMLElement>('#tooltip')
 
 const getTooltipContent = (title: string, description: string) => {
+	if (!title) return description
 	return `<b>${title}</b><br>${description}`
 }
 
@@ -61,10 +62,10 @@ function hideTooltip() {
 	tooltip_timeout = setTimeout(() => (tooltip!.style.display = ''), 100)
 }
 
-const showEvents = ['mousemove', 'focus']
-const hideEvents = ['mouseleave', 'blur', 'dragstart']
+const showEvents = ['mousemove']
+const hideEvents = ['mouseleave', 'dragstart']
 
 toolbar_gates.forEach((el: HTMLElement) => {
-	showEvents.forEach((e) => el.addEventListener(e, (_) => showTooltip(el, _)))
+	showEvents.forEach((e) => el.addEventListener(e, (event) => showTooltip(el, event)))
 	hideEvents.forEach((e) => el.addEventListener(e, hideTooltip))
 })
