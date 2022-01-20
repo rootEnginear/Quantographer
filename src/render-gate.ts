@@ -36,10 +36,12 @@ export const drawMeasure = (quBit: number, bit: number) => {
 
   const meter = new Path2D
 
-  meter.arc(0, 10, 10, -Math.PI, 0)
+  const meterOffset = renderOption.halfGateSize - 6
 
-  meter.moveTo(0, 10)
-  meter.lineTo(-10, -10)
+  meter.arc(0, meterOffset, meterOffset, -Math.PI, 0)
+
+  meter.moveTo(0, meterOffset)
+  meter.lineTo(meterOffset, -meterOffset)
 
   canvasContext.lineWidth = renderOption.gateBorderWidth
 
