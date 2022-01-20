@@ -1,3 +1,10 @@
+// import {createApp} from 'vue'
+// import App from './App.vue'
+
+// createApp(App).mount('#vue')
+
+import './styles/main.scss'
+
 import { gateButtons, canvasElement } from './element'
 import { drawCanvas, clearCanvas, updateSize } from './render'
 
