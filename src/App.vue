@@ -9,8 +9,8 @@ import HelloWorld from './components/HelloWorld.vue'
   <HelloWorld msg="Hello Vue 3 + TypeScript + Vite" />
 </template>
 
-<style>
-#app {
+<style scoped>
+#vue {
   font-family: Avenir, Helvetica, Arial, sans-serif;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;

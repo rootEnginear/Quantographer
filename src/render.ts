@@ -11,7 +11,7 @@ import {
   drawGateRelation
 } from './render-gate'
 
-import {drawDebug} from './render-debug'
+// import {drawDebug} from './render-debug'
 
 import circuit from './circuit'
 
