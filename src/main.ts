@@ -1,47 +1,54 @@
-import {gateButtons, canvasElement} from './element'
-import {findTarget, drawCircuit, updateSize, clearCanvas, drawHighlight} from './draw'
+// import {createApp} from 'vue'
+// import App from './App.vue'
 
-window.addEventListener(
-  'resize',
-  () => {
-    updateSize()
-    drawCircuit()
-  }
-)
+// createApp(App).mount('#vue')
 
-updateSize()
-drawCircuit()
+import './styles/main.scss'
+
+import { gateButtons, canvasElement } from './element'
+import { drawCanvas, clearCanvas, updateSize } from './render'
+
+import './ui/gate_tooltip'
+import './ui/menubar_dropdown'
+
+window.addEventListener('resize', () => {
+	updateSize()
+	clearCanvas()
+	drawCanvas()
+})
+
+document.fonts.ready.then(() => {
+	updateSize()
+	clearCanvas()
+	drawCanvas()
+})
 
 for (const gateButton of gateButtons)
-  gateButton.addEventListener(
-    'dragstart',
-    (e) => {
-      const {target, dataTransfer} = e
-      const node = target as Node
-      const transfer = dataTransfer as DataTransfer
-      transfer.setData('text/plain', node.textContent ?? 'what')
-    }
-  )
+	gateButton.addEventListener('dragstart', (e) => {
+		const { target, dataTransfer } = e
 
-canvasElement.addEventListener(
-  'dragover',
-  (e) => {
-    e.preventDefault()
-    const target = findTarget(e.offsetX, e.offsetY)
-    clearCanvas()
-    drawCircuit()
-    if (target === undefined) return
-    const [track, layer] = target
-    drawHighlight(track, layer)
-  }
-)
+		const node = target as Node
+		const transfer = dataTransfer as DataTransfer
 
-canvasElement.addEventListener(
-  'drop',
-  (e) => {
-    e.preventDefault()
-    const {dataTransfer} = e
-    const transfer = dataTransfer as DataTransfer
-    const data = transfer.getData('text/plain')
-  }
-)
+		const data = node.textContent ?? '?'
+
+		transfer.setData('text/plain', data)
+
+		console.log('dragstart', data)
+	})
+
+canvasElement.addEventListener('dragover', (e) => {
+	e.preventDefault()
+
+	console.log('dragover', e.offsetX, e.offsetY)
+})
+
+canvasElement.addEventListener('drop', (e) => {
+	e.preventDefault()
+
+	const { dataTransfer } = e
+	const transfer = dataTransfer as DataTransfer
+	const data = transfer.getData('text/plain')
+
+	console.log('drop', data)
+})

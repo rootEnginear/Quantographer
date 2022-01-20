@@ -1,3 +1,8 @@
+* {
+	box-sizing: border-box;
+	outline: 0;
+}
+
 body {
 	overflow: hidden;
 
@@ -51,7 +56,8 @@ body {
 
 			padding: 0 12px;
 
-			&:hover {
+			&:hover,
+			&:focus {
 				background: rgba(255, 255, 255, 0.25);
 			}
 		}
@@ -94,12 +100,16 @@ body {
 	border-radius: 2px;
 }
 
+.toolbar-flex {
+	flex: 1 1 0;
+}
+
 .toolbar-btn {
 	appearance: none;
 	box-sizing: border-box;
 
 	background: #ffffff;
-	border: 3px solid #0061ff;
+	border: 2px solid #0061ff;
 	border-radius: 6px;
 
 	color: #0061ff;
@@ -126,11 +136,45 @@ body {
 .workspace {
 	flex: 1 1 0;
 	min-height: 0;
+
+	display: flex;
 }
 
-.overflow {
+.pallette {
+	background: #f8f8f8;
+	border-right: 0 solid #0061ff;
+
+	width: 0;
+
+	transition: width 0.3s, border 0.3s;
+
+	&.open {
+		width: 20vw;
+
+		border-right-width: 2px;
+	}
+}
+
+.space {
 	overflow: auto;
 	height: 100%;
+
+	flex: 1 1 0;
+}
+
+.code {
+	background: #f8f8f8;
+	border-left: 0 solid #0061ff;
+
+	width: 0;
+
+	transition: width 0.3s, border 0.3s;
+
+	&.open {
+		width: 20vw;
+
+		border-left-width: 2px;
+	}
 }
 
 .status-bar {
@@ -142,4 +186,48 @@ body {
 
 	display: flex;
 	align-items: center;
+}
+
+#tooltip {
+	display: none;
+	position: absolute;
+
+	background: #f3f8ff;
+	border: 2px solid #0061ff;
+	box-sizing: border-box;
+	border-radius: 4px;
+
+	font-size: 0.8rem;
+
+	padding: 4px;
+
+	pointer-events: none;
+
+	transform: scale(0.8);
+	opacity: 0;
+	transform-origin: top left;
+
+	transition: transform 0.1s, opacity 0.1s;
+}
+
+.menu-dropdown {
+	display: none;
+	position: absolute;
+
+	color: black;
+
+	background: #f3f8ff;
+	border: 2px solid #0061ff;
+	border-top: 0;
+	box-sizing: border-box;
+
+	padding: 4px;
+
+	pointer-events: none;
+
+	transform: scaleY(0.8);
+	opacity: 0;
+	transform-origin: top left;
+
+	transition: transform 0.1s, opacity 0.1s;
 }
