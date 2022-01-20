@@ -6,9 +6,10 @@
   <meta http-equiv="X-UA-Compatible" content="IE=edge">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
+  <link rel="icon" href="/favicon.ico" />
+
   <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/reseter.css" />
   <link rel="stylesheet" href="https://unicons.iconscout.com/release/v4.0.0/css/line.css">
-  <link rel="stylesheet" href="src/style.scss">
 
   <title>Untitled1 &mdash; Quantographer</title>
 </head>
@@ -17,14 +18,21 @@
   <div id="app">
     <div class="menu-bar">
       <ul class="left">
-        <li><span class="u">F</span>ile</li>
-        <li><span class="u">E</span>dit</li>
-        <li><span class="u">V</span>iew</li>
-        <li><span class="u">I</span>nsert</li>
-        <li>E<span class="u">x</span>ecute</li>
-        <li><span class="u">T</span>ools</li>
-        <li><span class="u">W</span>indows</li>
-        <li><span class="u">H</span>elp</li>
+        <li class="menubar-btn file" tabindex="0">
+          File
+          <ul class="menu-dropdown" id="dropdown-file-menu">
+            <li>New Circuit</li>
+            <li>Open Circuit</li>
+            <li>Save Circuit</li>
+          </ul>
+        </li>
+        <li class="menubar-btn" tabindex="0">Edit</li>
+        <li class="menubar-btn" tabindex="0">View</li>
+        <li class="menubar-btn" tabindex="0">Insert</li>
+        <li class="menubar-btn" tabindex="0">Execute</li>
+        <li class="menubar-btn" tabindex="0">Tools</li>
+        <li class="menubar-btn" tabindex="0">Windows</li>
+        <li class="menubar-btn" tabindex="0">Help</li>
       </ul>
       <div class="center">Untitled1 &mdash; Quantographer</div>
       <div class="right">
@@ -39,27 +47,92 @@
       <div class="toolbar-btn ghost"><i class="uil uil-upload"></i></div>
     </div>
     <div class="toolbar">
-      <button class="toolbar-btn gate" draggable="true">Z</button>
-      <button class="toolbar-btn gate" draggable="true">Y</button>
-      <button class="toolbar-btn gate" draggable="true">X</button>
-      <button class="toolbar-btn gate" draggable="true">H</button>
+      <button class="toolbar-btn"
+        id="btn-toggle-palette"
+        onclick="togglePalette()">
+        <i class="uil uil-create-dashboard"></i>
+      </button>
       <div class="toolbar-separator"></div>
-      <button class="toolbar-btn gate" draggable="true">RZ</button>
-      <button class="toolbar-btn gate" draggable="true">RY</button>
-      <button class="toolbar-btn gate" draggable="true">RX</button>
-      <button class="toolbar-btn gate" draggable="true">U<sub>3</sub></button>
+      <button class="toolbar-btn gate" draggable="true"
+        data-title="Z Gate"
+        data-description="Lorem ipsum dolor sit amet."
+        data-gateid="z">
+        Z
+      </button>
+      <button class="toolbar-btn gate" draggable="true"
+        data-title="Y Gate"
+        data-description="Lorem ipsum dolor sit amet."
+        data-gateid="y">
+        Y
+      </button>
+      <button class="toolbar-btn gate" draggable="true"
+        data-title="X Gate"
+        data-description="Lorem ipsum dolor sit amet."
+        data-gateid="x">
+        X
+      </button>
+      <button class="toolbar-btn gate" draggable="true"
+        data-title="H Gate"
+        data-description="Lorem ipsum dolor sit amet."
+        data-gateid="h">
+        H
+      </button>
+      <div class="toolbar-separator"></div>
+      <button class="toolbar-btn gate" draggable="true"
+        data-title="RZ Gate"
+        data-description="Lorem ipsum dolor sit amet."
+        data-gateid="rz">
+        RZ
+      </button>
+      <button class="toolbar-btn gate" draggable="true"
+        data-title="RY Gate"
+        data-description="Lorem ipsum dolor sit amet."
+        data-gateid="ry">
+        RY
+      </button>
+      <button class="toolbar-btn gate" draggable="true"
+        data-title="RX Gate"
+        data-description="Lorem ipsum dolor sit amet."
+        data-gateid="rx">
+        RX
+      </button>
+      <button class="toolbar-btn gate" draggable="true"
+        data-title="U3 Gate"
+        data-description="Lorem ipsum dolor sit amet."
+        data-gateid="u3">
+        U<sub>3</sub>
+      </button>
+      <div class="toolbar-flex"></div>
+      <button class="toolbar-btn"
+        id="btn-toggle-palette"
+        onclick="toggleCode()">
+        <i class="uil uil-brackets-curly"></i>
+      </button>
     </div>
     <div class="workspace">
-      <div class="overflow">
+      <div class="pallette" id="pallette"></div>
+      <div class="space">
         <canvas id="workbench"></canvas>
       </div>
+      <div class="code" id="code"></div>
     </div>
     <div class="status-bar">
       Ready
     </div>
   </div>
 
+  <div id="tooltip"></div>
+
   <script type="module" src="/src/main.ts"></script>
+  <script>
+    function togglePalette() {
+      document.getElementById('pallette')?.classList.toggle('open')
+    }
+
+    function toggleCode() {
+      document.getElementById('code')?.classList.toggle('open')
+    }
+  </script>
 </body>
 
 </html>
