@@ -66,7 +66,7 @@ export const drawBarrier = () => {
 }
 
 export const drawControl = () => {
-  const dot =  new Path2D
+  const dot = new Path2D
 
   const halfCGateSize = renderOption.cGateSize / 2
 
@@ -105,9 +105,8 @@ export const drawGateRelation = (from: number, to: number, single: boolean) => {
 
   line.moveTo(0, 0)
 
-  if (single && Math.abs(dist) === 1) {
+  if (single && Math.abs(dist) === 1)
     line.lineTo(0, length)
-  }
   else {
     const controlX = -renderOption.gridSize * 0.7 * Math.exp(absDist / 10.5)
     const controlY = length / (absDist * 1.6)

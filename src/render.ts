@@ -138,33 +138,32 @@ const drawCell = (step: number, bit: number, cell: Gate) => {
   canvasContext.translate(centerX, centerY)
 
   switch (cell.type) {
-    case 'm':
-      drawMeasure(bit, cell.assign)
-      break
+  case 'm':
+    drawMeasure(bit, cell.assign)
+    break
 
-    case 'b':
-      drawBarrier()
-      break
+  case 'b':
+    drawBarrier()
+    break
 
-    case 'c':
-      drawControl()
-      break
+  case 'c':
+    drawControl()
+    break
 
-    case 'h':
-    case 'x':
-      const {type: cellType, control: cellControl} = cell
+  case 'h':
+  case 'x':
+    const {type: cellType, control: cellControl} = cell
 
-      for (const control of cellControl)
-        drawGateRelation(bit, control, cellControl.length === 1)
+    for (const control of cellControl)
+      drawGateRelation(bit, control, cellControl.length === 1)
 
-      if (cell.type === 'x' && cellControl.length > 0) {
-        drawControlXGate()
-      }
-      else {
-        drawGate(cellType)
-      }
+    if (cell.type === 'x' && cellControl.length > 0)
+      drawControlXGate()
+    else
+      drawGate(cellType)
 
-      break
+
+    break
   }
 
   canvasContext.restore()
