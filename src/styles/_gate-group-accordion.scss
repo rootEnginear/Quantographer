@@ -1,0 +1,43 @@
+.gate-group {
+	margin-bottom: 8px;
+
+	> summary {
+		padding: 0;
+		padding-left: 8px;
+
+		cursor: pointer;
+
+		list-style: none;
+
+		&::-webkit-details-marker {
+			display: none;
+		}
+
+		> span {
+			display: flex;
+			align-items: center;
+
+			width: 100%;
+
+			user-select: none;
+
+			> i.fa-solid.fa-angle-down {
+				margin-right: 0.5rem;
+				transform: rotate(-90deg);
+			}
+		}
+	}
+
+	&[open] > summary > span > i.fa-solid.fa-angle-down {
+		transform: rotate(0deg);
+	}
+
+	> section {
+		margin-top: 8px;
+		padding: 8px;
+		border: 2px solid #808080;
+		box-sizing: border-box;
+		border-radius: 8px;
+		background: white;
+	}
+}

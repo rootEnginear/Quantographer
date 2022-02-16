@@ -94,16 +94,15 @@
       <!-- Separator -->
       <div class="toolbar-flex"></div>
       <!-- Right -->
-      <button class="toolbar-btn"
-        onclick="execute()"
-        data-tooltip="Execute Circuit">
-        E
+      <button class="toolbar-btn fluid"
+        onclick="execute()">
+        <i class="fa-solid fa-play" style="margin-right:0.25rem"></i>Execute
       </button>
     </div>
     <!-- Secondary Toolbar -->
     <div class="toolbar toolbar-secondary">
       <!-- Left -->
-      <button class="toolbar-btn"
+      <button class="toolbar-btn active"
         id="btn-toggle-palette"
         onclick="togglePalette()"
         data-tooltip="Toggle Palette">
@@ -266,7 +265,7 @@
       <!-- Separator -->
       <div class="toolbar-flex"></div>
       <!-- Right -->
-      <button class="toolbar-btn"
+      <button class="toolbar-btn active"
         id="btn-toggle-code"
         onclick="toggleCode()"
         data-tooltip="Toggle Code Output">
@@ -274,11 +273,158 @@
       </button>
     </div>
     <div class="workspace">
-      <div class="pallette" id="pallette"></div>
+      <!-- Gate Palette -->
+      <div class="palette open" id="palette">
+        <details open class="gate-group">
+          <summary>
+            <span>
+              <i class="fa-solid fa-angle-down"></i>Common Gates
+            </span>
+          </summary>
+          <section>
+            A
+          </section>
+        </details>
+        <details open class="gate-group">
+          <summary>
+            <span>
+              <i class="fa-solid fa-angle-down"></i>User Gates
+            </span>
+          </summary>
+          <section>
+            A
+          </section>
+        </details>
+        <details open class="gate-group">
+          <summary>
+            <span>
+              <i class="fa-solid fa-angle-down"></i>90° Turn
+            </span>
+          </summary>
+          <section>
+            A
+          </section>
+        </details>
+        <details open class="gate-group">
+          <summary>
+            <span>
+              <i class="fa-solid fa-angle-down"></i>45° Turn
+            </span>
+          </summary>
+          <section>
+            A
+          </section>
+        </details>
+        <details open class="gate-group">
+          <summary>
+            <span>
+              <i class="fa-solid fa-angle-down"></i>Parameterized Gates
+            </span>
+          </summary>
+          <section>
+            A
+          </section>
+        </details>
+        <details open class="gate-group">
+          <summary>
+            <span>
+              <i class="fa-solid fa-angle-down"></i>Universal Gates
+            </span>
+          </summary>
+          <section>
+            A
+          </section>
+        </details>
+        <details open class="gate-group">
+          <summary>
+            <span>
+              <i class="fa-solid fa-angle-down"></i>2-Qubit Gates
+            </span>
+          </summary>
+          <section>
+            A
+          </section>
+        </details>
+        <details open class="gate-group">
+          <summary>
+            <span>
+              <i class="fa-solid fa-angle-down"></i>3-Qubit Gates
+            </span>
+          </summary>
+          <section>
+            A
+          </section>
+        </details>
+      </div>
+      <!-- Editing Area -->
       <div class="space">
         <canvas id="workbench"></canvas>
       </div>
-      <div class="code" id="code"></div>
+      <!-- Code Output -->
+      <div class="code open" id="code">
+        <div class="toolbar">
+          <!-- Left -->
+          <div class="code-title">
+            QASM Output
+          </div>
+          <!-- Separator -->
+          <div class="toolbar-flex"></div>
+          <!-- Right -->
+          <button class="toolbar-btn fluid" onclick="() => {}">
+            <i class="fa-solid fa-file-export" style="margin-right:0.25rem"></i>Export
+          </button>
+        </div>
+        <pre class="line-numbers">
+          <code class="language-openqasm">
+            OPENQASM 2.0;
+            include "qelib1.inc";
+
+            qreg q[3];
+            creg c[3];
+
+            h q[0];
+            h q[1];
+            h q[2];
+            cz q[2],q[0];
+            cz q[1],q[0];
+            h q[2];
+            h q[0];
+            h q[1];
+            x q[2];
+            x q[0];
+            x q[1];
+            h q[0];
+            ccx q[2],q[1],q[0];
+            h q[0];
+            x q[1];
+            x q[2];
+            x q[0];
+            h q[1];
+            h q[2];
+            h q[0];
+            cz q[2],q[0];
+            cz q[1],q[0];
+            h q[2];
+            h q[0];
+            h q[1];
+            x q[2];
+            x q[0];
+            x q[1];
+            h q[0];
+            ccx q[2],q[1],q[0];
+            h q[0];
+            x q[1];
+            x q[2];
+            x q[0];
+            h q[1];
+            h q[2];
+            h q[0];
+            measure q[0] -> c[0];
+            measure q[1] -> c[1];
+            measure q[2] -> c[2];
+          </code>
+        </pre>
+      </div>
     </div>
     <div class="status-bar">
       Ready
@@ -295,6 +441,7 @@
   <script src="https://kit.fontawesome.com/6b621a350d.js"
     crossorigin="anonymous"></script>
 
+  <script src="/src/prismjs/prism.js"></script>
   <script type="module" src="/src/main.ts"></script>
 </body>
 

@@ -1,6 +1,8 @@
 @import 'menubar';
 @import 'toolbar';
 @import 'tooltip';
+@import 'prismcss';
+@import 'gate-group-accordion';
 
 * {
 	box-sizing: border-box;
@@ -37,18 +39,60 @@ body {
 	display: flex;
 }
 
-.pallette {
+.palette,
+.code {
 	background: #f8f8f8;
-	border-right: 0 solid #0061ff;
 
 	width: 0;
 
-	transition: width 0.3s, border 0.3s;
+	transition-property: width, border;
+	transition-duration: 0.3s;
 
 	&.open {
 		width: 20vw;
+	}
+}
 
+.palette {
+	border-right: 0 solid #0061ff;
+
+	padding: 8px;
+
+	&.open {
 		border-right-width: 2px;
+	}
+}
+
+.code {
+	border-left: 0 solid #0061ff;
+
+	&.open {
+		border-left-width: 2px;
+	}
+
+	// custom properties
+	display: flex;
+	flex-direction: column;
+
+	> .toolbar {
+		white-space: nowrap;
+
+		> .code-title {
+			color: #0061ff;
+			font-weight: 700;
+
+			display: flex;
+			align-items: center;
+			justify-content: center;
+		}
+	}
+
+	> pre {
+		border-radius: 0;
+		padding: 0 1rem 0 3.8rem;
+		margin: 0;
+
+		height: 100%;
 	}
 }
 
@@ -57,21 +101,6 @@ body {
 	height: 100%;
 
 	flex: 1 1 0;
-}
-
-.code {
-	background: #f8f8f8;
-	border-left: 0 solid #0061ff;
-
-	width: 0;
-
-	transition: width 0.3s, border 0.3s;
-
-	&.open {
-		width: 20vw;
-
-		border-left-width: 2px;
-	}
 }
 
 .status-bar {
