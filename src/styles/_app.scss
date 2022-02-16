@@ -1,3 +1,7 @@
+@import 'menubar';
+@import 'toolbar';
+@import 'tooltip';
+
 * {
 	box-sizing: border-box;
 	outline: 0;
@@ -24,95 +28,6 @@ body {
 
 .u {
 	text-decoration: underline;
-}
-
-.menubar {
-	width: 100%;
-	height: 48px;
-
-	background: linear-gradient(90deg, #0061ff 0%, #8a3ffc 100%), #0061ff;
-
-	display: flex;
-
-	font-weight: 300;
-
-	padding: 0 16px 0 0;
-
-	color: #ffffff;
-
-	> .left {
-		flex: 1 1 0;
-		display: flex;
-	}
-
-	> .center {
-		display: flex;
-		align-items: center;
-		justify-content: center;
-	}
-
-	> .right {
-		flex: 1 1 0;
-
-		display: flex;
-		align-items: center;
-		justify-content: flex-end;
-	}
-}
-
-.toolbar {
-	width: 100%;
-	height: 48px;
-
-	border-bottom: 2px #0061ff solid;
-
-	background: linear-gradient(90deg, rgba(255, 255, 255, 0) 0%, rgba(255, 255, 255, 0.5) 100%),
-		#f2f7ff;
-
-	display: flex;
-	align-items: stretch;
-	gap: 8px;
-
-	padding: 8px 12px;
-}
-
-.toolbar-separator {
-	width: 2px;
-	background: #0061ff;
-	border-radius: 2px;
-}
-
-.toolbar-flex {
-	flex: 1 1 0;
-}
-
-.toolbar-btn {
-	appearance: none;
-	box-sizing: border-box;
-
-	background: #ffffff;
-	border: 2px solid #0061ff;
-	border-radius: 6px;
-
-	color: #0061ff;
-	font-weight: 600;
-	font-size: 1rem;
-	line-height: 1;
-
-	display: flex;
-	align-items: center;
-	justify-content: center;
-
-	aspect-ratio: 1/1;
-	padding: 0;
-
-	height: 100%;
-
-	&.ghost {
-		background: transparent;
-		border: none;
-		font-size: 1.5rem;
-	}
 }
 
 .workspace {
@@ -168,26 +83,4 @@ body {
 
 	display: flex;
 	align-items: center;
-}
-
-#tooltip {
-	display: none;
-	position: absolute;
-
-	background: #f3f8ff;
-	border: 2px solid #0061ff;
-	box-sizing: border-box;
-	border-radius: 4px;
-
-	font-size: 0.8rem;
-
-	padding: 4px;
-
-	pointer-events: none;
-
-	transform: scale(0.8);
-	opacity: 0;
-	transform-origin: top left;
-
-	transition: transform 0.1s, opacity 0.1s;
 }

@@ -1,7 +1,7 @@
 import {createApp} from 'vue'
 import Menubar from './components/Menubar.vue'
 
-createApp(Menubar).mount('#menubar')
+createApp(Menubar).mount('#menu')
 
 import './styles/main.scss'
 

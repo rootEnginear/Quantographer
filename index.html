@@ -9,105 +9,143 @@
   <link rel="icon" href="/favicon.svg" />
 
   <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/reseter.css" />
-  <link rel="stylesheet" href="https://unicons.iconscout.com/release/v4.0.0/css/line.css">
 
   <title>Untitled1 &mdash; Quantographer</title>
 </head>
 
 <body>
   <div id="app">
+    <!-- Menubar -->
     <div class="menubar">
-      <div id="menubar" class="left"></div>
+      <div id="menu" class="left"></div>
       <div class="center">Untitled1 &mdash; Quantographer</div>
       <div class="right">
-        <i class="uil uil-globe" style="margin-right:.5ch"></i>
+        <i class="fa-solid fa-link" style="margin-right:.5ch"></i>
         Connect to IBMQ
       </div>
     </div>
-    <div class="toolbar">
-      <div class="toolbar-btn ghost"><i class="uil uil-file"></i></div>
-      <div class="toolbar-btn ghost"><i class="uil uil-folder"></i></div>
-      <div class="toolbar-btn ghost"><i class="uil uil-save"></i></div>
-      <div class="toolbar-btn ghost"><i class="uil uil-upload"></i></div>
+    <!-- Primary Toolbar -->
+    <div class="toolbar toolbar-primary">
+      <!-- Left -->
+      <button class="toolbar-btn ghost" data-tooltip="New file">
+        <i class="fa-solid fa-file-medical"></i>
+      </button>
+      <button class="toolbar-btn ghost" data-tooltip="Open file">
+        <i class="fa-solid fa-folder-open"></i>
+      </button>
+      <button class="toolbar-btn ghost" data-tooltip="Save file">
+        <i class="fa-solid fa-floppy-disk"></i>
+      </button>
+      <button class="toolbar-btn ghost" data-tooltip="Export file">
+        <i class="fa-solid fa-file-export"></i>
+      </button>
+      <div class="toolbar-separator"></div>
+      <button class="toolbar-btn ghost" data-tooltip="Cut">
+        <i class="fa-solid fa-scissors"></i>
+      </button>
+      <button class="toolbar-btn ghost" data-tooltip="Copy">
+        <i class="fa-solid fa-copy"></i>
+      </button>
+      <button class="toolbar-btn ghost" data-tooltip="Paste">
+        <i class="fa-solid fa-paste"></i>
+      </button>
+      <button class="toolbar-btn ghost" data-tooltip="Delete">
+        <i class="fa-solid fa-trash-can"></i>
+      </button>
+      <div class="toolbar-separator"></div>
+      <button class="toolbar-btn ghost" data-tooltip="Undo">
+        <i class="fa-solid fa-rotate-left"></i>
+      </button>
+      <button class="toolbar-btn ghost" data-tooltip="Redo">
+        <i class="fa-solid fa-rotate-right"></i>
+      </button>
+      <div class="toolbar-separator"></div>
+      <button class="toolbar-btn ghost" data-tooltip="Zoom In">
+        <i class="fa-solid fa-magnifying-glass-plus"></i>
+      </button>
+      <button class="toolbar-btn ghost" data-tooltip="Zoom Out">
+        <i class="fa-solid fa-magnifying-glass-minus"></i>
+      </button>
+      <div class="toolbar-separator"></div>
+      <button class="toolbar-btn ghost" data-tooltip="Group Gates">
+        <i class="fa-solid fa-object-group"></i>
+      </button>
+      <button class="toolbar-btn ghost" data-tooltip="Ungroup Gates">
+        <i class="fa-solid fa-object-ungroup"></i>
+      </button>
+      <!-- Separator -->
       <div class="toolbar-flex"></div>
+      <!-- Right -->
       <button class="toolbar-btn"
         onclick="execute()"
-        data-tooltip
-        data-description="Toggle Palette">
+        data-tooltip="Execute Circuit">
         E
       </button>
     </div>
-    <div class="toolbar">
+    <!-- Secondary Toolbar -->
+    <div class="toolbar toolbar-secondary">
       <button class="toolbar-btn"
         id="btn-toggle-palette"
         onclick="togglePalette()"
-        data-tooltip
-        data-description="Toggle Palette">
-        <i class="uil uil-create-dashboard"></i>
+        data-tooltip="Toggle Palette">
+        <i class="fa-solid fa-toolbox"></i>
       </button>
       <div class="toolbar-separator"></div>
       <button class="toolbar-btn gate" draggable="true"
-        data-tooltip
-        data-title="Z Gate"
-        data-description="Lorem ipsum dolor sit amet."
+        data-tooltip="Lorem ipsum dolor sit amet."
+        data-tooltip-title="Z Gate"
         data-gateid="z">
         Z
       </button>
       <button class="toolbar-btn gate" draggable="true"
-        data-tooltip
-        data-title="Y Gate"
-        data-description="Lorem ipsum dolor sit amet."
+        data-tooltip="Lorem ipsum dolor sit amet."
+        data-tooltip-title="Y Gate"
         data-gateid="y">
         Y
       </button>
       <button class="toolbar-btn gate" draggable="true"
-        data-tooltip
-        data-title="X Gate"
-        data-description="Lorem ipsum dolor sit amet."
+        data-tooltip="Lorem ipsum dolor sit amet."
+        data-tooltip-title="X Gate"
         data-gateid="x">
         X
       </button>
       <button class="toolbar-btn gate" draggable="true"
-        data-tooltip
-        data-title="H Gate"
-        data-description="Lorem ipsum dolor sit amet."
+        data-tooltip="Lorem ipsum dolor sit amet."
+        data-tooltip-title="H Gate"
         data-gateid="h">
         H
       </button>
       <div class="toolbar-separator"></div>
       <button class="toolbar-btn gate" draggable="true"
-        data-tooltip
-        data-title="RZ Gate"
-        data-description="Lorem ipsum dolor sit amet."
+        data-tooltip="Lorem ipsum dolor sit amet."
+        data-tooltip-title="RZ Gate"
         data-gateid="rz">
         RZ
       </button>
       <button class="toolbar-btn gate" draggable="true"
-        data-tooltip
-        data-title="RY Gate"
-        data-description="Lorem ipsum dolor sit amet."
+        data-tooltip="Lorem ipsum dolor sit amet."
+        data-tooltip-title="RY Gate"
         data-gateid="ry">
         RY
       </button>
       <button class="toolbar-btn gate" draggable="true"
-        data-tooltip
-        data-title="RX Gate"
-        data-description="Lorem ipsum dolor sit amet."
+        data-tooltip="Lorem ipsum dolor sit amet."
+        data-tooltip-title="RX Gate"
         data-gateid="rx">
         RX
       </button>
       <button class="toolbar-btn gate" draggable="true"
-        data-tooltip
-        data-title="U3 Gate"
-        data-description="Lorem ipsum dolor sit amet."
+        data-tooltip="Lorem ipsum dolor sit amet."
+        data-tooltip-title="U3 Gate"
         data-gateid="u3">
         U<sub>3</sub>
       </button>
       <div class="toolbar-flex"></div>
       <button class="toolbar-btn"
         id="btn-toggle-palette"
-        onclick="toggleCode()">
-        <i class="uil uil-brackets-curly"></i>
+        onclick="toggleCode()"
+        data-tooltip="Toggle Code Output">
+        <i class="fa-solid fa-code"></i>
       </button>
     </div>
     <div class="workspace">
@@ -128,6 +166,9 @@
     src="https://rawcdn.githack.com/nextapps-de/winbox/0.2.0/dist/js/winbox.min.js"></script>
   <link rel="stylesheet"
     href="https://rawcdn.githack.com/nextapps-de/winbox/0.2.0/dist/css/winbox.min.css">
+
+  <script src="https://kit.fontawesome.com/6b621a350d.js"
+    crossorigin="anonymous"></script>
 
   <script type="module" src="/src/main.ts"></script>
 </body>

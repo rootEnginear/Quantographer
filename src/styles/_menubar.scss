@@ -1,0 +1,33 @@
+.menubar {
+	width: 100%;
+	height: 48px;
+
+	background: linear-gradient(90deg, #0061ff 0%, #8a3ffc 100%), #0061ff;
+
+	display: flex;
+
+	font-weight: 300;
+
+	padding: 0 16px 0 0;
+
+	color: #ffffff;
+
+	> .left {
+		flex: 1 1 0;
+		display: flex;
+	}
+
+	> .center {
+		display: flex;
+		align-items: center;
+		justify-content: center;
+	}
+
+	> .right {
+		flex: 1 1 0;
+
+		display: flex;
+		align-items: center;
+		justify-content: flex-end;
+	}
+}
