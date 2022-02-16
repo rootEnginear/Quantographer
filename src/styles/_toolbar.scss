@@ -25,6 +25,8 @@
 }
 
 .toolbar-btn {
+	--toolbar-icon-size: 1rem;
+
 	appearance: none;
 	box-sizing: border-box;
 
@@ -34,7 +36,7 @@
 
 	color: #0061ff;
 	font-weight: 600;
-	font-size: 1rem;
+	font-size: var(--toolbar-icon-size, 1rem);
 	line-height: 1;
 
 	display: flex;
@@ -48,13 +50,35 @@
 
 	transition: background 0.1s;
 
+	cursor: pointer;
+
+	&.fluid {
+		aspect-ratio: unset;
+		padding: 0 6px;
+	}
+
+	&:hover {
+		background: rgba(0, 97, 255, 0.05);
+	}
+
 	&.ghost {
 		background: transparent;
 		border: none;
-		font-size: 1.25rem;
+
+		--toolbar-icon-size: 1.25rem;
 
 		&:hover {
 			background: rgba(0, 97, 255, 0.1);
 		}
 	}
+
+	&.active {
+		background: #0061ff;
+		color: #ffffff;
+	}
+}
+
+.svg-icon {
+	height: calc(var(--toolbar-icon-size, 1rem) * 1.1);
+	aspect-ratio: 1/1;
 }

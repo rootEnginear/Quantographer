@@ -85,10 +85,12 @@ window.addEventListener('keydown', handlingShortcuts)
 // DOM
 // -----------------------------------------------------------------------------
 const togglePalette = () => {
+  document.getElementById('btn-toggle-palette')?.classList.toggle('active')
   document.getElementById('pallette')?.classList.toggle('open')
 }
 
 const toggleCode = () => {
+  document.getElementById('btn-toggle-code')?.classList.toggle('active')
   document.getElementById('code')?.classList.toggle('open')
 }
 

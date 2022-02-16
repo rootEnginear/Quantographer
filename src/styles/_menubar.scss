@@ -8,8 +8,6 @@
 
 	font-weight: 300;
 
-	padding: 0 16px 0 0;
-
 	color: #ffffff;
 
 	> .left {
@@ -29,5 +27,24 @@
 		display: flex;
 		align-items: center;
 		justify-content: flex-end;
+	}
+}
+
+.menubar-btn {
+	all: unset;
+
+	display: flex;
+	align-items: center;
+	justify-content: center;
+
+	margin: 0;
+	padding: 0 16px;
+
+	height: 48px;
+
+	cursor: pointer;
+
+	&:hover {
+		background: rgba(0, 0, 0, 0.1);
 	}
 }

@@ -18,10 +18,16 @@
     <!-- Menubar -->
     <div class="menubar">
       <div id="menu" class="left"></div>
-      <div class="center">Untitled1 &mdash; Quantographer</div>
+      <div class="center">
+        <button class="menubar-btn">
+          Untitled1 &mdash; Quantographer
+        </button>
+      </div>
       <div class="right">
-        <i class="fa-solid fa-link" style="margin-right:.5ch"></i>
-        Connect to IBMQ
+        <button class="menubar-btn">
+          <i class="fa-solid fa-link" style="margin-right:0.375rem"></i>
+          Connect to IBMQ
+        </button>
       </div>
     </div>
     <!-- Primary Toolbar -->
@@ -73,6 +79,18 @@
       <button class="toolbar-btn ghost" data-tooltip="Ungroup Gates">
         <i class="fa-solid fa-object-ungroup"></i>
       </button>
+      <div class="toolbar-separator"></div>
+      <button class="toolbar-btn ghost" data-tooltip="Conjugate Transpose">
+        <svg class="svg-icon" width="30" height="32" viewBox="0 0 30 32"
+          fill="none"
+          xmlns="http://www.w3.org/2000/svg">
+          <path
+            d="M17.9984 31.25L15.954 24.8746H6.9L4.89206 31.25H0L8.54286 6.25H14.5302L23 31.25H17.9984ZM11.5 10.548H11.3175L8.06826 20.8274H14.7857L11.5 10.548Z"
+            fill="currentColor" />
+          <path d="M23 23.25V8.75H19V6.25H23V0.75H25.5V6.25H29.5V8.75H25.5V23.25H23Z"
+            fill="currentColor" />
+        </svg>
+      </button>
       <!-- Separator -->
       <div class="toolbar-flex"></div>
       <!-- Right -->
@@ -84,6 +102,7 @@
     </div>
     <!-- Secondary Toolbar -->
     <div class="toolbar toolbar-secondary">
+      <!-- Left -->
       <button class="toolbar-btn"
         id="btn-toggle-palette"
         onclick="togglePalette()"
@@ -118,6 +137,12 @@
       <div class="toolbar-separator"></div>
       <button class="toolbar-btn gate" draggable="true"
         data-tooltip="Lorem ipsum dolor sit amet."
+        data-tooltip-title="U3 Gate"
+        data-gateid="u3">
+        U<sub>3</sub>
+      </button>
+      <button class="toolbar-btn gate" draggable="true"
+        data-tooltip="Lorem ipsum dolor sit amet."
         data-tooltip-title="RZ Gate"
         data-gateid="rz">
         RZ
@@ -134,15 +159,115 @@
         data-gateid="rx">
         RX
       </button>
+      <div class="toolbar-separator"></div>
       <button class="toolbar-btn gate" draggable="true"
         data-tooltip="Lorem ipsum dolor sit amet."
-        data-tooltip-title="U3 Gate"
-        data-gateid="u3">
-        U<sub>3</sub>
+        data-tooltip-title="Controlled-Not Gate"
+        data-gateid="cnot">
+        <svg class="svg-icon" width="16" height="32" viewBox="0 0 16 32" fill="none"
+          xmlns="http://www.w3.org/2000/svg">
+          <circle cx="8" cy="24.8889" r="6.11111" fill="white" stroke="currentColor"
+            stroke-width="2" />
+          <line x1="7.88889" y1="30.2222" x2="7.88889" y2="1.77772" stroke="currentColor"
+            stroke-width="2" />
+          <line x1="0.888885" y1="24.7778" x2="15.1111" y2="24.7778" stroke="currentColor"
+            stroke-width="2" />
+          <circle cx="7.99998" cy="3.55556" r="3.55556" fill="currentColor" />
+        </svg>
       </button>
+      <button class="toolbar-btn gate" draggable="true"
+        data-tooltip="Lorem ipsum dolor sit amet."
+        data-tooltip-title="Toffoli Gate"
+        data-gateid="toff">
+        <svg class="svg-icon" width="16" height="32" viewBox="0 0 16 32" fill="none"
+          xmlns="http://www.w3.org/2000/svg">
+          <circle cx="8.00003" cy="24.8889" r="6.11111" fill="white" stroke="currentColor"
+            stroke-width="2" />
+          <line x1="7.88892" y1="30.2222" x2="7.88892" y2="1.77772" stroke="currentColor"
+            stroke-width="2" />
+          <line x1="0.888916" y1="24.7778" x2="15.1111" y2="24.7778" stroke="currentColor"
+            stroke-width="2" />
+          <circle cx="8.00001" cy="3.55556" r="3.55556" fill="currentColor" />
+          <circle cx="8.00001" cy="12.4445" r="3.55556" fill="currentColor" />
+        </svg>
+      </button>
+      <button class="toolbar-btn gate" draggable="true"
+        data-tooltip="Lorem ipsum dolor sit amet."
+        data-tooltip-title="Swap Gate"
+        data-gateid="swap">
+        <svg class="svg-icon" width="11" height="32" viewBox="0 0 11 32" fill="none"
+          xmlns="http://www.w3.org/2000/svg">
+          <line x1="1.8439" y1="22.8594" x2="9.57026" y2="30.5857" stroke="currentColor"
+            stroke-width="2" stroke-linecap="round" />
+          <line x1="9.57025" y1="22.9678" x2="1.84389" y2="30.6942" stroke="currentColor"
+            stroke-width="2" stroke-linecap="round" />
+          <line x1="1.8439" y1="1.30579" x2="9.57026" y2="9.03215" stroke="currentColor"
+            stroke-width="2" stroke-linecap="round" />
+          <line x1="9.57025" y1="1.41421" x2="1.84389" y2="9.14058" stroke="currentColor"
+            stroke-width="2" stroke-linecap="round" />
+          <line x1="5.57587" y1="25.7767" x2="5.57587" y2="5.61663" stroke="currentColor"
+            stroke-width="2" stroke-linecap="round" />
+        </svg>
+      </button>
+      <button class="toolbar-btn gate" draggable="true"
+        data-tooltip="Lorem ipsum dolor sit amet."
+        data-tooltip-title="Gate Control Modifier"
+        data-gateid="ctrl">
+        <svg class="svg-icon" width="30" height="32" viewBox="0 0 30 32" fill="none"
+          xmlns="http://www.w3.org/2000/svg">
+          <path
+            d="M4.612 31.332C4.06 31.332 3.56 31.244 3.112 31.068C2.672 30.884 2.292 30.612 1.972 30.252C1.66 29.892 1.42 29.448 1.252 28.92C1.084 28.384 1 27.764 1 27.06C1 26.356 1.084 25.732 1.252 25.188C1.42 24.636 1.66 24.176 1.972 23.808C2.292 23.432 2.672 23.148 3.112 22.956C3.56 22.764 4.06 22.668 4.612 22.668C5.364 22.668 5.988 22.828 6.484 23.148C6.98 23.468 7.376 23.952 7.672 24.6L6.316 25.32C6.196 24.944 6 24.644 5.728 24.42C5.456 24.188 5.084 24.072 4.612 24.072C4.02 24.072 3.548 24.272 3.196 24.672C2.852 25.072 2.68 25.632 2.68 26.352V27.672C2.68 28.4 2.852 28.96 3.196 29.352C3.548 29.736 4.02 29.928 4.612 29.928C5.084 29.928 5.468 29.8 5.764 29.544C6.068 29.288 6.288 28.972 6.424 28.596L7.708 29.352C7.404 29.976 7 30.464 6.496 30.816C5.992 31.16 5.364 31.332 4.612 31.332Z"
+            fill="currentColor" />
+          <path
+            d="M12.3472 24.216V31.188H10.7632V24.216H8.38722V22.812H14.7232V24.216H12.3472Z"
+            fill="currentColor" />
+          <path
+            d="M17.6042 31.188H16.0202V22.812H19.8002C20.1842 22.812 20.5282 22.872 20.8322 22.992C21.1362 23.112 21.3922 23.288 21.6002 23.52C21.8162 23.744 21.9802 24.016 22.0922 24.336C22.2122 24.656 22.2722 25.012 22.2722 25.404C22.2722 25.98 22.1402 26.476 21.8762 26.892C21.6202 27.308 21.2322 27.604 20.7122 27.78L22.4282 31.188H20.6642L19.1042 27.96H17.6042V31.188ZM19.6442 26.628C19.9482 26.628 20.1882 26.548 20.3642 26.388C20.5402 26.22 20.6282 25.984 20.6282 25.68V25.128C20.6282 24.824 20.5402 24.592 20.3642 24.432C20.1882 24.272 19.9482 24.192 19.6442 24.192H17.6042V26.628H19.6442Z"
+            fill="currentColor" />
+          <path d="M23.9889 31.188V22.812H25.5729V29.784H28.8729V31.188H23.9889Z"
+            fill="currentColor" />
+          <circle cx="15" cy="6.66797" r="6" fill="currentColor" />
+          <line x1="1" y1="6.66797" x2="29" y2="6.66797" stroke="currentColor"
+            stroke-width="2" stroke-linecap="round" />
+          <line x1="15" y1="6.66797" x2="15" y2="17.668" stroke="currentColor"
+            stroke-width="2" stroke-linecap="round" />
+        </svg>
+      </button>
+      <div class="toolbar-separator"></div>
+      <button class="toolbar-btn gate" draggable="true"
+        data-tooltip="Lorem ipsum dolor sit amet."
+        data-tooltip-title="Measurement"
+        data-gateid="cnot">
+        <svg class="svg-icon" width="34" height="30" viewBox="0 0 34 30" fill="none"
+          xmlns="http://www.w3.org/2000/svg">
+          <path fill-rule="evenodd" clip-rule="evenodd"
+            d="M29.2606 0.0513438C29.7846 -0.123304 30.3509 0.159856 30.5255 0.683799L33.3716 9.22195C33.5462 9.74589 33.2631 10.3122 32.7391 10.4869C32.2152 10.6615 31.6489 10.3783 31.4742 9.8544L29.3916 3.60658L23.1656 16.0585C27.6001 18.6645 30.5768 23.4846 30.5768 29C30.5768 29.5523 30.1291 30 29.5768 30C29.0246 30 28.5768 29.5523 28.5768 29C28.5768 24.2678 26.0484 20.1262 22.2687 17.8524L16.4713 29.4472C16.2243 29.9412 15.6236 30.1414 15.1296 29.8945C14.6357 29.6475 14.4354 29.0468 14.6824 28.5528L20.4805 16.9566C18.9673 16.3399 17.3118 16 15.5768 16C8.39714 16 2.57684 21.8203 2.57684 29C2.57684 29.5523 2.12913 30 1.57684 30C1.02456 30 0.576843 29.5523 0.576843 29C0.576843 20.7158 7.29257 14 15.5768 14C17.6333 14 19.5931 14.4138 21.3774 15.1628L27.6027 2.71215L21.3549 4.79476C20.831 4.96941 20.2647 4.68625 20.09 4.1623C19.9154 3.63836 20.1985 3.07204 20.7225 2.89739L29.2606 0.0513438Z"
+            fill="currentColor" />
+        </svg>
+      </button>
+      <button class="toolbar-btn gate" draggable="true"
+        data-tooltip="Lorem ipsum dolor sit amet."
+        data-tooltip-title="Barrier"
+        data-gateid="toff">
+        <svg class="svg-icon" width="2" height="32" viewBox="0 0 2 32" fill="none"
+          xmlns="http://www.w3.org/2000/svg">
+          <path fill-rule="evenodd" clip-rule="evenodd"
+            d="M1 -4.37114e-08C1.55228 -1.95703e-08 2 0.447715 2 1L2 2.875C2 3.42728 1.55228 3.875 1 3.875C0.447715 3.875 -1.49811e-07 3.42728 -1.2567e-07 2.875L-4.37114e-08 1C-1.95703e-08 0.447715 0.447715 -6.78525e-08 1 -4.37114e-08ZM1 5.625C1.55228 5.625 2 6.07272 2 6.625L2 10.375C2 10.9273 1.55228 11.375 1 11.375C0.447715 11.375 -4.77647e-07 10.9273 -4.53506e-07 10.375L-2.89588e-07 6.625C-2.65447e-07 6.07272 0.447715 5.625 1 5.625ZM0.999999 13.125C1.55228 13.125 2 13.5727 2 14.125L2 17.875C2 18.4273 1.55228 18.875 0.999999 18.875C0.447714 18.875 -8.05482e-07 18.4273 -7.81341e-07 17.875L-6.17423e-07 14.125C-5.93282e-07 13.5727 0.447715 13.125 0.999999 13.125ZM0.999999 20.625C1.55228 20.625 2 21.0727 2 21.625L2 25.375C2 25.9273 1.55228 26.375 0.999999 26.375C0.447714 26.375 -1.13332e-06 25.9273 -1.10918e-06 25.375L-9.45259e-07 21.625C-9.21118e-07 21.0727 0.447714 20.625 0.999999 20.625ZM0.999999 28.125C1.55228 28.125 2 28.5727 2 29.125L2 31C2 31.5523 1.55228 32 0.999999 32C0.447714 32 -1.37919e-06 31.5523 -1.35505e-06 31L-1.27309e-06 29.125C-1.24895e-06 28.5727 0.447714 28.125 0.999999 28.125Z"
+            fill="currentColor" />
+        </svg>
+      </button>
+      <div class="toolbar-separator"></div>
+      <button class="toolbar-btn gate fluid" draggable="true"
+        data-tooltip="Lorem ipsum dolor sit amet."
+        data-tooltip-title="Create New Gate"
+        data-gateid="toff">
+        <i class="fa-solid fa-plus" style="margin-right:0.25rem"></i>New
+      </button>
+      <!-- Separator -->
       <div class="toolbar-flex"></div>
+      <!-- Right -->
       <button class="toolbar-btn"
-        id="btn-toggle-palette"
+        id="btn-toggle-code"
         onclick="toggleCode()"
         data-tooltip="Toggle Code Output">
         <i class="fa-solid fa-code"></i>
