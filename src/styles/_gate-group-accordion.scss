@@ -1,9 +1,8 @@
 .gate-group {
-	margin-bottom: 8px;
-
 	> summary {
 		padding: 0;
 		padding-left: 8px;
+		margin-bottom: 8px;
 
 		cursor: pointer;
 
@@ -24,6 +23,9 @@
 			> i.fa-solid.fa-angle-down {
 				margin-right: 0.5rem;
 				transform: rotate(-90deg);
+
+				transition: transform 0.3s;
+				will-change: transform;
 			}
 		}
 	}
@@ -33,7 +35,7 @@
 	}
 
 	> section {
-		margin-top: 8px;
+		margin-bottom: 8px;
 		padding: 8px;
 		border: 2px solid #808080;
 		box-sizing: border-box;

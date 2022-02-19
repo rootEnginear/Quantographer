@@ -343,6 +343,7 @@ const initMenu = () => {
 
 .menubar-body.active > li.active > ul {
   position: absolute;
+  z-index: 99;
 
   display: flex;
   flex-direction: column;

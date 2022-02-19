@@ -36,41 +36,57 @@ body {
 	flex: 1 1 0;
 	min-height: 0;
 
+	position: relative;
+
 	display: flex;
+
+	&::before,
+	&::after {
+		content: '';
+		width: 0vw;
+
+		transition: width 0.3s;
+		will-change: width;
+	}
+
+	&.palette-open::before,
+	&.code-open::after {
+		width: 20vw;
+	}
 }
 
 .palette,
 .code {
 	background: #f8f8f8;
 
-	width: 0;
+	width: 20vw;
+	height: 100%;
+	overflow: auto;
 
-	transition-property: width, border;
-	transition-duration: 0.3s;
+	position: absolute;
+	box-sizing: border-box;
 
-	&.open {
-		width: 20vw;
-	}
+	transition: transform 0.3s;
+	will-change: transform;
 }
 
 .palette {
-	border-right: 0 solid #0061ff;
-
+	border-right: 2px solid #0061ff;
 	padding: 8px;
 
-	&.open {
-		border-right-width: 2px;
-	}
+	transform: translateX(-100%);
+}
+
+.workspace.palette-open .palette {
+	transform: translateX(0);
 }
 
 .code {
-	border-left: 0 solid #0061ff;
+	border-left: 2px solid #0061ff;
 
-	&.open {
-		border-left-width: 2px;
-	}
+	right: 0;
+	transform: translateX(100%);
 
-	// custom properties
 	display: flex;
 	flex-direction: column;
 
@@ -94,6 +110,10 @@ body {
 
 		height: 100%;
 	}
+}
+
+.workspace.code-open .code {
+	transform: translateX(0);
 }
 
 .space {
