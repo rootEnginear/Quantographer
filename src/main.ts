@@ -244,8 +244,8 @@ const toggleCode = () => {
 
 const execute = () => {
   new window.WinBox({
-    class: ['no-full'],
-    title: 'Execute'
+    title: 'Execute',
+    border: 4
   })
 }
 
