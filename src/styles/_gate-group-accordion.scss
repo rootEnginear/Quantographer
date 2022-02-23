@@ -35,11 +35,22 @@
 	}
 
 	> section {
+		box-sizing: border-box;
+
 		margin-bottom: 8px;
 		padding: 8px;
+
+		display: flex;
+		flex-wrap: wrap;
+		gap: 8px;
+
 		border: 2px solid #808080;
-		box-sizing: border-box;
 		border-radius: 8px;
+
 		background: white;
+
+		> .toolbar-btn {
+			height: 30px;
+		}
 	}
 }
