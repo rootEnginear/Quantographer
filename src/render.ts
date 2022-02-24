@@ -198,7 +198,6 @@ const adjustWorkbenchSize = () => {
 
 import {
   populateBarrierDirective,
-  populateInstruction,
   populateGate
 } from './render-op'
 
@@ -209,21 +208,11 @@ const populateOps = () => {
     (op, i) => {
       const {type} = op
 
-      switch (type) {
-      case 'barrier':
+      if (type === 'barrier')
         populateBarrierDirective(op, i)
-        break
-      case 'reset':
-        populateInstruction(op, i)
-        break
-      case 'measure':
-        break
-      case 'x':
-      case 'z':
-      case 'h':
+      else
+        // @ts-expect-error
         populateGate(op, i)
-        break
-      }
     }
   )
 }

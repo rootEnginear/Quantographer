@@ -65,7 +65,7 @@ export const populateBarrierDirective = (op: BarrierDirective, opIndex: number) 
   haloElement.setAttribute('fill', 'none')
 }
 
-export const populateInstruction = (op: BaseInstruction<any>, opIndex: number) => {
+export const populateGate = (op: BaseParameterizedGate<any>, opIndex: number) => {
   // prepare data
   const {
     qubitLaneHeight,
@@ -87,183 +87,9 @@ export const populateInstruction = (op: BaseInstruction<any>, opIndex: number) =
     qubit,
     step,
     type,
-    controlBits
-  } = op
-
-  // calculate a constants
-  const bitLaneStartY = qubitLaneHeight * qubitCount
-
-  const halfStepWidth = stepWidth / 2
-  const halfQubitLaneHeight = qubitLaneHeight / 2
-  const halfBitLaneHeight = bitLaneHeight / 2
-  const halfGateSize = gateSize / 2
-
-  const doubleGateOutlineSize = gateOutlinePadding * 2
-
-  // calculate position
-  const centerX = stepWidth * step + halfStepWidth
-  const centerY = qubitLaneHeight * qubit + halfQubitLaneHeight
-
-  // construct operation
-  const opElement = document.createElementNS(svgNamespace, 'g')
-
-  opGroupElement.append(opElement)
-
-  opElement.dataset.index = `${opIndex}`
-
-  // construct halo
-  const haloElement = document.createElementNS(svgNamespace, 'rect')
-
-  if (controlBits.length > 0) {
-    const maxBit = Math.max(
-      ... controlBits.map(
-        (entry) => entry.index
-      )
-    )
-
-    const centerX1 = centerX - bitLineSpacing
-    const centerX2 = centerX + bitLineSpacing
-
-    const endY = bitLaneStartY + bitLaneHeight * maxBit + halfBitLaneHeight
-
-    const controlLine1 = document.createElementNS(svgNamespace, 'line')
-    const controlLine2 = document.createElementNS(svgNamespace, 'line')
-
-    controlLine1.setAttribute('x1', `${centerX1}`)
-    controlLine1.setAttribute('x2', `${centerX1}`)
-
-    controlLine1.setAttribute('y1', `${centerY}`)
-    controlLine1.setAttribute('y2', `${endY}`)
-
-    controlLine1.setAttribute('stroke', 'black')
-    controlLine1.setAttribute('stroke-width', `${laneLineThickness}`)
-
-    controlLine2.setAttribute('x1', `${centerX2}`)
-    controlLine2.setAttribute('x2', `${centerX2}`)
-
-    controlLine2.setAttribute('y1', `${centerY}`)
-    controlLine2.setAttribute('y2', `${endY}`)
-
-    controlLine2.setAttribute('stroke', 'black')
-    controlLine2.setAttribute('stroke-width', `${laneLineThickness}`)
-
-    const controlPoints = controlBits.map(
-      (entry) => {
-        // prepare data
-        const {index, invert} = entry
-
-        // calculate position
-        const centerY = bitLaneStartY + bitLaneHeight * index + halfBitLaneHeight
-
-        const fillColor = invert ? 'white' : 'black'
-
-        // construct element
-        const gateControl = document.createElementNS(svgNamespace, 'circle')
-
-        gateControl.dataset.bit = `${index}`
-
-        gateControl.setAttribute('cx', `${centerX}`)
-        gateControl.setAttribute('cy', `${centerY}`)
-
-        gateControl.setAttribute('r', `${controlSize}`)
-
-        gateControl.setAttribute('stroke', 'black')
-        gateControl.setAttribute('stroke-width', `${laneLineThickness}`)
-
-        gateControl.setAttribute('fill', fillColor)
-
-        return gateControl
-      }
-    )
-
-    opElement.append(controlLine1, controlLine2, ... controlPoints)
-  }
-
-  const bodyElement = document.createElementNS(svgNamespace, 'g')
-
-  opElement.append(bodyElement)
-
-  if (0) {
-    // TODO: change gate body by condition
-    // TODO: change gate body to template symbol if exists
-  } else {
-    const bodyStartX = centerX - halfGateSize
-    const bodyStartY = centerY - halfGateSize
-
-    const boxElement = document.createElementNS(svgNamespace, 'rect')
-
-    boxElement.setAttribute('x', `${bodyStartX}`)
-    boxElement.setAttribute('y', `${bodyStartY}`)
-
-    boxElement.setAttribute('width', `${gateSize}`)
-    boxElement.setAttribute('height', `${gateSize}`)
-
-    boxElement.setAttribute('fill', 'white')
-
-    boxElement.setAttribute('stroke', 'black')
-    boxElement.setAttribute('stroke-width', `${gateBorderThickness}`)
-
-    const labelElement = document.createElementNS(svgNamespace, 'text')
-
-    labelElement.setAttribute('x', `${centerX}`)
-    labelElement.setAttribute('y', `${centerY}`)
-
-    labelElement.classList.add('gate-label')
-
-    labelElement.textContent = type[0]
-
-    bodyElement.append(boxElement, labelElement)
-  }
-
-  const {
-    x: opX,
-    y: opY,
-    width: opWidth,
-    height: opHeight
-  } = opElement.getBBox()
-
-  const selectX = opX - gateOutlinePadding
-  const selectY = opY - gateOutlinePadding
-
-  const selectWidth = opWidth + doubleGateOutlineSize
-  const selectHeight = opHeight + doubleGateOutlineSize
-
-  // add halo after calculate region
-  opElement.append(haloElement)
-
-  haloElement.setAttribute('x', `${selectX}`)
-  haloElement.setAttribute('y', `${selectY}`)
-
-  haloElement.setAttribute('width', `${selectWidth}`)
-  haloElement.setAttribute('height', `${selectHeight}`)
-
-  haloElement.setAttribute('fill', 'none')
-}
-
-export const populateGate = (op: BaseGate<any>, opIndex: number) => {
-  // prepare data
-  const {
-    qubitLaneHeight,
-    bitLaneHeight,
-    stepWidth,
-    gateSize,
-    gateBorderThickness,
-    gateOutlinePadding,
-    controlSize,
-    laneLineThickness,
-    bitLineSpacing
-  } = renderConfig
-
-  const {
-    qubits: {length: qubitCount}
-  } = circuitData
-
-  const {
-    qubit,
-    step,
-    type,
-    controlQubits,
-    controlBits
+    controlQubits = [],
+    controlBits = [],
+    params = {}
   } = op
 
   // calculate a constants
@@ -433,10 +259,18 @@ export const populateGate = (op: BaseGate<any>, opIndex: number) => {
 
     labelElement.classList.add('gate-label')
 
-    labelElement.textContent = type
+    labelElement.textContent = type[0]
 
     bodyElement.append(boxElement, labelElement)
   }
+
+  bodyElement.addEventListener(
+    'contextmenu',
+    (e) => {
+      e.stopPropagation()
+      e.preventDefault()
+    }
+  )
 
   const {
     x: opX,
