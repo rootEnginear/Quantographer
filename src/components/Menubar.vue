@@ -133,14 +133,14 @@ const MENU_ITEMS: MenuItem[] = [
 // -----------------------------------------------------------------------------
 // Logics
 // -----------------------------------------------------------------------------
-const menu_element = ref(null)
+const menu_element = ref<HTMLElement | null>(null)
 
 onMounted(() => {
   initMenu()
 })
 
 const initMenu = () => {
-  const menu_el = menu_element.value
+  const menu_el = menu_element.value!
 
   const closeMenu = () => {
     (document.activeElement as HTMLElement).blur()
@@ -160,7 +160,8 @@ const initMenu = () => {
   });
 
   menu_el.addEventListener('click', (event) => {
-    if (event.target.dataset.menuItem != undefined) {
+    const target = event.target! as HTMLElement
+    if (target.dataset.menuItem != undefined) {
       menu_el.classList.toggle('active')
     }
   });
@@ -171,12 +172,12 @@ const initMenu = () => {
       closeMenu()
     }
 
-    const children = [...menu_el.children]
+    const children = [...menu_el.children] as HTMLElement[]
     const isChildOpen = [...menu_el.children].map(el => el.classList.contains("active"))
     const currentOpenIndex = isChildOpen.indexOf(true)
 
     // Left
-    if (event.keyCode == 37) {
+    if (event.key === "ArrowLeft") {
       if (currentOpenIndex === 0) return
 
       children.forEach(el => {
@@ -185,14 +186,14 @@ const initMenu = () => {
 
       children[currentOpenIndex - 1].classList.add('active')
       if (children[currentOpenIndex - 1].children.length) {
-        children[currentOpenIndex - 1].children[0].children[0].focus()
+        (children[currentOpenIndex - 1].children[0].children[0] as HTMLElement).focus()
       } else {
-        children[currentOpenIndex - 1].focus()
+        (children[currentOpenIndex - 1]).focus()
       }
     }
 
     // Right
-    if (event.keyCode == 39) {
+    if (event.key === "ArrowRight") {
       if (currentOpenIndex === children.length - 1) return
 
       children.forEach(el => {
@@ -201,42 +202,42 @@ const initMenu = () => {
 
       children[currentOpenIndex + 1].classList.add('active')
       if (children[currentOpenIndex + 1].children.length) {
-        children[currentOpenIndex + 1].children[0].children[0].focus()
+        (children[currentOpenIndex + 1].children[0].children[0] as HTMLElement).focus()
       } else {
-        children[currentOpenIndex + 1].focus()
+        (children[currentOpenIndex + 1]).focus()
       }
     }
 
-    const currentSubmenu_els = children[currentOpenIndex].children[0].children
+    const currentSubmenu_els = [...children[currentOpenIndex].children[0].children] as HTMLElement[]
     const currentSubMenuFocus = [...currentSubmenu_els].map(el => el === document.activeElement)
     const currentSubMenuFocusIndex = currentSubMenuFocus.indexOf(true)
     const lastSubMenuIndex = currentSubmenu_els.length - 1
     const isAllSubMenuBlur = currentSubMenuFocus.every(el => el === false)
 
     // Up
-    if (event.keyCode == 38) {
+    if (event.key === "ArrowUp") {
       // if all empty -> focus the last one
       if (isAllSubMenuBlur) {
-        currentSubmenu_els[lastSubMenuIndex].focus()
+        (currentSubmenu_els[lastSubMenuIndex]).focus()
       } else {
         if (currentSubMenuFocusIndex === 0) {
-          currentSubmenu_els[lastSubMenuIndex].focus()
+          (currentSubmenu_els[lastSubMenuIndex]).focus()
         } else {
-          currentSubmenu_els[currentSubMenuFocusIndex - 1].focus()
+          (currentSubmenu_els[currentSubMenuFocusIndex - 1]).focus()
         }
       }
     }
 
     // Down
-    if (event.keyCode == 40) {
+    if (event.key === "ArrowDown") {
       // if all empty -> focus the first one
       if (isAllSubMenuBlur) {
-        currentSubmenu_els[0].focus()
+        (currentSubmenu_els[0]).focus()
       } else {
         if (currentSubMenuFocusIndex === lastSubMenuIndex) {
-          currentSubmenu_els[0].focus()
+          (currentSubmenu_els[0]).focus()
         } else {
-          currentSubmenu_els[currentSubMenuFocusIndex + 1].focus()
+          (currentSubmenu_els[currentSubMenuFocusIndex + 1]).focus()
         }
       }
     }
@@ -244,10 +245,10 @@ const initMenu = () => {
 
   // .menubar-body > li
   [...menu_el.children].forEach(el => {
-    el.addEventListener('mousemove', function () {
+    el.addEventListener('mousemove', function (this: HTMLElement) {
       if (this.classList.contains('active')) return
 
-      [...this.parentElement.children].forEach(el => {
+      [...this.parentElement!.children].forEach(el => {
         if (el === this) {
           this.focus()
           el.classList.add('active')
@@ -258,17 +259,17 @@ const initMenu = () => {
 
     })
 
-    el.addEventListener('mouseleave', function () {
+    el.addEventListener('mouseleave', function (this: HTMLElement) {
       if (!menu_el.classList.contains('active')) this.classList.remove('active');
     })
   });
 
   // .menubar-body > li > ul > li
   [...document.querySelectorAll('.menubar-body > li > ul > li')].forEach(el => {
-    el.addEventListener('mouseenter', function () {
+    el.addEventListener('mouseenter', function (this: HTMLElement) {
       if (this.classList.contains('active')) return
 
-      [...this.parentElement.children].forEach(el => {
+      [...this.parentElement!.children].forEach(el => {
         if (el === this) {
           this.focus()
         } else {
@@ -277,15 +278,15 @@ const initMenu = () => {
       });
     })
 
-    el.addEventListener('mouseleave', function () {
+    el.addEventListener('mouseleave', function (this: HTMLElement) {
       if (!menu_el.classList.contains('active')) this.classList.remove('active');
     })
 
-    el.addEventListener('focus', function () {
+    el.addEventListener('focus', function (this: HTMLElement) {
       this.classList.add('active');
     })
 
-    el.addEventListener('blur', function () {
+    el.addEventListener('blur', function (this: HTMLElement) {
       this.classList.remove('active');
     })
   })
@@ -318,6 +319,8 @@ const initMenu = () => {
   align-items: center;
 
   padding: 0 12px;
+
+  transition: background 0.1s;
 }
 
 .menubar-body > li.active {
@@ -335,11 +338,12 @@ const initMenu = () => {
 }
 
 .menubar-body.active > li.active {
-  border-bottom: 1px solid rgba(0, 0, 0, 0.1);
+  // border-bottom: 1px solid rgba(0, 0, 0, 0.1);
 }
 
 .menubar-body.active > li.active > ul {
   position: absolute;
+  z-index: 99;
 
   display: flex;
   flex-direction: column;
@@ -358,6 +362,8 @@ const initMenu = () => {
 
   cursor: pointer;
   white-space: nowrap;
+
+  transition: background 0.1s;
 }
 
 .menubar-body > li > ul > li.active {
