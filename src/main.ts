@@ -5,52 +5,47 @@ createApp(Menubar).mount('#menu')
 
 import './styles/main.scss'
 
-import {gateButtons, canvasElement} from './element'
-import {drawCanvas, clearCanvas, updateSize} from './render'
+const gateButtons = document.querySelectorAll<HTMLElement>('.gate')
+
+const workspaceElement = document.querySelector<HTMLElement>('#workspace')!
+
+const togglePaletteButton = document.getElementById('btn-toggle-palette')!
+const toggleCodeButton = document.getElementById('btn-toggle-code')!
+
+const accordionGroups = document.querySelectorAll('details')
 
 import './ui/gate_tooltip'
 
-window.addEventListener('resize', () => {
-  updateSize()
-  clearCanvas()
-  drawCanvas()
-})
-
-document.fonts.ready.then(() => {
-  updateSize()
-  clearCanvas()
-  drawCanvas()
-})
-
 for (const gateButton of gateButtons)
-  gateButton.addEventListener('dragstart', (e) => {
-    const {target, dataTransfer} = e
+  gateButton.addEventListener(
+    'dragstart',
+    (e) => {
+      const {target, dataTransfer} = e
 
-    const node = target as Node
-    const transfer = dataTransfer as DataTransfer
+      const transfer = dataTransfer as DataTransfer
+      const elem = target as HTMLElement
 
-    const data = node.textContent ?? '?'
+      const {
+        dataset: {
+          gateid = ''
+        }
+      } = elem
 
-    transfer.setData('text/plain', data)
+      // move cursor to the center of drag body
+      transfer.setDragImage(
+        elem,
+        window.devicePixelRatio * (elem.offsetWidth / 2),
+        window.devicePixelRatio * (elem.offsetHeight / 2)
+      )
 
-    console.log('dragstart', data)
-  })
+      // because Chrome doesn't allow reading data on other drag events
+      // except drop. to circumvent the issue, we attach data as a type instead.
+      // it can be seen from every event.
+      transfer.setData(gateid, '')
+    }
+  )
 
-canvasElement.addEventListener('dragover', (e) => {
-  e.preventDefault()
-
-  console.log('dragover', e.offsetX, e.offsetY)
-})
-
-canvasElement.addEventListener('drop', (e) => {
-  e.preventDefault()
-
-  const {dataTransfer} = e
-  const transfer = dataTransfer as DataTransfer
-  const data = transfer.getData('text/plain')
-
-  console.log('drop', data)
-})
+import './render'
 
 // -----------------------------------------------------------------------------
 // Shortcuts
@@ -225,7 +220,7 @@ class Accordion {
   }
 }
 
-document.querySelectorAll('details').forEach((el) => {
+accordionGroups.forEach((el) => {
   new Accordion(el)
 })
 
@@ -233,13 +228,13 @@ document.querySelectorAll('details').forEach((el) => {
 // DOM
 // -----------------------------------------------------------------------------
 const togglePalette = () => {
-  document.getElementById('btn-toggle-palette')?.classList.toggle('active')
-  document.getElementById('workspace')?.classList.toggle('palette-open')
+  togglePaletteButton.classList.toggle('active')
+  workspaceElement.classList.toggle('palette-open')
 }
 
 const toggleCode = () => {
-  document.getElementById('btn-toggle-code')?.classList.toggle('active')
-  document.getElementById('workspace')?.classList.toggle('code-open')
+  toggleCodeButton.classList.toggle('active')
+  workspaceElement.classList.toggle('code-open')
 }
 
 const execute = () => {
@@ -257,5 +252,5 @@ Object.assign(window, {
 
 // If everything loaded correctly, show the content
 requestAnimationFrame(() => {
-  document.querySelector('html')!.style.opacity = ''
+  document.documentElement.style.opacity = ''
 })
