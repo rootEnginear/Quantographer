@@ -65,7 +65,7 @@ export const populateBarrierDirective = (op: BarrierDirective, opIndex: number) 
   haloElement.setAttribute('fill', 'none')
 }
 
-export const populateGate = (op: BaseParameterizedGate<any>, opIndex: number) => {
+export const populateOperation = (op: Operation, opIndex: number) => {
   // prepare data
   const {
     qubitLaneHeight,
@@ -86,10 +86,7 @@ export const populateGate = (op: BaseParameterizedGate<any>, opIndex: number) =>
   const {
     qubit,
     step,
-    type,
-    controlQubits = [],
-    controlBits = [],
-    params = {}
+    type
   } = op
 
   // calculate a constants
@@ -116,116 +113,131 @@ export const populateGate = (op: BaseParameterizedGate<any>, opIndex: number) =>
   // construct halo
   const haloElement = document.createElementNS(svgNamespace, 'rect')
 
-  if (controlBits.length > 0) {
-    const maxQubit = Math.max(qubit, ... controlQubits)
-    const maxBit = Math.max(
-      ... controlBits.map(
-        (entry) => entry.index
+  if ('controlBits' in op) {
+    const {controlBits} = op
+
+    if (controlBits.length > 0) {
+      const maxBit = Math.max(
+        ... controlBits.map(
+          (entry) => entry.index
+        )
       )
-    )
 
-    const centerX1 = centerX - bitLineSpacing
-    const centerX2 = centerX + bitLineSpacing
+      let maxQubit = qubit
 
-    const centerLineY1 = qubitLaneHeight * maxQubit + halfQubitLaneHeight
-    const centerLineY2 = bitLaneStartY + bitLaneHeight * maxBit + halfBitLaneHeight
+      if ('controlQubits' in op) {
+        const {controlQubits} = op
 
-    const controlLine1 = document.createElementNS(svgNamespace, 'line')
-    const controlLine2 = document.createElementNS(svgNamespace, 'line')
-
-    controlLine1.setAttribute('x1', `${centerX1}`)
-    controlLine1.setAttribute('x2', `${centerX1}`)
-
-    controlLine1.setAttribute('y1', `${centerLineY1}`)
-    controlLine1.setAttribute('y2', `${centerLineY2}`)
-
-    controlLine1.setAttribute('stroke', 'black')
-    controlLine1.setAttribute('stroke-width', `${laneLineThickness}`)
-
-    controlLine2.setAttribute('x1', `${centerX2}`)
-    controlLine2.setAttribute('x2', `${centerX2}`)
-
-    controlLine2.setAttribute('y1', `${centerLineY1}`)
-    controlLine2.setAttribute('y2', `${centerLineY2}`)
-
-    controlLine2.setAttribute('stroke', 'black')
-    controlLine2.setAttribute('stroke-width', `${laneLineThickness}`)
-
-    const controlPoints = controlBits.map(
-      (entry) => {
-        // prepare data
-        const {index, invert} = entry
-
-        // calculate position
-        const centerY = bitLaneStartY + bitLaneHeight * index + halfBitLaneHeight
-
-        const fillColor = invert ? 'white' : 'black'
-
-        // construct element
-        const gateControl = document.createElementNS(svgNamespace, 'circle')
-
-        gateControl.dataset.bit = `${index}`
-
-        gateControl.setAttribute('cx', `${centerX}`)
-        gateControl.setAttribute('cy', `${centerY}`)
-
-        gateControl.setAttribute('r', `${controlSize}`)
-
-        gateControl.setAttribute('stroke', 'black')
-        gateControl.setAttribute('stroke-width', `${laneLineThickness}`)
-
-        gateControl.setAttribute('fill', fillColor)
-
-        return gateControl
+        maxQubit = Math.max(maxQubit, ... controlQubits)
       }
-    )
 
-    opElement.append(controlLine1, controlLine2, ... controlPoints)
+      const centerX1 = centerX - bitLineSpacing
+      const centerX2 = centerX + bitLineSpacing
+
+      const centerLineY1 = qubitLaneHeight * maxQubit + halfQubitLaneHeight
+      const centerLineY2 = bitLaneStartY + bitLaneHeight * maxBit + halfBitLaneHeight
+
+      const controlLine1 = document.createElementNS(svgNamespace, 'line')
+      const controlLine2 = document.createElementNS(svgNamespace, 'line')
+
+      controlLine1.setAttribute('x1', `${centerX1}`)
+      controlLine1.setAttribute('x2', `${centerX1}`)
+
+      controlLine1.setAttribute('y1', `${centerLineY1}`)
+      controlLine1.setAttribute('y2', `${centerLineY2}`)
+
+      controlLine1.setAttribute('stroke', 'black')
+      controlLine1.setAttribute('stroke-width', `${laneLineThickness}`)
+
+      controlLine2.setAttribute('x1', `${centerX2}`)
+      controlLine2.setAttribute('x2', `${centerX2}`)
+
+      controlLine2.setAttribute('y1', `${centerLineY1}`)
+      controlLine2.setAttribute('y2', `${centerLineY2}`)
+
+      controlLine2.setAttribute('stroke', 'black')
+      controlLine2.setAttribute('stroke-width', `${laneLineThickness}`)
+
+      const controlPoints = controlBits.map(
+        (entry) => {
+          // prepare data
+          const {index, invert} = entry
+
+          // calculate position
+          const centerY = bitLaneStartY + bitLaneHeight * index + halfBitLaneHeight
+
+          const fillColor = invert ? 'white' : 'black'
+
+          // construct element
+          const gateControl = document.createElementNS(svgNamespace, 'circle')
+
+          gateControl.dataset.bit = `${index}`
+
+          gateControl.setAttribute('cx', `${centerX}`)
+          gateControl.setAttribute('cy', `${centerY}`)
+
+          gateControl.setAttribute('r', `${controlSize}`)
+
+          gateControl.setAttribute('stroke', 'black')
+          gateControl.setAttribute('stroke-width', `${laneLineThickness}`)
+
+          gateControl.setAttribute('fill', fillColor)
+
+          return gateControl
+        }
+      )
+
+      opElement.append(controlLine1, controlLine2, ... controlPoints)
+    }
   }
 
-  if (controlQubits.length > 0) {
-    const qubits = [qubit, ... controlQubits]
+  if ('controlQubits' in op) {
+    const {controlQubits} = op
 
-    const minQubit = Math.min(... qubits)
-    const maxQubit = Math.max(... qubits)
+    if (controlQubits.length > 0) {
+      const qubits = [qubit, ... controlQubits]
 
-    const centerLineY1 = qubitLaneHeight * minQubit + halfQubitLaneHeight
-    const centerLineY2 = qubitLaneHeight * maxQubit + halfQubitLaneHeight
+      const minQubit = Math.min(... qubits)
+      const maxQubit = Math.max(... qubits)
 
-    // construct element
-    const controlLine = document.createElementNS(svgNamespace, 'line')
+      const centerLineY1 = qubitLaneHeight * minQubit + halfQubitLaneHeight
+      const centerLineY2 = qubitLaneHeight * maxQubit + halfQubitLaneHeight
 
-    controlLine.setAttribute('x1', `${centerX}`)
-    controlLine.setAttribute('x2', `${centerX}`)
+      // construct element
+      const controlLine = document.createElementNS(svgNamespace, 'line')
 
-    controlLine.setAttribute('y1', `${centerLineY1}`)
-    controlLine.setAttribute('y2', `${centerLineY2}`)
+      controlLine.setAttribute('x1', `${centerX}`)
+      controlLine.setAttribute('x2', `${centerX}`)
 
-    controlLine.setAttribute('stroke', 'black')
-    controlLine.setAttribute('stroke-width', `${laneLineThickness}`)
+      controlLine.setAttribute('y1', `${centerLineY1}`)
+      controlLine.setAttribute('y2', `${centerLineY2}`)
 
-    const controlPoints = controlQubits.map(
-      (controlQubit, i) => {
-        // calculate position
-        const centerY = qubitLaneHeight * controlQubit + halfQubitLaneHeight
+      controlLine.setAttribute('stroke', 'black')
+      controlLine.setAttribute('stroke-width', `${laneLineThickness}`)
 
-        // construct element
-        const gateControl = document.createElementNS(svgNamespace, 'circle')
+      const controlPoints = controlQubits.map(
+        (controlQubit, i) => {
+          // calculate position
+          const centerY = qubitLaneHeight * controlQubit + halfQubitLaneHeight
 
-        gateControl.dataset.qubit = `${controlQubit}`
+          // construct element
+          const gateControl = document.createElementNS(svgNamespace, 'circle')
 
-        gateControl.setAttribute('cx', `${centerX}`)
-        gateControl.setAttribute('cy', `${centerY}`)
+          gateControl.dataset.qubit = `${controlQubit}`
 
-        gateControl.setAttribute('r', `${controlSize}`)
+          gateControl.setAttribute('cx', `${centerX}`)
+          gateControl.setAttribute('cy', `${centerY}`)
 
-        gateControl.setAttribute('fill', 'blue')
+          gateControl.setAttribute('r', `${controlSize}`)
 
-        return gateControl
-      }
-    )
+          gateControl.setAttribute('fill', 'blue')
 
-    opElement.append(controlLine, ... controlPoints)
+          return gateControl
+        }
+      )
+
+      opElement.append(controlLine, ... controlPoints)
+    }
   }
 
   const bodyElement = document.createElementNS(svgNamespace, 'g')
