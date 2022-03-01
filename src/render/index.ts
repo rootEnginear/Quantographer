@@ -62,8 +62,6 @@ const populateTrack = () => {
 
   const {qubits, bits} = circuitData
 
-  const {width: opWidth} = calcOperationSize()
-
   // calculate constants
   const halfQubitLaneHeight = qubitLaneHeight / 2
   const halfBitLaneHeight = bitLaneHeight / 2
@@ -95,7 +93,6 @@ const populateTrack = () => {
       trackLines.push(lineElement)
 
       lineElement.setAttribute('x1', '0')
-      lineElement.setAttribute('x2', `${opWidth}`)
 
       lineElement.setAttribute('y1', `${startY}`)
       lineElement.setAttribute('y2', `${startY}`)
@@ -136,7 +133,6 @@ const populateTrack = () => {
       const lineElement2 = document.createElementNS(svgNamespace, 'line')
 
       lineElement1.setAttribute('x1', '0')
-      lineElement1.setAttribute('x2', `${opWidth}`)
 
       lineElement1.setAttribute('y1', `${startY1}`)
       lineElement1.setAttribute('y2', `${startY1}`)
@@ -145,7 +141,6 @@ const populateTrack = () => {
       lineElement1.setAttribute('stroke-width', `${laneLineThickness}`)
 
       lineElement2.setAttribute('x1', '0')
-      lineElement2.setAttribute('x2', `${opWidth}`)
 
       lineElement2.setAttribute('y1', `${startY2}`)
       lineElement2.setAttribute('y2', `${startY2}`)
@@ -188,9 +183,7 @@ const adjustWorkbenchSize = () => {
   trackLineGroupElement
     .querySelectorAll('line')
     .forEach(
-      (line) => {
-        line.setAttribute('x2', `${opWidth}`)
-      }
+      (line) => line.setAttribute('x2', `${opWidth}`)
     )
 
   const svgWidth = labelsWidth + opWidth

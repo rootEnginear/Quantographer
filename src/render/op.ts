@@ -3,13 +3,22 @@ import {circuitData} from './data'
 
 import {svgNamespace, opGroupElement} from '.'
 
+const opSymbolMapping: Partial<Record<OperationTypes, string>> = {
+  reset: 'reset-operation',
+  measure: 'measure-operation',
+
+  x: 'x-gate',
+  sx: 'sx-gate',
+  sdg: 'sdg-gate',
+  tdg: 'tdg-gate'
+}
+
 export const populateBarrierDirective = (op: BarrierDirective, opIndex: number) => {
   // prepare data
   const {
     qubitLaneHeight,
     stepWidth,
-    gateSize,
-    gateBorderThickness
+    gateSize
   } = renderConfig
 
   const {qubit, step, span} = op
@@ -44,7 +53,7 @@ export const populateBarrierDirective = (op: BarrierDirective, opIndex: number) 
   bodyElement.setAttribute('y2', `${endY}`)
 
   bodyElement.setAttribute('stroke', 'black')
-  bodyElement.setAttribute('stroke-width', `${gateBorderThickness}`)
+  bodyElement.setAttribute('stroke-width', '2')
   bodyElement.setAttribute('stroke-dasharray', '8 4')
 
   const selectX = centerX - halfGateSize
@@ -72,7 +81,6 @@ export const populateOperation = (op: Operation, opIndex: number) => {
     bitLaneHeight,
     stepWidth,
     gateSize,
-    gateBorderThickness,
     gateOutlinePadding,
     controlSize,
     laneLineThickness,
@@ -134,8 +142,8 @@ export const populateOperation = (op: Operation, opIndex: number) => {
       const centerX1 = centerX - bitLineSpacing
       const centerX2 = centerX + bitLineSpacing
 
-      const centerLineY1 = qubitLaneHeight * maxQubit + halfQubitLaneHeight
-      const centerLineY2 = bitLaneStartY + bitLaneHeight * maxBit + halfBitLaneHeight
+      const startY = qubitLaneHeight * maxQubit + halfQubitLaneHeight
+      const endY = bitLaneStartY + bitLaneHeight * maxBit + halfBitLaneHeight
 
       const controlLine1 = document.createElementNS(svgNamespace, 'line')
       const controlLine2 = document.createElementNS(svgNamespace, 'line')
@@ -143,8 +151,8 @@ export const populateOperation = (op: Operation, opIndex: number) => {
       controlLine1.setAttribute('x1', `${centerX1}`)
       controlLine1.setAttribute('x2', `${centerX1}`)
 
-      controlLine1.setAttribute('y1', `${centerLineY1}`)
-      controlLine1.setAttribute('y2', `${centerLineY2}`)
+      controlLine1.setAttribute('y1', `${startY}`)
+      controlLine1.setAttribute('y2', `${endY}`)
 
       controlLine1.setAttribute('stroke', 'black')
       controlLine1.setAttribute('stroke-width', `${laneLineThickness}`)
@@ -152,8 +160,8 @@ export const populateOperation = (op: Operation, opIndex: number) => {
       controlLine2.setAttribute('x1', `${centerX2}`)
       controlLine2.setAttribute('x2', `${centerX2}`)
 
-      controlLine2.setAttribute('y1', `${centerLineY1}`)
-      controlLine2.setAttribute('y2', `${centerLineY2}`)
+      controlLine2.setAttribute('y1', `${startY}`)
+      controlLine2.setAttribute('y2', `${endY}`)
 
       controlLine2.setAttribute('stroke', 'black')
       controlLine2.setAttribute('stroke-width', `${laneLineThickness}`)
@@ -200,8 +208,8 @@ export const populateOperation = (op: Operation, opIndex: number) => {
       const minQubit = Math.min(... qubits)
       const maxQubit = Math.max(... qubits)
 
-      const centerLineY1 = qubitLaneHeight * minQubit + halfQubitLaneHeight
-      const centerLineY2 = qubitLaneHeight * maxQubit + halfQubitLaneHeight
+      const startY = qubitLaneHeight * minQubit + halfQubitLaneHeight
+      const endY = qubitLaneHeight * maxQubit + halfQubitLaneHeight
 
       // construct element
       const controlLine = document.createElementNS(svgNamespace, 'line')
@@ -209,8 +217,8 @@ export const populateOperation = (op: Operation, opIndex: number) => {
       controlLine.setAttribute('x1', `${centerX}`)
       controlLine.setAttribute('x2', `${centerX}`)
 
-      controlLine.setAttribute('y1', `${centerLineY1}`)
-      controlLine.setAttribute('y2', `${centerLineY2}`)
+      controlLine.setAttribute('y1', `${startY}`)
+      controlLine.setAttribute('y2', `${endY}`)
 
       controlLine.setAttribute('stroke', 'black')
       controlLine.setAttribute('stroke-width', `${laneLineThickness}`)
@@ -240,18 +248,97 @@ export const populateOperation = (op: Operation, opIndex: number) => {
     }
   }
 
+  if ('assignBit' in op) {
+    const {
+      assignBit: {
+        index
+      }
+    } = op
+
+    const assignSymbolSize = controlSize * 2.5, halfAssignSymbolSize = assignSymbolSize / 2
+
+    const centerX1 = centerX - bitLineSpacing
+    const centerX2 = centerX + bitLineSpacing
+
+    const startY = qubitLaneHeight * qubit + halfQubitLaneHeight
+    const endY = bitLaneStartY + bitLaneHeight * index + halfBitLaneHeight
+
+    const stopY = endY - halfAssignSymbolSize
+
+    const assignSymbolX = centerX - halfAssignSymbolSize
+    const assignSymbolY = endY - assignSymbolSize
+
+    const controlLine1 = document.createElementNS(svgNamespace, 'line')
+    const controlLine2 = document.createElementNS(svgNamespace, 'line')
+
+    const assignSymbol = document.createElementNS(svgNamespace, 'use')
+
+    controlLine1.setAttribute('x1', `${centerX1}`)
+    controlLine1.setAttribute('x2', `${centerX1}`)
+
+    controlLine1.setAttribute('y1', `${startY}`)
+    controlLine1.setAttribute('y2', `${stopY}`)
+
+    controlLine1.setAttribute('stroke', 'black')
+    controlLine1.setAttribute('stroke-width', `${laneLineThickness}`)
+
+    controlLine2.setAttribute('x1', `${centerX2}`)
+    controlLine2.setAttribute('x2', `${centerX2}`)
+
+    controlLine2.setAttribute('y1', `${startY}`)
+    controlLine2.setAttribute('y2', `${stopY}`)
+
+    controlLine2.setAttribute('stroke', 'black')
+    controlLine2.setAttribute('stroke-width', `${laneLineThickness}`)
+
+    assignSymbol.setAttribute('x', `${assignSymbolX}`)
+    assignSymbol.setAttribute('y', `${assignSymbolY}`)
+
+    assignSymbol.setAttribute('width', `${assignSymbolSize}`)
+    assignSymbol.setAttribute('height', `${assignSymbolSize}`)
+
+    assignSymbol.setAttribute('href', '#symmetric-triangle')
+
+    opElement.append(controlLine1, controlLine2, assignSymbol)
+  }
+
   const bodyElement = document.createElementNS(svgNamespace, 'g')
 
   opElement.append(bodyElement)
 
-  if (0) {
-    // TODO: change gate body by condition
-    // TODO: change gate body to template symbol if exists
+  if (type === 'z' && op.controlQubits.length > 0) {
+    const gateControl = document.createElementNS(svgNamespace, 'circle')
+
+    gateControl.setAttribute('cx', `${centerX}`)
+    gateControl.setAttribute('cy', `${centerY}`)
+
+    gateControl.setAttribute('r', `${controlSize}`)
+
+    gateControl.setAttribute('fill', 'black')
+
+    bodyElement.append(gateControl)
+  } else if (type in opSymbolMapping) {
+    const bodyStartX = centerX - halfGateSize
+    const bodyStartY = centerY - halfGateSize
+
+    const symbolId = opSymbolMapping[type]!
+
+    const useElement = document.createElementNS(svgNamespace, 'use')
+
+    useElement.setAttribute('x', `${bodyStartX}`)
+    useElement.setAttribute('y', `${bodyStartY}`)
+
+    useElement.setAttribute('width', `${gateSize}`)
+    useElement.setAttribute('height', `${gateSize}`)
+
+    useElement.setAttribute('href', `#${symbolId}`)
+
+    bodyElement.append(useElement)
   } else {
     const bodyStartX = centerX - halfGateSize
     const bodyStartY = centerY - halfGateSize
 
-    const boxElement = document.createElementNS(svgNamespace, 'rect')
+    const boxElement = document.createElementNS(svgNamespace, 'use')
 
     boxElement.setAttribute('x', `${bodyStartX}`)
     boxElement.setAttribute('y', `${bodyStartY}`)
@@ -259,10 +346,7 @@ export const populateOperation = (op: Operation, opIndex: number) => {
     boxElement.setAttribute('width', `${gateSize}`)
     boxElement.setAttribute('height', `${gateSize}`)
 
-    boxElement.setAttribute('fill', 'white')
-
-    boxElement.setAttribute('stroke', 'black')
-    boxElement.setAttribute('stroke-width', `${gateBorderThickness}`)
+    boxElement.setAttribute('href', '#operation-container')
 
     const labelElement = document.createElementNS(svgNamespace, 'text')
 

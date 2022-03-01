@@ -32,6 +32,8 @@ type Operation =
   | ParameterizedGates
   | SwapGate
 
+type OperationTypes = Operation['type']
+
 type BaseOperation<T extends string> = {
   qubit: number
   step: number
@@ -57,10 +59,10 @@ type BarrierDirective = BaseOperation<'barrier'> & {
 type ResetInstruction = BaseInstruction<'reset'>
 
 type MeasureInstruction = BaseInstruction<'measure'> & {
-  assignBit: AssignBitProperty | undefined
+  assignBit: AssignBitProperty
 }
 
-type Gates = BaseGate<'x' | 'z' | 'h'>
+type Gates = BaseGate<'x' | 'z' | 'h' | 'sx' | 'sdg' | 'tdg'>
 
 type SwapGate = BaseGate<'swap'> & {
   targetQubit: number
