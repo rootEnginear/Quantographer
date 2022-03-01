@@ -199,7 +199,7 @@ const adjustWorkbenchSize = () => {
 import {
   populateBarrierDirective,
   populateOperation
-} from './render-op'
+} from './op'
 
 const populateOps = () => {
   const {ops} = circuitData

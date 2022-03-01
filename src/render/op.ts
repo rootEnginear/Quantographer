@@ -1,7 +1,7 @@
 import {renderConfig} from './config'
 import {circuitData} from './data'
 
-import {svgNamespace, opGroupElement} from './render'
+import {svgNamespace, opGroupElement} from '.'
 
 export const populateBarrierDirective = (op: BarrierDirective, opIndex: number) => {
   // prepare data
@@ -216,7 +216,7 @@ export const populateOperation = (op: Operation, opIndex: number) => {
       controlLine.setAttribute('stroke-width', `${laneLineThickness}`)
 
       const controlPoints = controlQubits.map(
-        (controlQubit, i) => {
+        (controlQubit) => {
           // calculate position
           const centerY = qubitLaneHeight * controlQubit + halfQubitLaneHeight
 

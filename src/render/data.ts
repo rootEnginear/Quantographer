@@ -90,11 +90,34 @@ export const circuitData: Circuit = {
       controlQubits: [4]
     },
     {
-      qubit: 2,
-      step: 5,
+      qubit: 1,
+      step: 4,
 
       type: 'barrier',
-      span: 2
+      span: 3
+    },
+    {
+      qubit: 1,
+      step: 5,
+
+      type: 'reset',
+      controlBits: [
+        {
+          index: 0,
+          invert: false,
+          value: 0
+        },
+        {
+          index: 1,
+          invert: false,
+          value: 0
+        },
+        {
+          index: 2,
+          invert: false,
+          value: 0
+        }
+      ]
     }
   ]
 }
