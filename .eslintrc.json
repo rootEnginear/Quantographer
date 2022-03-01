@@ -26,6 +26,9 @@
     "@typescript-eslint/member-delimiter-style": [
       "error",
       {
+        "singleline": {
+          "delimiter": "comma"
+        },
         "multiline": {
           "delimiter": "none"
         }
