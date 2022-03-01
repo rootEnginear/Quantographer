@@ -185,6 +185,14 @@ const adjustWorkbenchSize = () => {
 
   const {width: labelsWidth} = trackLabelGroupElement.getBBox()
 
+  trackLineGroupElement
+    .querySelectorAll('line')
+    .forEach(
+      (line) => {
+        line.setAttribute('x2', `${opWidth}`)
+      }
+    )
+
   const svgWidth = labelsWidth + opWidth
 
   const finalWidth = svgWidth * zoomLevel
