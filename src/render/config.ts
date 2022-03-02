@@ -14,10 +14,8 @@ export const renderConfig = Object.seal(
     headerPadding: 20,
 
     gateSize: 60,
-
-    gateOutlinePadding: 5,
-
     controlSize: 7.5,
-    controlXSize: 20
+
+    gateOutlinePadding: 5
   }
 )

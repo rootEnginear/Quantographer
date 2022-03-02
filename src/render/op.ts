@@ -8,6 +8,7 @@ const opSymbolMapping: Partial<Record<OperationTypes, string>> = {
   measure: 'measure-operation',
 
   x: 'x-gate',
+  swap: 'swap-gate',
   sx: 'sx-gate',
   sdg: 'sdg-gate',
   tdg: 'tdg-gate'
@@ -139,14 +140,24 @@ export const populateOperation = (op: Operation, opIndex: number) => {
         maxQubit = Math.max(maxQubit, ... controlQubits)
       }
 
+      if (type === 'swap') {
+        const {targetQubit} = op
+
+        maxQubit = Math.max(maxQubit, targetQubit)
+      }
+
       const centerX1 = centerX - bitLineSpacing
       const centerX2 = centerX + bitLineSpacing
 
       const startY = qubitLaneHeight * maxQubit + halfQubitLaneHeight
       const endY = bitLaneStartY + bitLaneHeight * maxBit + halfBitLaneHeight
 
+      const controlLineGroup = document.createElementNS(svgNamespace, 'g')
+
       const controlLine1 = document.createElementNS(svgNamespace, 'line')
       const controlLine2 = document.createElementNS(svgNamespace, 'line')
+
+      controlLineGroup.append(controlLine1, controlLine2)
 
       controlLine1.setAttribute('x1', `${centerX1}`)
       controlLine1.setAttribute('x2', `${centerX1}`)
@@ -195,7 +206,7 @@ export const populateOperation = (op: Operation, opIndex: number) => {
         }
       )
 
-      opElement.append(controlLine1, controlLine2, ... controlPoints)
+      opElement.append(controlLineGroup, ... controlPoints)
     }
   }
 
@@ -205,8 +216,15 @@ export const populateOperation = (op: Operation, opIndex: number) => {
     if (controlQubits.length > 0) {
       const qubits = [qubit, ... controlQubits]
 
-      const minQubit = Math.min(... qubits)
-      const maxQubit = Math.max(... qubits)
+      let minQubit = Math.min(... qubits)
+      let maxQubit = Math.max(... qubits)
+
+      if (type === 'swap') {
+        const {targetQubit} = op
+
+        minQubit = Math.min(minQubit, targetQubit)
+        maxQubit = Math.max(maxQubit, targetQubit)
+      }
 
       const startY = qubitLaneHeight * minQubit + halfQubitLaneHeight
       const endY = qubitLaneHeight * maxQubit + halfQubitLaneHeight
@@ -306,18 +324,44 @@ export const populateOperation = (op: Operation, opIndex: number) => {
 
   opElement.append(bodyElement)
 
-  if (type === 'z' && op.controlQubits.length > 0) {
-    const gateControl = document.createElementNS(svgNamespace, 'circle')
+  if (type === 'swap') {
+    const {targetQubit, controlQubits} = op
 
-    gateControl.setAttribute('cx', `${centerX}`)
-    gateControl.setAttribute('cy', `${centerY}`)
+    // calculate position
+    const targetCenterY = qubitLaneHeight * targetQubit + halfQubitLaneHeight
 
-    gateControl.setAttribute('r', `${controlSize}`)
+    if (controlQubits.length === 0) {
+      const bridgeLine = document.createElementNS(svgNamespace, 'line')
 
-    gateControl.setAttribute('fill', 'black')
+      bridgeLine.setAttribute('x1', `${centerX}`)
+      bridgeLine.setAttribute('x2', `${centerX}`)
 
-    bodyElement.append(gateControl)
-  } else if (type in opSymbolMapping) {
+      bridgeLine.setAttribute('y1', `${centerY}`)
+      bridgeLine.setAttribute('y2', `${targetCenterY}`)
+
+      bridgeLine.setAttribute('stroke', 'black')
+      bridgeLine.setAttribute('stroke-width', `${laneLineThickness}`)
+
+      bodyElement.append(bridgeLine)
+    }
+
+    const bodyStartX = centerX - halfGateSize
+    const bodyStartY = targetCenterY - halfGateSize
+
+    const useElement = document.createElementNS(svgNamespace, 'use')
+
+    useElement.setAttribute('x', `${bodyStartX}`)
+    useElement.setAttribute('y', `${bodyStartY}`)
+
+    useElement.setAttribute('width', `${gateSize}`)
+    useElement.setAttribute('height', `${gateSize}`)
+
+    useElement.setAttribute('href', '#swap-gate')
+
+    bodyElement.append(useElement)
+  }
+
+  if (type in opSymbolMapping) {
     const bodyStartX = centerX - halfGateSize
     const bodyStartY = centerY - halfGateSize
 
@@ -355,7 +399,7 @@ export const populateOperation = (op: Operation, opIndex: number) => {
 
     labelElement.classList.add('gate-label')
 
-    labelElement.textContent = type[0]
+    labelElement.textContent = type
 
     bodyElement.append(boxElement, labelElement)
   }
