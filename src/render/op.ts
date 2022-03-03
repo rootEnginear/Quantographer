@@ -8,7 +8,6 @@ const opSymbolMapping: Partial<Record<OperationTypes, string>> = {
   measure: 'measure-operation',
 
   x: 'x-gate',
-  swap: 'swap-gate',
   sx: 'sx-gate',
   sdg: 'sdg-gate',
   tdg: 'tdg-gate'
@@ -259,69 +258,7 @@ export const populateOperation = (op: Operation, opIndex: number) => {
     opElement.append(controlLine1, controlLine2, assignSymbol)
   }
 
-  const bodyElement = document.createElementNS(svgNamespace, 'g')
-
-  opElement.append(bodyElement)
-
-  if (type === 'swap') {
-    const {targetQubit, controlQubits} = op
-
-    // calculate position
-    const targetCenterY = qubitLaneHeight * targetQubit + halfQubitLaneHeight
-
-    if (controlQubits.length === 0) {
-      const bridgeLine = document.createElementNS(svgNamespace, 'line')
-
-      bridgeLine.setAttribute('x1', `${centerX}`)
-      bridgeLine.setAttribute('x2', `${centerX}`)
-
-      bridgeLine.setAttribute('y1', `${centerY}`)
-      bridgeLine.setAttribute('y2', `${targetCenterY}`)
-
-      bridgeLine.setAttribute('stroke', 'black')
-      bridgeLine.setAttribute('stroke-width', `${laneLineThickness}`)
-
-      bodyElement.append(bridgeLine)
-    }
-
-    const bodyStartX = centerX - halfGateSize
-    const bodyStartY = targetCenterY - halfGateSize
-
-    const useElement = document.createElementNS(svgNamespace, 'use')
-
-    useElement.setAttribute('x', `${bodyStartX}`)
-    useElement.setAttribute('y', `${bodyStartY}`)
-
-    useElement.setAttribute('width', `${gateSize}`)
-    useElement.setAttribute('height', `${gateSize}`)
-
-    useElement.setAttribute('href', '#swap-gate')
-
-    useElement.classList.add('opaque')
-
-    bodyElement.append(useElement)
-  }
-
-  if (type in opSymbolMapping) {
-    const bodyStartX = centerX - halfGateSize
-    const bodyStartY = centerY - halfGateSize
-
-    const symbolId = opSymbolMapping[type]!
-
-    const useElement = document.createElementNS(svgNamespace, 'use')
-
-    useElement.setAttribute('x', `${bodyStartX}`)
-    useElement.setAttribute('y', `${bodyStartY}`)
-
-    useElement.setAttribute('width', `${gateSize}`)
-    useElement.setAttribute('height', `${gateSize}`)
-
-    useElement.setAttribute('href', `#${symbolId}`)
-
-    useElement.classList.add('opaque')
-
-    bodyElement.append(useElement)
-  } else if (type === 'barrier') {
+  if (type === 'barrier') {
     const {span} = op
 
     const bodyStartX = centerX - halfGateSize
@@ -330,6 +267,10 @@ export const populateOperation = (op: Operation, opIndex: number) => {
     const lengthY = qubitLaneHeight * span
 
     const endY = startY + lengthY
+
+    const bodyElement = document.createElementNS(svgNamespace, 'g')
+
+    opElement.append(bodyElement)
 
     const lineElement = document.createElementNS(svgNamespace, 'line')
 
@@ -356,9 +297,87 @@ export const populateOperation = (op: Operation, opIndex: number) => {
     hitElement.classList.add('opaque')
 
     bodyElement.append(lineElement, hitElement)
+  } else if (type === 'swap') {
+    const {targetQubit, controlQubits} = op
+
+    // calculate position
+    const targetCenterY = qubitLaneHeight * targetQubit + halfQubitLaneHeight
+
+    const bodyElement = document.createElementNS(svgNamespace, 'g')
+
+    opElement.append(bodyElement)
+
+    if (controlQubits.length === 0) {
+      const bridgeLine = document.createElementNS(svgNamespace, 'line')
+
+      bridgeLine.setAttribute('x1', `${centerX}`)
+      bridgeLine.setAttribute('x2', `${centerX}`)
+
+      bridgeLine.setAttribute('y1', `${centerY}`)
+      bridgeLine.setAttribute('y2', `${targetCenterY}`)
+
+      bridgeLine.setAttribute('stroke', 'black')
+      bridgeLine.setAttribute('stroke-width', `${laneLineThickness}`)
+
+      bodyElement.append(bridgeLine)
+    }
+
+    const bodyStartX = centerX - halfGateSize
+    const bodyStartY = centerY - halfGateSize
+
+    const targetStartY = targetCenterY - halfGateSize
+
+    const useElement1 = document.createElementNS(svgNamespace, 'use')
+
+    useElement1.setAttribute('x', `${bodyStartX}`)
+    useElement1.setAttribute('y', `${bodyStartY}`)
+
+    useElement1.setAttribute('width', `${gateSize}`)
+    useElement1.setAttribute('height', `${gateSize}`)
+
+    useElement1.setAttribute('href', '#swap-gate')
+
+    useElement1.classList.add('opaque')
+
+    const useElement2 = document.createElementNS(svgNamespace, 'use')
+
+    useElement2.setAttribute('x', `${bodyStartX}`)
+    useElement2.setAttribute('y', `${targetStartY}`)
+
+    useElement2.setAttribute('width', `${gateSize}`)
+    useElement2.setAttribute('height', `${gateSize}`)
+
+    useElement2.setAttribute('href', '#swap-gate')
+
+    useElement2.classList.add('opaque')
+
+    bodyElement.append(useElement1, useElement2)
+  } else if (type in opSymbolMapping) {
+    const bodyStartX = centerX - halfGateSize
+    const bodyStartY = centerY - halfGateSize
+
+    const symbolId = opSymbolMapping[type]!
+
+    const useElement = document.createElementNS(svgNamespace, 'use')
+
+    useElement.setAttribute('x', `${bodyStartX}`)
+    useElement.setAttribute('y', `${bodyStartY}`)
+
+    useElement.setAttribute('width', `${gateSize}`)
+    useElement.setAttribute('height', `${gateSize}`)
+
+    useElement.setAttribute('href', `#${symbolId}`)
+
+    useElement.classList.add('opaque')
+
+    opElement.append(useElement)
   } else {
     const bodyStartX = centerX - halfGateSize
     const bodyStartY = centerY - halfGateSize
+
+    const bodyElement = document.createElementNS(svgNamespace, 'g')
+
+    opElement.append(bodyElement)
 
     const boxElement = document.createElementNS(svgNamespace, 'use')
 
@@ -404,5 +423,6 @@ export const populateOperation = (op: Operation, opIndex: number) => {
   haloElement.setAttribute('width', `${selectWidth}`)
   haloElement.setAttribute('height', `${selectHeight}`)
 
-  haloElement.setAttribute('fill', 'none')
+  haloElement.setAttribute('fill', 'blue')
+  haloElement.setAttribute('fill-opacity', '0.15')
 }
