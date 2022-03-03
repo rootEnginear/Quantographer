@@ -140,7 +140,7 @@ export const populateOperation = (op: Operation, opIndex: number) => {
         maxQubit = Math.max(maxQubit, ... controlQubits)
       }
 
-      if (type === 'swap') {
+      if ('targetQubit' in op) {
         const {targetQubit} = op
 
         maxQubit = Math.max(maxQubit, targetQubit)
@@ -219,7 +219,7 @@ export const populateOperation = (op: Operation, opIndex: number) => {
       let minQubit = Math.min(... qubits)
       let maxQubit = Math.max(... qubits)
 
-      if (type === 'swap') {
+      if ('targetQubit' in op) {
         const {targetQubit} = op
 
         minQubit = Math.min(minQubit, targetQubit)
@@ -403,14 +403,6 @@ export const populateOperation = (op: Operation, opIndex: number) => {
 
     bodyElement.append(boxElement, labelElement)
   }
-
-  bodyElement.addEventListener(
-    'contextmenu',
-    (e) => {
-      e.stopPropagation()
-      e.preventDefault()
-    }
-  )
 
   const {
     x: opX,
