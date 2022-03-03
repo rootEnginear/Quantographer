@@ -60,6 +60,8 @@ export const populateOperation = (op: Operation, opIndex: number) => {
   // construct halo
   const haloElement = document.createElementNS(svgNamespace, 'rect')
 
+  opElement.append(haloElement)
+
   if ('controlBits' in op) {
     const {controlBits} = op
 
@@ -261,7 +263,7 @@ export const populateOperation = (op: Operation, opIndex: number) => {
   if (type === 'barrier') {
     const {span} = op
 
-    const bodyStartX = centerX - halfGateSize
+    const startX = centerX - halfGateSize
 
     const startY = qubitLaneHeight * qubit
     const lengthY = qubitLaneHeight * span
@@ -286,7 +288,7 @@ export const populateOperation = (op: Operation, opIndex: number) => {
 
     const hitElement = document.createElementNS(svgNamespace, 'rect')
 
-    hitElement.setAttribute('x', `${bodyStartX}`)
+    hitElement.setAttribute('x', `${startX}`)
     hitElement.setAttribute('y', `${startY}`)
 
     hitElement.setAttribute('width', `${gateSize}`)
@@ -302,6 +304,10 @@ export const populateOperation = (op: Operation, opIndex: number) => {
 
     // calculate position
     const targetCenterY = qubitLaneHeight * targetQubit + halfQubitLaneHeight
+
+    const startX = centerX - halfGateSize
+    const startY = centerY - halfGateSize
+    const targetStartY = targetCenterY - halfGateSize
 
     const bodyElement = document.createElementNS(svgNamespace, 'g')
 
@@ -322,15 +328,10 @@ export const populateOperation = (op: Operation, opIndex: number) => {
       bodyElement.append(bridgeLine)
     }
 
-    const bodyStartX = centerX - halfGateSize
-    const bodyStartY = centerY - halfGateSize
-
-    const targetStartY = targetCenterY - halfGateSize
-
     const useElement1 = document.createElementNS(svgNamespace, 'use')
 
-    useElement1.setAttribute('x', `${bodyStartX}`)
-    useElement1.setAttribute('y', `${bodyStartY}`)
+    useElement1.setAttribute('x', `${startX}`)
+    useElement1.setAttribute('y', `${startY}`)
 
     useElement1.setAttribute('width', `${gateSize}`)
     useElement1.setAttribute('height', `${gateSize}`)
@@ -341,7 +342,7 @@ export const populateOperation = (op: Operation, opIndex: number) => {
 
     const useElement2 = document.createElementNS(svgNamespace, 'use')
 
-    useElement2.setAttribute('x', `${bodyStartX}`)
+    useElement2.setAttribute('x', `${startX}`)
     useElement2.setAttribute('y', `${targetStartY}`)
 
     useElement2.setAttribute('width', `${gateSize}`)
@@ -353,15 +354,15 @@ export const populateOperation = (op: Operation, opIndex: number) => {
 
     bodyElement.append(useElement1, useElement2)
   } else if (type in opSymbolMapping) {
-    const bodyStartX = centerX - halfGateSize
-    const bodyStartY = centerY - halfGateSize
+    const startX = centerX - halfGateSize
+    const startY = centerY - halfGateSize
 
     const symbolId = opSymbolMapping[type]!
 
     const useElement = document.createElementNS(svgNamespace, 'use')
 
-    useElement.setAttribute('x', `${bodyStartX}`)
-    useElement.setAttribute('y', `${bodyStartY}`)
+    useElement.setAttribute('x', `${startX}`)
+    useElement.setAttribute('y', `${startY}`)
 
     useElement.setAttribute('width', `${gateSize}`)
     useElement.setAttribute('height', `${gateSize}`)
@@ -372,8 +373,8 @@ export const populateOperation = (op: Operation, opIndex: number) => {
 
     opElement.append(useElement)
   } else {
-    const bodyStartX = centerX - halfGateSize
-    const bodyStartY = centerY - halfGateSize
+    const startX = centerX - halfGateSize
+    const startY = centerY - halfGateSize
 
     const bodyElement = document.createElementNS(svgNamespace, 'g')
 
@@ -381,8 +382,8 @@ export const populateOperation = (op: Operation, opIndex: number) => {
 
     const boxElement = document.createElementNS(svgNamespace, 'use')
 
-    boxElement.setAttribute('x', `${bodyStartX}`)
-    boxElement.setAttribute('y', `${bodyStartY}`)
+    boxElement.setAttribute('x', `${startX}`)
+    boxElement.setAttribute('y', `${startY}`)
 
     boxElement.setAttribute('width', `${gateSize}`)
     boxElement.setAttribute('height', `${gateSize}`)
@@ -414,15 +415,11 @@ export const populateOperation = (op: Operation, opIndex: number) => {
   const selectWidth = opWidth + doubleGateOutlineSize
   const selectHeight = opHeight + doubleGateOutlineSize
 
-  // add halo after calculate region
-  opElement.append(haloElement)
-
   haloElement.setAttribute('x', `${selectX}`)
   haloElement.setAttribute('y', `${selectY}`)
 
   haloElement.setAttribute('width', `${selectWidth}`)
   haloElement.setAttribute('height', `${selectHeight}`)
 
-  haloElement.setAttribute('fill', 'blue')
-  haloElement.setAttribute('fill-opacity', '0.15')
+  haloElement.setAttribute('fill', 'none')
 }

@@ -132,6 +132,8 @@ const populateTrack = () => {
       const lineElement1 = document.createElementNS(svgNamespace, 'line')
       const lineElement2 = document.createElementNS(svgNamespace, 'line')
 
+      lineGroupElement.append(lineElement1, lineElement2)
+
       lineElement1.setAttribute('x1', '0')
 
       lineElement1.setAttribute('y1', `${startY1}`)
@@ -147,8 +149,6 @@ const populateTrack = () => {
 
       lineElement2.setAttribute('stroke', 'black')
       lineElement2.setAttribute('stroke-width', `${laneLineThickness}`)
-
-      lineGroupElement.append(lineElement1, lineElement2)
     }
   )
 
