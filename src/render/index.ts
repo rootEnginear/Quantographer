@@ -197,24 +197,12 @@ const adjustWorkbenchSize = () => {
   workbenchElement.setAttribute('viewBox', `0 0 ${svgWidth} ${opHeight}`)
 }
 
-import {
-  populateBarrierDirective,
-  populateOperation
-} from './op'
+import {populateOperation} from './op'
 
 const populateOps = () => {
   const {ops} = circuitData
 
-  ops.forEach(
-    (op, i) => {
-      const {type} = op
-
-      if (type === 'barrier')
-        populateBarrierDirective(op, i)
-      else
-        populateOperation(op, i)
-    }
-  )
+  ops.forEach(populateOperation)
 }
 
 workbenchElement.addEventListener(

@@ -14,67 +14,6 @@ const opSymbolMapping: Partial<Record<OperationTypes, string>> = {
   tdg: 'tdg-gate'
 }
 
-export const populateBarrierDirective = (op: BarrierDirective, opIndex: number) => {
-  // prepare data
-  const {
-    qubitLaneHeight,
-    stepWidth,
-    gateSize
-  } = renderConfig
-
-  const {qubit, step, span} = op
-
-  // calculate a constants
-  const halfStepWidth = stepWidth / 2
-  const halfGateSize = gateSize / 2
-
-  // calculate position
-  const startX = stepWidth * step, centerX = startX + halfStepWidth
-
-  const startY = qubitLaneHeight * qubit
-  const lengthY = qubitLaneHeight * span
-
-  const endY = startY + lengthY
-
-  // construct operation
-  const opElement = document.createElementNS(svgNamespace, 'g')
-
-  opGroupElement.append(opElement)
-
-  opElement.dataset.index = `${opIndex}`
-
-  const bodyElement = document.createElementNS(svgNamespace, 'line')
-
-  opElement.append(bodyElement)
-
-  bodyElement.setAttribute('x1', `${centerX}`)
-  bodyElement.setAttribute('x2', `${centerX}`)
-
-  bodyElement.setAttribute('y1', `${startY}`)
-  bodyElement.setAttribute('y2', `${endY}`)
-
-  bodyElement.setAttribute('stroke', 'black')
-  bodyElement.setAttribute('stroke-width', '2')
-  bodyElement.setAttribute('stroke-dasharray', '8 4')
-
-  const selectX = centerX - halfGateSize
-
-  // construct halo
-  const haloElement = document.createElementNS(svgNamespace, 'rect')
-
-  opElement.append(haloElement)
-
-  haloElement.classList.add('opaque')
-
-  haloElement.setAttribute('x', `${selectX}`)
-  haloElement.setAttribute('y', `${startY}`)
-
-  haloElement.setAttribute('width', `${gateSize}`)
-  haloElement.setAttribute('height', `${lengthY}`)
-
-  haloElement.setAttribute('fill', 'none')
-}
-
 export const populateOperation = (op: Operation, opIndex: number) => {
   // prepare data
   const {
@@ -358,6 +297,8 @@ export const populateOperation = (op: Operation, opIndex: number) => {
 
     useElement.setAttribute('href', '#swap-gate')
 
+    useElement.classList.add('opaque')
+
     bodyElement.append(useElement)
   }
 
@@ -377,7 +318,44 @@ export const populateOperation = (op: Operation, opIndex: number) => {
 
     useElement.setAttribute('href', `#${symbolId}`)
 
+    useElement.classList.add('opaque')
+
     bodyElement.append(useElement)
+  } else if (type === 'barrier') {
+    const {span} = op
+
+    const bodyStartX = centerX - halfGateSize
+
+    const startY = qubitLaneHeight * qubit
+    const lengthY = qubitLaneHeight * span
+
+    const endY = startY + lengthY
+
+    const lineElement = document.createElementNS(svgNamespace, 'line')
+
+    lineElement.setAttribute('x1', `${centerX}`)
+    lineElement.setAttribute('x2', `${centerX}`)
+
+    lineElement.setAttribute('y1', `${startY}`)
+    lineElement.setAttribute('y2', `${endY}`)
+
+    lineElement.setAttribute('stroke', 'black')
+    lineElement.setAttribute('stroke-width', '2')
+    lineElement.setAttribute('stroke-dasharray', '8 4')
+
+    const hitElement = document.createElementNS(svgNamespace, 'rect')
+
+    hitElement.setAttribute('x', `${bodyStartX}`)
+    hitElement.setAttribute('y', `${startY}`)
+
+    hitElement.setAttribute('width', `${gateSize}`)
+    hitElement.setAttribute('height', `${lengthY}`)
+
+    hitElement.setAttribute('fill', 'none')
+
+    hitElement.classList.add('opaque')
+
+    bodyElement.append(lineElement, hitElement)
   } else {
     const bodyStartX = centerX - halfGateSize
     const bodyStartY = centerY - halfGateSize
