@@ -153,6 +153,8 @@ export const populateOperation = (op: Operation, opIndex: number) => {
           gateControl.addEventListener(
             'mousedown',
             (e) => {
+              e.stopPropagation()
+
               if (e.buttons === 4) {
                 // delete
                 controlBits.splice(entryIndex, 1)
@@ -290,6 +292,8 @@ export const populateOperation = (op: Operation, opIndex: number) => {
           gateControl.addEventListener(
             'mousedown',
             (e) => {
+              e.stopPropagation()
+
               if (e.buttons === 4) {
                 // delete
                 controlQubits.splice(entryIndex, 1)
@@ -445,7 +449,9 @@ export const populateOperation = (op: Operation, opIndex: number) => {
 
     assignSymbol.addEventListener(
       'mousedown',
-      () => {
+      (e) => {
+        e.stopPropagation()
+
         // new operation to be changed and validated
         let newBit = index
 
@@ -549,6 +555,9 @@ export const populateOperation = (op: Operation, opIndex: number) => {
     bodyElement.addEventListener(
       'mousedown',
       (e) => {
+        // stop bubbling
+        e.stopPropagation()
+
         // new operation to be changed and validated
         const newOp = deepClone(op)
 
@@ -630,8 +639,7 @@ export const populateOperation = (op: Operation, opIndex: number) => {
 
     bodyElement.append(resizeElement)
 
-    const resizeStartY = endY - 15
-
+    const resizeStartY = endY - halfQubitLaneHeight - 7.5
     resizeElement.setAttribute('x', `${startX}`)
     resizeElement.setAttribute('y', `${resizeStartY}`)
 
@@ -791,7 +799,10 @@ export const populateOperation = (op: Operation, opIndex: number) => {
 
     useElement1.addEventListener(
       'mousedown',
-      () => {
+      (e) => {
+        // stop bubbling
+        e.stopPropagation()
+
         // new operation to be changed and validated
         const newOp = deepClone(op)
 
@@ -871,7 +882,10 @@ export const populateOperation = (op: Operation, opIndex: number) => {
 
     useElement2.addEventListener(
       'mousedown',
-      () => {
+      (e) => {
+        // stop bubbling
+        e.stopPropagation()
+
         // new operation to be changed and validated
         const newOp = deepClone(op)
 
@@ -1002,7 +1016,10 @@ export const populateOperation = (op: Operation, opIndex: number) => {
 
     mainElement.addEventListener(
       'mousedown',
-      () => {
+      (e) => {
+        // stop bubbling
+        e.stopPropagation()
+
         // new operation to be changed and validated
         const newOp = deepClone(op)
 
