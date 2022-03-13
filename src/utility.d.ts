@@ -3,7 +3,7 @@ type NumberRange = {
   upper: number
 }
 
-type OpLocation = {
+type OperationLocation = {
   step: NumberRange
   qubit: NumberRange
 }

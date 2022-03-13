@@ -150,6 +150,73 @@ export const populateOperation = (op: Operation, opIndex: number) => {
 
           gateControl.setAttribute('fill', fillColor)
 
+          gateControl.addEventListener(
+            'mousedown',
+            () => {
+              // new operation to be changed and validated
+              let newBit = index
+
+              // change is valid
+              let changeValid = false
+
+              const updateValid = (b: boolean) => {
+                // update flag
+                changeValid = b
+
+                // visual feedback
+                workbenchElement.style.cursor = b ? 'ns-resize' : 'not-allowed'
+              }
+
+              const moveHandler = (e: MouseEvent) => {
+                const {
+                  laneType,
+                  bitType,
+
+                  step: movedStep,
+                  index: movedBit
+                } = getLocationInfo(e.offsetX, e.offsetY)
+
+                if (
+                  bitType !== 'bit' ||
+                  laneType !== 'op' ||
+                  movedStep !== step
+                ) return updateValid(false)
+
+                newBit = movedBit
+
+                const failed =
+                  // overlaps with other control bit
+                  controlBits.some(
+                    (prop) => prop.index === movedBit
+                  )
+
+                // update flag and feedback
+                updateValid(
+                  !failed
+                )
+              }
+
+              const upHandler = () => {
+                workbenchElement.style.cursor = ''
+
+                workbenchElement.removeEventListener('mousemove', moveHandler)
+                workbenchElement.removeEventListener('mouseup', upHandler)
+
+                if (!changeValid) return
+
+                entry.index = newBit
+
+                opElement.remove()
+
+                // create updated varsion
+                populateOperation(op, opIndex)
+              }
+
+              workbenchElement.addEventListener('mousemove', moveHandler)
+              workbenchElement.addEventListener('mouseup', upHandler)
+            }
+          )
+
           return gateControl
         }
       )
@@ -190,7 +257,7 @@ export const populateOperation = (op: Operation, opIndex: number) => {
       controlLine.setAttribute('stroke-width', `${laneLineThickness}`)
 
       const controlPoints = controlQubits.map(
-        (controlQubit) => {
+        (controlQubit, entryIndex) => {
           // calculate position
           const centerY = qubitLaneHeight * controlQubit + halfQubitLaneHeight
 
@@ -206,6 +273,92 @@ export const populateOperation = (op: Operation, opIndex: number) => {
 
           gateControl.setAttribute('fill', 'blue')
 
+          gateControl.addEventListener(
+            'mousedown',
+            () => {
+              // new operation to be changed and validated
+              let newQubit = controlQubit
+
+              // change is valid
+              let changeValid = false
+
+              const updateValid = (b: boolean) => {
+                // update flag
+                changeValid = b
+
+                // visual feedback
+                workbenchElement.style.cursor = b ? 'ns-resize' : 'not-allowed'
+              }
+
+              const moveHandler = (e: MouseEvent) => {
+                const {
+                  laneType,
+                  bitType,
+
+                  step: movedStep,
+                  index: movedQubit
+                } = getLocationInfo(e.offsetX, e.offsetY)
+
+                if (
+                  bitType !== 'qubit' ||
+                  laneType !== 'op' ||
+                  movedStep !== step
+                ) return updateValid(false)
+
+                newQubit = movedQubit
+
+                const opSpan: OperationLocation = {
+                  step: {
+                    lower: step,
+                    upper: step
+                  },
+                  qubit: {
+                    lower: newQubit,
+                    upper: newQubit
+                  }
+                }
+
+                const failed =
+                  // moved over its control qubit
+                  controlQubits.includes(newQubit) ||
+
+                  // moved over its gate
+                  newQubit === qubit ||
+
+                  'targetQubit' in op && newQubit === op.targetQubit ||
+
+                  // overlaps with other operation
+                  ops.some(
+                    (op, index) => opIndex !== index && opOverlaps(getOpSpan(op), opSpan)
+                  )
+
+                // update flag and feedback
+                updateValid(
+                  !failed
+                )
+              }
+
+              const upHandler = () => {
+                workbenchElement.style.cursor = ''
+
+                workbenchElement.removeEventListener('mousemove', moveHandler)
+                workbenchElement.removeEventListener('mouseup', upHandler)
+
+                if (!changeValid) return
+
+                controlQubits[entryIndex] = newQubit
+
+                opElement.remove()
+
+                // create updated varsion
+                populateOperation(op, opIndex)
+              }
+
+              workbenchElement.addEventListener('mousemove', moveHandler)
+              workbenchElement.addEventListener('mouseup', upHandler)
+            }
+          )
+
           return gateControl
         }
       )
@@ -215,11 +368,8 @@ export const populateOperation = (op: Operation, opIndex: number) => {
   }
 
   if ('assignBit' in op) {
-    const {
-      assignBit: {
-        index
-      }
-    } = op
+    const {assignBit} = op
+    const {index} = assignBit
 
     const assignSymbolSize = controlSize * 2.5, halfAssignSymbolSize = assignSymbolSize / 2
 
@@ -264,6 +414,65 @@ export const populateOperation = (op: Operation, opIndex: number) => {
     assignSymbol.setAttribute('height', `${assignSymbolSize}`)
 
     assignSymbol.setAttribute('href', '#symmetric-triangle')
+
+    assignSymbol.addEventListener(
+      'mousedown',
+      () => {
+        // new operation to be changed and validated
+        let newBit = index
+
+        // change is valid
+        let changeValid = false
+
+        const updateValid = (b: boolean) => {
+          // update flag
+          changeValid = b
+
+          // visual feedback
+          workbenchElement.style.cursor = b ? 'ns-resize' : 'not-allowed'
+        }
+
+        const moveHandler = (e: MouseEvent) => {
+          const {
+            laneType,
+            bitType,
+
+            step: movedStep,
+            index: movedBit
+          } = getLocationInfo(e.offsetX, e.offsetY)
+
+          if (
+            bitType !== 'bit' ||
+            laneType !== 'op' ||
+            movedStep !== step
+          ) return updateValid(false)
+
+          newBit = movedBit
+
+          // update flag and feedback
+          updateValid(true)
+        }
+
+        const upHandler = () => {
+          workbenchElement.style.cursor = ''
+
+          workbenchElement.removeEventListener('mousemove', moveHandler)
+          workbenchElement.removeEventListener('mouseup', upHandler)
+
+          if (!changeValid) return
+
+          assignBit.index = newBit
+
+          opElement.remove()
+
+          // create updated varsion
+          populateOperation(op, opIndex)
+        }
+
+        workbenchElement.addEventListener('mousemove', moveHandler)
+        workbenchElement.addEventListener('mouseup', upHandler)
+      }
+    )
 
     opElement.append(controlLine1, controlLine2, assignSymbol)
   }
@@ -401,7 +610,7 @@ export const populateOperation = (op: Operation, opIndex: number) => {
     resizeElement.setAttribute('width', `${gateSize}`)
     resizeElement.setAttribute('height', '15')
 
-    resizeElement.setAttribute('fill', 'black')
+    resizeElement.setAttribute('fill', 'none')
     resizeElement.setAttribute('fill-opacity', '0.3')
 
     let resizing = false
@@ -433,12 +642,14 @@ export const populateOperation = (op: Operation, opIndex: number) => {
             laneType,
             bitType,
 
+            step: movedStep,
             index: movedQubit
           } = getLocationInfo(e.offsetX, e.offsetY)
 
           if (
             bitType !== 'qubit' ||
-            laneType !== 'op'
+            laneType !== 'op' ||
+            movedStep !== step
           ) return updateValid(false)
 
           newOp.qubitSpan = movedQubit - newOp.qubit + 1
@@ -484,10 +695,12 @@ export const populateOperation = (op: Operation, opIndex: number) => {
       }
     )
 
+    // show/hide resize gutter
     bodyElement.addEventListener(
       'mouseenter',
       () => resizeElement.setAttribute('fill', 'black')
     )
+
     bodyElement.addEventListener(
       'mouseleave',
       () => !resizing && resizeElement.setAttribute('fill', 'none')
@@ -547,53 +760,296 @@ export const populateOperation = (op: Operation, opIndex: number) => {
     useElement2.classList.add('opaque')
 
     bodyElement.append(useElement1, useElement2)
-  } else if (type in opSymbolMapping) {
-    const startX = centerX - halfGateSize
-    const startY = centerY - halfGateSize
 
-    const symbolId = opSymbolMapping[type]!
+    useElement1.addEventListener(
+      'mousedown',
+      () => {
+        // new operation to be changed and validated
+        const newOp = deepClone(op)
 
-    const useElement = document.createElementNS(svgNamespace, 'use')
+        // change is valid
+        let changeValid = false
 
-    useElement.setAttribute('x', `${startX}`)
-    useElement.setAttribute('y', `${startY}`)
+        const updateValid = (b: boolean) => {
+          // update flag
+          changeValid = b
 
-    useElement.setAttribute('width', `${gateSize}`)
-    useElement.setAttribute('height', `${gateSize}`)
+          // visual feedback
+          workbenchElement.style.cursor = b ? 'move' : 'not-allowed'
+        }
 
-    useElement.setAttribute('href', `#${symbolId}`)
+        const moveHandler = (e: MouseEvent) => {
+          const {
+            laneType,
+            bitType,
 
-    useElement.classList.add('opaque')
+            step: movedStep,
+            index: movedQubit
+          } = getLocationInfo(e.offsetX, e.offsetY)
 
-    opElement.append(useElement)
+          if (
+            bitType !== 'qubit' ||
+            laneType !== 'op'
+          ) return updateValid(false)
+
+          newOp.step = movedStep
+          newOp.qubit = movedQubit
+
+          const opSpan = getOpSpan(newOp)
+
+          const failed =
+            // moved over itself
+            qubit === movedQubit && movedStep === step ||
+            targetQubit === movedQubit ||
+
+            // moved over its control qubits
+            'controlQubits' in op && op.controlQubits.includes(movedQubit) ||
+
+            // overlaps with other operation
+            ops.some(
+              (op, index) => opIndex !== index && opOverlaps(getOpSpan(op), opSpan)
+            )
+
+          // update flag and feedback
+          updateValid(
+            !failed
+          )
+        }
+
+        const upHandler = () => {
+          workbenchElement.style.cursor = ''
+
+          workbenchElement.removeEventListener('mousemove', moveHandler)
+          workbenchElement.removeEventListener('mouseup', upHandler)
+
+          if (!changeValid) return
+
+          op.qubit = newOp.qubit
+          op.step = newOp.step
+
+          // resize workbench in case of moved to the far right
+          adjustWorkbenchSize()
+
+          opElement.remove()
+
+          // create updated varsion
+          populateOperation(op, opIndex)
+        }
+
+        workbenchElement.addEventListener('mousemove', moveHandler)
+        workbenchElement.addEventListener('mouseup', upHandler)
+      }
+    )
+
+    useElement2.addEventListener(
+      'mousedown',
+      () => {
+        // new operation to be changed and validated
+        const newOp = deepClone(op)
+
+        // change is valid
+        let changeValid = false
+
+        const updateValid = (b: boolean) => {
+          // update flag
+          changeValid = b
+
+          // visual feedback
+          workbenchElement.style.cursor = b ? 'move' : 'not-allowed'
+        }
+
+        const moveHandler = (e: MouseEvent) => {
+          const {
+            laneType,
+            bitType,
+
+            step: movedStep,
+            index: movedQubit
+          } = getLocationInfo(e.offsetX, e.offsetY)
+
+          if (
+            bitType !== 'qubit' ||
+            laneType !== 'op'
+          ) return updateValid(false)
+
+          newOp.step = movedStep
+          newOp.targetQubit = movedQubit
+
+          const opSpan = getOpSpan(newOp)
+
+          const failed =
+            // moved over itself
+            qubit === movedQubit ||
+            targetQubit === movedQubit && movedStep === step ||
+
+            // moved over its control qubits
+            'controlQubits' in op && op.controlQubits.includes(movedQubit) ||
+
+            // overlaps with other operation
+            ops.some(
+              (op, index) => opIndex !== index && opOverlaps(getOpSpan(op), opSpan)
+            )
+
+          // update flag and feedback
+          updateValid(
+            !failed
+          )
+        }
+
+        const upHandler = () => {
+          workbenchElement.style.cursor = ''
+
+          workbenchElement.removeEventListener('mousemove', moveHandler)
+          workbenchElement.removeEventListener('mouseup', upHandler)
+
+          if (!changeValid) return
+
+          op.targetQubit = newOp.targetQubit
+          op.step = newOp.step
+
+          // resize workbench in case of moved to the far right
+          adjustWorkbenchSize()
+
+          opElement.remove()
+
+          // create updated varsion
+          populateOperation(op, opIndex)
+        }
+
+        workbenchElement.addEventListener('mousemove', moveHandler)
+        workbenchElement.addEventListener('mouseup', upHandler)
+      }
+    )
   } else {
-    const startX = centerX - halfGateSize
-    const startY = centerY - halfGateSize
+    let mainElement
 
-    const bodyElement = document.createElementNS(svgNamespace, 'g')
+    if (type in opSymbolMapping) {
+      const startX = centerX - halfGateSize
+      const startY = centerY - halfGateSize
 
-    opElement.append(bodyElement)
+      const symbolId = opSymbolMapping[type]!
 
-    const boxElement = document.createElementNS(svgNamespace, 'use')
+      mainElement = document.createElementNS(svgNamespace, 'use')
 
-    boxElement.setAttribute('x', `${startX}`)
-    boxElement.setAttribute('y', `${startY}`)
+      opElement.append(mainElement)
 
-    boxElement.setAttribute('width', `${gateSize}`)
-    boxElement.setAttribute('height', `${gateSize}`)
+      mainElement.setAttribute('x', `${startX}`)
+      mainElement.setAttribute('y', `${startY}`)
 
-    boxElement.setAttribute('href', '#operation-container')
+      mainElement.setAttribute('width', `${gateSize}`)
+      mainElement.setAttribute('height', `${gateSize}`)
 
-    const labelElement = document.createElementNS(svgNamespace, 'text')
+      mainElement.setAttribute('href', `#${symbolId}`)
 
-    labelElement.setAttribute('x', `${centerX}`)
-    labelElement.setAttribute('y', `${centerY}`)
+      mainElement.classList.add('opaque')
+    } else {
+      const startX = centerX - halfGateSize
+      const startY = centerY - halfGateSize
 
-    labelElement.classList.add('gate-label')
+      mainElement = document.createElementNS(svgNamespace, 'g')
 
-    labelElement.textContent = type
+      opElement.append(mainElement)
 
-    bodyElement.append(boxElement, labelElement)
+      const boxElement = document.createElementNS(svgNamespace, 'use')
+
+      boxElement.setAttribute('x', `${startX}`)
+      boxElement.setAttribute('y', `${startY}`)
+
+      boxElement.setAttribute('width', `${gateSize}`)
+      boxElement.setAttribute('height', `${gateSize}`)
+
+      boxElement.setAttribute('href', '#operation-container')
+
+      const labelElement = document.createElementNS(svgNamespace, 'text')
+
+      labelElement.setAttribute('x', `${centerX}`)
+      labelElement.setAttribute('y', `${centerY}`)
+
+      labelElement.classList.add('gate-label')
+
+      labelElement.textContent = type
+
+      mainElement.append(boxElement, labelElement)
+    }
+
+    mainElement.addEventListener(
+      'mousedown',
+      () => {
+        // new operation to be changed and validated
+        const newOp = deepClone(op)
+
+        // change is valid
+        let changeValid = false
+
+        const updateValid = (b: boolean) => {
+          // update flag
+          changeValid = b
+
+          // visual feedback
+          workbenchElement.style.cursor = b ? 'move' : 'not-allowed'
+        }
+
+        const moveHandler = (e: MouseEvent) => {
+          const {
+            laneType,
+            bitType,
+
+            step: movedStep,
+            index: movedQubit
+          } = getLocationInfo(e.offsetX, e.offsetY)
+
+          if (
+            bitType !== 'qubit' ||
+            laneType !== 'op'
+          ) return updateValid(false)
+
+          newOp.step = movedStep
+          newOp.qubit = movedQubit
+
+          const opSpan = getOpSpan(newOp)
+
+          const failed =
+            // moved over itself
+            qubit === movedQubit && step === movedStep ||
+
+            // moved over its control qubits
+            'controlQubits' in op && op.controlQubits.includes(movedQubit) ||
+
+            // overlaps with other operation
+            ops.some(
+              (op, index) => opIndex !== index && opOverlaps(getOpSpan(op), opSpan)
+            )
+
+          // update flag and feedback
+          updateValid(
+            !failed
+          )
+        }
+
+        const upHandler = () => {
+          workbenchElement.style.cursor = ''
+
+          workbenchElement.removeEventListener('mousemove', moveHandler)
+          workbenchElement.removeEventListener('mouseup', upHandler)
+
+          if (!changeValid) return
+
+          op.qubit = newOp.qubit
+          op.step = newOp.step
+
+          // resize workbench in case of moved to the far right
+          adjustWorkbenchSize()
+
+          opElement.remove()
+
+          // create updated varsion
+          populateOperation(op, opIndex)
+        }
+
+        workbenchElement.addEventListener('mousemove', moveHandler)
+        workbenchElement.addEventListener('mouseup', upHandler)
+      }
+    )
   }
 
   const {

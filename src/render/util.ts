@@ -71,7 +71,7 @@ export const getLocationInfo = (x: number, y: number): LocationInfo => {
   }
 }
 
-export const getOpSpan = (op: Operation): OpLocation => {
+export const getOpSpan = (op: Operation): OperationLocation => {
   // prepare data
   const {
     qubits: {
@@ -131,4 +131,4 @@ export const getOpSpan = (op: Operation): OpLocation => {
   }
 }
 
-export const opOverlaps = (left: OpLocation, right: OpLocation) => rangeOverlaps(left.qubit, right.qubit) && rangeOverlaps(left.step, right.step)
+export const opOverlaps = (left: OperationLocation, right: OperationLocation) => rangeOverlaps(left.qubit, right.qubit) && rangeOverlaps(left.step, right.step)
