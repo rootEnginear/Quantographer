@@ -126,7 +126,7 @@ export const populateOperation = (op: Operation, opIndex: number) => {
       controlLine2.setAttribute('stroke-width', `${laneLineThickness}`)
 
       const controlPoints = controlBits.map(
-        (entry) => {
+        (entry, entryIndex) => {
           // prepare data
           const {index, invert} = entry
 
@@ -152,7 +152,21 @@ export const populateOperation = (op: Operation, opIndex: number) => {
 
           gateControl.addEventListener(
             'mousedown',
-            () => {
+            (e) => {
+              if (e.buttons === 4) {
+                // delete
+                controlBits.splice(entryIndex, 1)
+
+                opElement.remove()
+
+                // create updated varsion
+                populateOperation(op, opIndex)
+
+                return
+              }
+
+              if (e.buttons !== 1) return
+
               // new operation to be changed and validated
               let newBit = index
 
@@ -275,7 +289,21 @@ export const populateOperation = (op: Operation, opIndex: number) => {
 
           gateControl.addEventListener(
             'mousedown',
-            () => {
+            (e) => {
+              if (e.buttons === 4) {
+                // delete
+                controlQubits.splice(entryIndex, 1)
+
+                opElement.remove()
+
+                // create updated varsion
+                populateOperation(op, opIndex)
+
+                return
+              }
+
+              if (e.buttons !== 1) return
+
               // new operation to be changed and validated
               let newQubit = controlQubit
 
