@@ -34,7 +34,10 @@ type Operation =
 
 type OperationTypes = Operation['type']
 
+type OperationRegistry<T> = Record<OperationTypes, T>
+
 type BaseOperation<T extends string> = {
+  active: boolean
   qubit: number
   step: number
   type: T
@@ -53,7 +56,7 @@ type BaseParameterizedGate<T extends string> = BaseGate<T> & {
 }
 
 type BarrierDirective = BaseOperation<'barrier'> & {
-  span: number
+  qubitSpan: number
 }
 
 type ResetInstruction = BaseInstruction<'reset'>

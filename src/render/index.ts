@@ -1,28 +1,22 @@
 import {renderConfig} from './config'
 import {circuitData} from './data'
 
-const svgNamespace = 'http://www.w3.org/2000/svg'
+import {populateOperation} from './op'
 
-const workbenchElement = document.querySelector<SVGElement>('#workbench')!
+export const svgNamespace = 'http://www.w3.org/2000/svg'
+
+export const workbenchElement = document.querySelector<SVGElement>('#workbench')!
 
 // create drawing layers
 const trackGroupElement = document.createElementNS(svgNamespace, 'g')
-const opGroupElement = document.createElementNS(svgNamespace, 'g')
+export const opGroupElement = document.createElementNS(svgNamespace, 'g')
 
 workbenchElement.append(trackGroupElement, opGroupElement)
 
-const trackLabelGroupElement = document.createElementNS(svgNamespace, 'g')
-const trackLineGroupElement = document.createElementNS(svgNamespace, 'g')
+export const trackLabelGroupElement = document.createElementNS(svgNamespace, 'g')
+export const trackLineGroupElement = document.createElementNS(svgNamespace, 'g')
 
 trackGroupElement.append(trackLabelGroupElement, trackLineGroupElement)
-
-export {
-  svgNamespace,
-  workbenchElement,
-  opGroupElement,
-  trackLabelGroupElement,
-  trackLineGroupElement
-}
 
 const calcOperationSize = (): {width: number, height: number} => {
   const {
@@ -50,7 +44,7 @@ const calcOperationSize = (): {width: number, height: number} => {
   }
 }
 
-const populateTrack = () => {
+export const populateTrack = () => {
   // prepare data
   const {
     qubitLaneHeight,
@@ -170,7 +164,19 @@ const populateTrack = () => {
   opGroupElement.style.transform = `translateX(${labelsWidth}px)`
 }
 
-const adjustWorkbenchSize = () => {
+export const clearTrack = () => {
+  let elem
+  while (elem = trackLabelGroupElement.firstChild) elem.remove()
+  while (elem = trackLineGroupElement.firstChild) elem.remove()
+}
+
+const populateOps = () => {
+  const {ops} = circuitData
+
+  ops.forEach(populateOperation)
+}
+
+export const adjustWorkbenchSize = () => {
   const {zoomLevel} = renderConfig
 
   const {
@@ -195,14 +201,6 @@ const adjustWorkbenchSize = () => {
   workbenchElement.setAttribute('height', `${finalHeight}`)
 
   workbenchElement.setAttribute('viewBox', `0 0 ${svgWidth} ${opHeight}`)
-}
-
-import {populateOperation} from './op'
-
-const populateOps = () => {
-  const {ops} = circuitData
-
-  ops.forEach(populateOperation)
 }
 
 workbenchElement.addEventListener(
