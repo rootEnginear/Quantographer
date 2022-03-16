@@ -155,6 +155,7 @@ export const populateOperation = (op: Operation, opIndex: number) => {
           gateControl.addEventListener(
             'mousedown',
             (e) => {
+              e.preventDefault()
               e.stopPropagation()
 
               if (e.buttons === 4) {
@@ -294,6 +295,7 @@ export const populateOperation = (op: Operation, opIndex: number) => {
           gateControl.addEventListener(
             'mousedown',
             (e) => {
+              e.preventDefault()
               e.stopPropagation()
 
               if (e.buttons === 4) {
@@ -453,6 +455,7 @@ export const populateOperation = (op: Operation, opIndex: number) => {
       'mousedown',
       (e) => {
         e.stopPropagation()
+        e.preventDefault()
 
         // new operation to be changed and validated
         let newBit = index
@@ -558,6 +561,7 @@ export const populateOperation = (op: Operation, opIndex: number) => {
       'mousedown',
       (e) => {
         // stop bubbling
+        e.preventDefault()
         e.stopPropagation()
 
         if (e.buttons === 4) {
@@ -668,6 +672,7 @@ export const populateOperation = (op: Operation, opIndex: number) => {
       (e) => {
         // stop bubbling
         e.stopPropagation()
+        e.preventDefault()
 
         resizing = true
 
@@ -814,6 +819,7 @@ export const populateOperation = (op: Operation, opIndex: number) => {
       (e) => {
         // stop bubbling
         e.stopPropagation()
+        e.preventDefault()
 
         if (e.buttons === 4) {
           // delete
@@ -907,6 +913,7 @@ export const populateOperation = (op: Operation, opIndex: number) => {
       (e) => {
         // stop bubbling
         e.stopPropagation()
+        e.preventDefault()
 
         if (e.buttons === 4) {
           // delete
@@ -1051,6 +1058,7 @@ export const populateOperation = (op: Operation, opIndex: number) => {
       (e) => {
         // stop bubbling
         e.stopPropagation()
+        e.preventDefault()
 
         if (e.buttons === 4) {
           // delete
