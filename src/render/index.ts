@@ -2,6 +2,7 @@ import {renderConfig} from './config'
 import {circuitData} from './data'
 
 import {populateOperation} from './op'
+import {deepClone, getLocationInfo, getOpSpan, opOverlaps} from './util'
 
 export const svgNamespace = 'http://www.w3.org/2000/svg'
 
@@ -170,10 +171,15 @@ export const clearTrack = () => {
   while (elem = trackLineGroupElement.firstChild) elem.remove()
 }
 
-const populateOps = () => {
+export const populateOps = () => {
   const {ops} = circuitData
 
   ops.forEach(populateOperation)
+}
+
+export const clearOps = () => {
+  let elem
+  while (elem = opGroupElement.firstChild) elem.remove()
 }
 
 export const adjustWorkbenchSize = () => {
@@ -205,12 +211,226 @@ export const adjustWorkbenchSize = () => {
 
 workbenchElement.addEventListener(
   'dragover',
-  (e) => e.preventDefault()
+  (e) => {
+    e.preventDefault()
+
+    const {dataTransfer} = e
+    const transfer = dataTransfer as DataTransfer
+
+    const {
+      items: [
+        {type: gateid}
+      ]
+    } = transfer
+
+    const loc = getLocationInfo(e.offsetX, e.offsetY)
+
+    transfer.dropEffect =
+      loc.laneType === 'op' &&
+      loc.bitType === 'qubit' ?
+        'copy' :
+        'none'
+  }
 )
 
 workbenchElement.addEventListener(
   'drop',
-  () => {}
+  (e) => {
+    const {dataTransfer} = e
+    const transfer = dataTransfer as DataTransfer
+
+    const {
+      items: [
+        {type: gateid}
+      ]
+    } = transfer
+
+    console.log(gateid)
+
+    const loc = getLocationInfo(e.offsetX, e.offsetY)
+    switch (gateid) {
+    case 'ctrl':
+      const stepOperations = circuitData.ops.filter(
+        (op) => op.step === loc.step
+      )
+      const opToAddIndex = stepOperations.findIndex(
+        (op) => op.qubit === loc.index || 'targetQubit' in op && op.targetQubit === loc.index
+      )
+      const opToAdd = stepOperations[opToAddIndex]
+      console.log(stepOperations, opToAddIndex, opToAdd)
+      if (
+        !('controlQubits' in opToAdd)
+      ) return
+      for (let ctrlIndex = 0; ctrlIndex < circuitData.qubits.length; ctrlIndex += 1) {
+        if (
+          opToAdd.controlQubits.includes(ctrlIndex) ||
+          ctrlIndex === opToAdd.qubit ||
+          'targetQubit' in opToAdd && ctrlIndex === opToAdd.targetQubit
+        ) continue
+        const newOp = deepClone(opToAdd)
+        newOp.controlQubits.push(ctrlIndex)
+        const opSpan = getOpSpan(newOp)
+        if (
+          stepOperations.every(
+            (op, i) => !(opOverlaps(getOpSpan(op), opSpan) && i !== opToAddIndex)
+          )
+        ) {
+          opToAdd.controlQubits.push(ctrlIndex)
+          clearOps()
+          populateOps()
+          break
+        }
+      }
+      break
+    default:
+      const op = constructOperation(gateid as OperationTypes, loc.index, loc.step)
+      if (!op) return
+      const i = circuitData.ops.push(op) - 1
+      populateOperation(op, i)
+    }
+  }
+)
+
+const constructOperation = (type: OperationTypes, qubit: number, step: number): Operation => {
+  switch (type) {
+  case 'barrier':
+    return {
+      type,
+      step,
+      qubit,
+      active: false,
+
+      qubitSpan: 1
+    }
+  case 'reset':
+    return {
+      type,
+      step,
+      qubit,
+      active: false,
+
+      controlBits: []
+    }
+  case 'measure':
+    return {
+      type,
+      step,
+      qubit,
+      active: false,
+
+      controlBits: [],
+
+      assignBit: {
+        index: 0,
+        bit: 0
+      }
+    }
+  case 'x':
+  case 'z':
+  case 'h':
+  case 'sx':
+  case 'sdg':
+  case 'tdg':
+    return {
+      type,
+      step,
+      qubit,
+      active: false,
+
+      controlBits: [],
+      controlQubits: []
+    }
+  case 'swap':
+    return {
+      type,
+      step,
+      qubit,
+      active: false,
+
+      controlBits: [],
+      controlQubits: [],
+
+      targetQubit: qubit + 1
+    }
+  case 'u3':
+  case 'rx':
+    return {
+      type,
+      step,
+      qubit,
+      active: false,
+
+      controlBits: [],
+      controlQubits: [],
+      params: {}
+    }
+  }
+}
+
+let dragging = false
+
+let startX = 0
+let startY = 0
+
+let endX = 0
+let endY = 0
+
+const selectElement = document.createElementNS(svgNamespace, 'rect')
+
+workbenchElement.append(selectElement)
+
+selectElement.setAttribute('fill', 'none')
+
+selectElement.setAttribute('stroke', 'none')
+selectElement.setAttribute('stroke-dasharray', '6 5')
+
+workbenchElement.addEventListener(
+  'mousedown',
+  (e) => {
+    dragging = true
+
+    startX = e.offsetX
+    startY = e.offsetY
+
+    selectElement.setAttribute('stroke', 'blue')
+
+    selectElement.setAttribute('x', `${startX}`)
+    selectElement.setAttribute('y', `${startY}`)
+
+    selectElement.setAttribute('width', '0')
+    selectElement.setAttribute('height', '0')
+  }
+)
+
+workbenchElement.addEventListener(
+  'mousemove',
+  (e) => {
+    if (!dragging) return
+
+    endX = e.offsetX
+    endY = e.offsetY
+
+    const rectStartX = Math.min(startX, endX)
+    const rectStartY = Math.min(startY, endY)
+
+    const rectLengthX = Math.abs(endX - startX)
+    const rectLengthY = Math.abs(endY - startY)
+
+    selectElement.setAttribute('x', `${rectStartX}`)
+    selectElement.setAttribute('y', `${rectStartY}`)
+
+    selectElement.setAttribute('width', `${rectLengthX}`)
+    selectElement.setAttribute('height', `${rectLengthY}`)
+  }
+)
+
+workbenchElement.addEventListener(
+  'mouseup',
+  () => {
+    if (!dragging) return
+    dragging = false
+    selectElement.setAttribute('stroke', 'none')
+  }
 )
 
 populateTrack()

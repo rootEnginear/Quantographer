@@ -26,7 +26,7 @@ type AssignBitProperty = {
 
 type Operation =
   | BarrierDirective
-  | ResetInstruction
+  | Instructions
   | MeasureInstruction
   | Gates
   | ParameterizedGates
@@ -59,7 +59,7 @@ type BarrierDirective = BaseOperation<'barrier'> & {
   qubitSpan: number
 }
 
-type ResetInstruction = BaseInstruction<'reset'>
+type Instructions = BaseInstruction<'reset'>
 
 type MeasureInstruction = BaseInstruction<'measure'> & {
   assignBit: AssignBitProperty
@@ -71,4 +71,4 @@ type SwapGate = BaseGate<'swap'> & {
   targetQubit: number
 }
 
-type ParameterizedGates = BaseParameterizedGate<'u' | 'rx'>
+type ParameterizedGates = BaseParameterizedGate<'u3' | 'rx'>

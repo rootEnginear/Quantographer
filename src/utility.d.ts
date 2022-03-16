@@ -9,8 +9,8 @@ type OperationLocation = {
 }
 
 type LocationInfo = {
-  laneType: string
-  bitType: string
+  laneType: 'head' | 'op'
+  bitType: 'qubit' | 'bit'
 
   step: number
   index: number

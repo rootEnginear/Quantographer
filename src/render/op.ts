@@ -7,7 +7,9 @@ import {
   workbenchElement,
   opGroupElement,
 
-  adjustWorkbenchSize
+  adjustWorkbenchSize,
+  clearOps,
+  populateOps
 } from '.'
 
 import {
@@ -558,6 +560,16 @@ export const populateOperation = (op: Operation, opIndex: number) => {
         // stop bubbling
         e.stopPropagation()
 
+        if (e.buttons === 4) {
+          // delete
+          ops.splice(opIndex, 1)
+
+          clearOps()
+          populateOps()
+
+          return
+        }
+
         // new operation to be changed and validated
         const newOp = deepClone(op)
 
@@ -803,6 +815,16 @@ export const populateOperation = (op: Operation, opIndex: number) => {
         // stop bubbling
         e.stopPropagation()
 
+        if (e.buttons === 4) {
+          // delete
+          ops.splice(opIndex, 1)
+
+          clearOps()
+          populateOps()
+
+          return
+        }
+
         // new operation to be changed and validated
         const newOp = deepClone(op)
 
@@ -885,6 +907,16 @@ export const populateOperation = (op: Operation, opIndex: number) => {
       (e) => {
         // stop bubbling
         e.stopPropagation()
+
+        if (e.buttons === 4) {
+          // delete
+          ops.splice(opIndex, 1)
+
+          clearOps()
+          populateOps()
+
+          return
+        }
 
         // new operation to be changed and validated
         const newOp = deepClone(op)
@@ -1019,6 +1051,16 @@ export const populateOperation = (op: Operation, opIndex: number) => {
       (e) => {
         // stop bubbling
         e.stopPropagation()
+
+        if (e.buttons === 4) {
+          // delete
+          ops.splice(opIndex, 1)
+
+          clearOps()
+          populateOps()
+
+          return
+        }
 
         // new operation to be changed and validated
         const newOp = deepClone(op)

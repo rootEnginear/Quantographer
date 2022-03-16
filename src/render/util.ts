@@ -41,8 +41,8 @@ export const getLocationInfo = (x: number, y: number): LocationInfo => {
   y /= zoomLevel
 
   // do estimation
-  let laneType = 'head'
-  let bitType = 'qubit'
+  let laneType: LocationInfo['laneType'] = 'head'
+  let bitType: LocationInfo['bitType'] = 'qubit'
 
   if (x > labelsWidth) {
     x -= labelsWidth
