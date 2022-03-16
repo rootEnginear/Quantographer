@@ -42,6 +42,8 @@ for (const gateButton of gateButtons)
       // except drop. to circumvent the issue, we attach data as a type instead.
       // it can be seen from every event.
       transfer.setData(gateid, '')
+
+      transfer.effectAllowed = 'copy'
     }
   )
 

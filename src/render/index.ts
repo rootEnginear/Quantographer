@@ -1,28 +1,23 @@
 import {renderConfig} from './config'
 import {circuitData} from './data'
 
-const svgNamespace = 'http://www.w3.org/2000/svg'
+import {populateOperation} from './op'
+import {deepClone, getLocationInfo, getOpSpan, opOverlaps} from './util'
 
-const workbenchElement = document.querySelector<SVGElement>('#workbench')!
+export const svgNamespace = 'http://www.w3.org/2000/svg'
+
+export const workbenchElement = document.querySelector<SVGElement>('#workbench')!
 
 // create drawing layers
 const trackGroupElement = document.createElementNS(svgNamespace, 'g')
-const opGroupElement = document.createElementNS(svgNamespace, 'g')
+export const opGroupElement = document.createElementNS(svgNamespace, 'g')
 
 workbenchElement.append(trackGroupElement, opGroupElement)
 
-const trackLabelGroupElement = document.createElementNS(svgNamespace, 'g')
-const trackLineGroupElement = document.createElementNS(svgNamespace, 'g')
+export const trackLabelGroupElement = document.createElementNS(svgNamespace, 'g')
+export const trackLineGroupElement = document.createElementNS(svgNamespace, 'g')
 
 trackGroupElement.append(trackLabelGroupElement, trackLineGroupElement)
-
-export {
-  svgNamespace,
-  workbenchElement,
-  opGroupElement,
-  trackLabelGroupElement,
-  trackLineGroupElement
-}
 
 const calcOperationSize = (): {width: number, height: number} => {
   const {
@@ -50,7 +45,7 @@ const calcOperationSize = (): {width: number, height: number} => {
   }
 }
 
-const populateTrack = () => {
+export const populateTrack = () => {
   // prepare data
   const {
     qubitLaneHeight,
@@ -61,8 +56,6 @@ const populateTrack = () => {
   } = renderConfig
 
   const {qubits, bits} = circuitData
-
-  const {width: opWidth} = calcOperationSize()
 
   // calculate constants
   const halfQubitLaneHeight = qubitLaneHeight / 2
@@ -95,7 +88,6 @@ const populateTrack = () => {
       trackLines.push(lineElement)
 
       lineElement.setAttribute('x1', '0')
-      lineElement.setAttribute('x2', `${opWidth}`)
 
       lineElement.setAttribute('y1', `${startY}`)
       lineElement.setAttribute('y2', `${startY}`)
@@ -135,8 +127,9 @@ const populateTrack = () => {
       const lineElement1 = document.createElementNS(svgNamespace, 'line')
       const lineElement2 = document.createElementNS(svgNamespace, 'line')
 
+      lineGroupElement.append(lineElement1, lineElement2)
+
       lineElement1.setAttribute('x1', '0')
-      lineElement1.setAttribute('x2', `${opWidth}`)
 
       lineElement1.setAttribute('y1', `${startY1}`)
       lineElement1.setAttribute('y2', `${startY1}`)
@@ -145,15 +138,12 @@ const populateTrack = () => {
       lineElement1.setAttribute('stroke-width', `${laneLineThickness}`)
 
       lineElement2.setAttribute('x1', '0')
-      lineElement2.setAttribute('x2', `${opWidth}`)
 
       lineElement2.setAttribute('y1', `${startY2}`)
       lineElement2.setAttribute('y2', `${startY2}`)
 
       lineElement2.setAttribute('stroke', 'black')
       lineElement2.setAttribute('stroke-width', `${laneLineThickness}`)
-
-      lineGroupElement.append(lineElement1, lineElement2)
     }
   )
 
@@ -175,7 +165,24 @@ const populateTrack = () => {
   opGroupElement.style.transform = `translateX(${labelsWidth}px)`
 }
 
-const adjustWorkbenchSize = () => {
+export const clearTrack = () => {
+  let elem
+  while (elem = trackLabelGroupElement.firstChild) elem.remove()
+  while (elem = trackLineGroupElement.firstChild) elem.remove()
+}
+
+export const populateOps = () => {
+  const {ops} = circuitData
+
+  ops.forEach(populateOperation)
+}
+
+export const clearOps = () => {
+  let elem
+  while (elem = opGroupElement.firstChild) elem.remove()
+}
+
+export const adjustWorkbenchSize = () => {
   const {zoomLevel} = renderConfig
 
   const {
@@ -184,6 +191,12 @@ const adjustWorkbenchSize = () => {
   } = calcOperationSize()
 
   const {width: labelsWidth} = trackLabelGroupElement.getBBox()
+
+  trackLineGroupElement
+    .querySelectorAll('line')
+    .forEach(
+      (line) => line.setAttribute('x2', `${opWidth}`)
+    )
 
   const svgWidth = labelsWidth + opWidth
 
@@ -196,34 +209,237 @@ const adjustWorkbenchSize = () => {
   workbenchElement.setAttribute('viewBox', `0 0 ${svgWidth} ${opHeight}`)
 }
 
-import {
-  populateBarrierDirective,
-  populateOperation
-} from './op'
-
-const populateOps = () => {
-  const {ops} = circuitData
-
-  ops.forEach(
-    (op, i) => {
-      const {type} = op
-
-      if (type === 'barrier')
-        populateBarrierDirective(op, i)
-      else
-        populateOperation(op, i)
-    }
-  )
-}
-
 workbenchElement.addEventListener(
   'dragover',
-  (e) => e.preventDefault()
+  (e) => {
+    e.preventDefault()
+
+    const {dataTransfer} = e
+    const transfer = dataTransfer as DataTransfer
+
+    const {
+      items: [
+        {type: gateid}
+      ]
+    } = transfer
+
+    const loc = getLocationInfo(e.offsetX, e.offsetY)
+
+    transfer.dropEffect =
+      loc.laneType === 'op' &&
+      loc.bitType === 'qubit' ?
+        'copy' :
+        'none'
+  }
 )
 
 workbenchElement.addEventListener(
   'drop',
-  () => {}
+  (e) => {
+    const {dataTransfer} = e
+    const transfer = dataTransfer as DataTransfer
+
+    const {
+      items: [
+        {type: gateid}
+      ]
+    } = transfer
+
+    console.log(gateid)
+
+    const loc = getLocationInfo(e.offsetX, e.offsetY)
+    switch (gateid) {
+    case 'ctrl':
+      const stepOperations = circuitData.ops.filter(
+        (op) => op.step === loc.step
+      )
+      const opToAddIndex = stepOperations.findIndex(
+        (op) => op.qubit === loc.index || 'targetQubit' in op && op.targetQubit === loc.index
+      )
+      const opToAdd = stepOperations[opToAddIndex]
+      console.log(stepOperations, opToAddIndex, opToAdd)
+      if (
+        !('controlQubits' in opToAdd)
+      ) return
+      for (let ctrlIndex = 0; ctrlIndex < circuitData.qubits.length; ctrlIndex += 1) {
+        if (
+          opToAdd.controlQubits.includes(ctrlIndex) ||
+          ctrlIndex === opToAdd.qubit ||
+          'targetQubit' in opToAdd && ctrlIndex === opToAdd.targetQubit
+        ) continue
+        const newOp = deepClone(opToAdd)
+        newOp.controlQubits.push(ctrlIndex)
+        const opSpan = getOpSpan(newOp)
+        if (
+          stepOperations.every(
+            (op, i) => !(opOverlaps(getOpSpan(op), opSpan) && i !== opToAddIndex)
+          )
+        ) {
+          opToAdd.controlQubits.push(ctrlIndex)
+          clearOps()
+          populateOps()
+          break
+        }
+      }
+      break
+    default:
+      const op = constructOperation(gateid as OperationTypes, loc.index, loc.step)
+      if (
+        !op ||
+        // prevent overlaps
+        circuitData.ops.some(
+          (opi) => opOverlaps(
+            getOpSpan(opi),
+            getOpSpan(op)
+          )
+        )
+      ) return
+      const i = circuitData.ops.push(op) - 1
+      populateOperation(op, i)
+    }
+  }
+)
+
+const constructOperation = (type: OperationTypes, qubit: number, step: number): Operation => {
+  switch (type) {
+  case 'barrier':
+    return {
+      type,
+      step,
+      qubit,
+      active: false,
+
+      qubitSpan: 1
+    }
+  case 'reset':
+    return {
+      type,
+      step,
+      qubit,
+      active: false,
+
+      controlBits: []
+    }
+  case 'measure':
+    return {
+      type,
+      step,
+      qubit,
+      active: false,
+
+      controlBits: [],
+
+      assignBit: {
+        index: 0,
+        bit: 0
+      }
+    }
+  case 'x':
+  case 'z':
+  case 'h':
+  case 'sx':
+  case 'sdg':
+  case 'tdg':
+    return {
+      type,
+      step,
+      qubit,
+      active: false,
+
+      controlBits: [],
+      controlQubits: []
+    }
+  case 'swap':
+    return {
+      type,
+      step,
+      qubit,
+      active: false,
+
+      controlBits: [],
+      controlQubits: [],
+
+      targetQubit: qubit + 1
+    }
+  case 'u3':
+  case 'rx':
+    return {
+      type,
+      step,
+      qubit,
+      active: false,
+
+      controlBits: [],
+      controlQubits: [],
+      params: {}
+    }
+  }
+}
+
+let dragging = false
+
+let startX = 0
+let startY = 0
+
+let endX = 0
+let endY = 0
+
+const selectElement = document.createElementNS(svgNamespace, 'rect')
+
+workbenchElement.append(selectElement)
+
+selectElement.setAttribute('fill', 'none')
+
+selectElement.setAttribute('stroke', 'none')
+selectElement.setAttribute('stroke-dasharray', '6 5')
+
+workbenchElement.addEventListener(
+  'mousedown',
+  (e) => {
+    dragging = true
+
+    startX = e.offsetX
+    startY = e.offsetY
+
+    selectElement.setAttribute('stroke', 'blue')
+
+    selectElement.setAttribute('x', `${startX}`)
+    selectElement.setAttribute('y', `${startY}`)
+
+    selectElement.setAttribute('width', '0')
+    selectElement.setAttribute('height', '0')
+  }
+)
+
+workbenchElement.addEventListener(
+  'mousemove',
+  (e) => {
+    if (!dragging) return
+
+    endX = e.offsetX
+    endY = e.offsetY
+
+    const rectStartX = Math.min(startX, endX)
+    const rectStartY = Math.min(startY, endY)
+
+    const rectLengthX = Math.abs(endX - startX)
+    const rectLengthY = Math.abs(endY - startY)
+
+    selectElement.setAttribute('x', `${rectStartX}`)
+    selectElement.setAttribute('y', `${rectStartY}`)
+
+    selectElement.setAttribute('width', `${rectLengthX}`)
+    selectElement.setAttribute('height', `${rectLengthY}`)
+  }
+)
+
+workbenchElement.addEventListener(
+  'mouseup',
+  () => {
+    if (!dragging) return
+    dragging = false
+    selectElement.setAttribute('stroke', 'none')
+  }
 )
 
 populateTrack()

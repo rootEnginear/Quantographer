@@ -26,13 +26,18 @@ type AssignBitProperty = {
 
 type Operation =
   | BarrierDirective
-  | ResetInstruction
+  | Instructions
   | MeasureInstruction
   | Gates
   | ParameterizedGates
   | SwapGate
 
+type OperationTypes = Operation['type']
+
+type OperationRegistry<T> = Record<OperationTypes, T>
+
 type BaseOperation<T extends string> = {
+  active: boolean
   qubit: number
   step: number
   type: T
@@ -51,19 +56,19 @@ type BaseParameterizedGate<T extends string> = BaseGate<T> & {
 }
 
 type BarrierDirective = BaseOperation<'barrier'> & {
-  span: number
+  qubitSpan: number
 }
 
-type ResetInstruction = BaseInstruction<'reset'>
+type Instructions = BaseInstruction<'reset'>
 
 type MeasureInstruction = BaseInstruction<'measure'> & {
-  assignBit: AssignBitProperty | undefined
+  assignBit: AssignBitProperty
 }
 
-type Gates = BaseGate<'x' | 'z' | 'h'>
+type Gates = BaseGate<'x' | 'z' | 'h' | 'sx' | 'sdg' | 'tdg'>
 
 type SwapGate = BaseGate<'swap'> & {
   targetQubit: number
 }
 
-type ParameterizedGates = BaseParameterizedGate<'u' | 'rx'>
+type ParameterizedGates = BaseParameterizedGate<'u3' | 'rx'>
