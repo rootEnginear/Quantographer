@@ -284,7 +284,16 @@ workbenchElement.addEventListener(
       break
     default:
       const op = constructOperation(gateid as OperationTypes, loc.index, loc.step)
-      if (!op) return
+      if (
+        !op ||
+        // prevent overlaps
+        circuitData.ops.some(
+          (opi) => opOverlaps(
+            getOpSpan(opi),
+            getOpSpan(op)
+          )
+        )
+      ) return
       const i = circuitData.ops.push(op) - 1
       populateOperation(op, i)
     }
