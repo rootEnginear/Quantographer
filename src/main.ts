@@ -64,7 +64,7 @@ const handlingShortcuts = (e: KeyboardEvent) => {
 
 
   if (e.ctrlKey && e.key === 'e')
-    execute()
+    openExecuteDialog()
 
 
   if (e.ctrlKey && e.key === 'n')
@@ -240,7 +240,7 @@ const toggleCode = () => {
 }
 
 let isExecuteDialogOpen = false
-const execute = () => {
+const openExecuteDialog = () => {
   if (isExecuteDialogOpen) return
   isExecuteDialogOpen = true
   new window.WinBox({
@@ -258,8 +258,28 @@ const execute = () => {
   })
 }
 
+let isExportDialogOpen = false
+const openExportDialog = () => {
+  if (isExportDialogOpen) return
+  isExportDialogOpen = true
+  new window.WinBox({
+    title: 'Export',
+    border: 4,
+    mount: document.getElementById('export-circuit-dialog') as Node,
+    onclose: () => {
+      isExportDialogOpen = false
+      return false
+    },
+    width: 750,
+    height: 526,
+    x: 'center',
+    y: 'center'
+  })
+}
+
 Object.assign(window, {
-  execute,
+  openExportDialog,
+  openExecuteDialog,
   togglePalette,
   toggleCode
 })
@@ -268,5 +288,5 @@ Object.assign(window, {
 requestAnimationFrame(() => {
   document.documentElement.style.opacity = ''
   document.documentElement.classList.remove('not-ready')
-  execute()
+  openExportDialog()
 })

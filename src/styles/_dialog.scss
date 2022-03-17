@@ -1,21 +1,28 @@
 @import 'bulma/sass/utilities/_all';
 
-#execute-circuit-dialog {
+.common-dialog {
 	display: none;
 
 	.wb-body & {
 		display: block;
 	}
-}
 
-#execute-circuit-dialog {
 	padding: 1rem;
 
-	> strong {
+	strong {
 		margin: 0.75rem 0;
 		display: block;
 	}
 
+	> .separator {
+		display: block;
+		height: 4px;
+		background: linear-gradient(90deg, #0061ff, #8a3ffc);
+		margin: 1.25rem -1rem 1rem;
+	}
+}
+
+#execute-circuit-dialog {
 	> .circuit-preview {
 		height: 100px;
 		overflow: scroll hidden;
@@ -27,12 +34,5 @@
 			width: auto;
 			height: 100%;
 		}
-	}
-
-	> .separator {
-		display: block;
-		height: 4px;
-		background: linear-gradient(90deg, #0061ff, #8a3ffc);
-		margin: 1.25rem -1rem 1rem;
 	}
 }
