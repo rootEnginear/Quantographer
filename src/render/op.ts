@@ -571,6 +571,8 @@ export const populateOperation = (op: Operation, opIndex: number) => {
           clearOps()
           populateOps()
 
+          adjustWorkbenchSize()
+
           return
         }
 
@@ -828,6 +830,8 @@ export const populateOperation = (op: Operation, opIndex: number) => {
           clearOps()
           populateOps()
 
+          adjustWorkbenchSize()
+
           return
         }
 
@@ -921,6 +925,8 @@ export const populateOperation = (op: Operation, opIndex: number) => {
 
           clearOps()
           populateOps()
+
+          adjustWorkbenchSize()
 
           return
         }
@@ -1066,6 +1072,8 @@ export const populateOperation = (op: Operation, opIndex: number) => {
 
           clearOps()
           populateOps()
+
+          adjustWorkbenchSize()
 
           return
         }

@@ -28,15 +28,19 @@ const calcOperationSize = (): {width: number, height: number} => {
 
   const {qubits, bits, ops} = circuitData
 
-  const overlongStep = 2 + Math.max(
-    ... ops.map(
-      (op) => op.step
-    )
+  const overlongStep = 2 + (
+    ops.length === 0 ?
+      0 :
+      Math.max(
+        ... ops.map(
+          (op) => op.step
+        )
+      )
   )
 
   const opWidth = stepWidth * overlongStep
   const opHeight =
-  qubitLaneHeight * qubits.length +
+    qubitLaneHeight * qubits.length +
     bitLaneHeight * bits.length
 
   return {
@@ -256,8 +260,8 @@ workbenchElement.addEventListener(
       const opToAddIndex = stepOperations.findIndex(
         (op) => op.qubit === loc.index || 'targetQubit' in op && op.targetQubit === loc.index
       )
+      if (opToAddIndex === -1) return
       const opToAdd = stepOperations[opToAddIndex]
-      console.log(stepOperations, opToAddIndex, opToAdd)
       if (
         !('controlQubits' in opToAdd)
       ) return
@@ -281,6 +285,7 @@ workbenchElement.addEventListener(
           break
         }
       }
+      // TODO: might show some feedback here?
       break
     default:
       const op = constructOperation(gateid as OperationTypes, loc.index, loc.step)
@@ -293,10 +298,11 @@ workbenchElement.addEventListener(
             getOpSpan(op)
           )
         )
-      ) return
+      ) return // TODO: might show some feedback in here?
       const i = circuitData.ops.push(op) - 1
       populateOperation(op, i)
     }
+    adjustWorkbenchSize()
   }
 )
 
