@@ -70,6 +70,8 @@ const handlingShortcuts = (e: KeyboardEvent) => {
   if (e.ctrlKey && e.key === 'n')
     location.reload()
 
+  if (e.key === 'F11' || e.key === 'F12' || e.key === 'F5') return 0
+
 
   e.stopPropagation()
   e.preventDefault()
@@ -288,5 +290,4 @@ Object.assign(window, {
 requestAnimationFrame(() => {
   document.documentElement.style.opacity = ''
   document.documentElement.classList.remove('not-ready')
-  openExportDialog()
 })
