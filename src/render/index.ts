@@ -28,15 +28,19 @@ const calcOperationSize = (): {width: number, height: number} => {
 
   const {qubits, bits, ops} = circuitData
 
-  const overlongStep = 2 + Math.max(
-    ... ops.map(
-      (op) => op.step
-    )
+  const overlongStep = 2 + (
+    ops.length === 0 ?
+      0 :
+      Math.max(
+        ... ops.map(
+          (op) => op.step
+        )
+      )
   )
 
   const opWidth = stepWidth * overlongStep
   const opHeight =
-  qubitLaneHeight * qubits.length +
+    qubitLaneHeight * qubits.length +
     bitLaneHeight * bits.length
 
   return {
@@ -298,6 +302,7 @@ workbenchElement.addEventListener(
       const i = circuitData.ops.push(op) - 1
       populateOperation(op, i)
     }
+    adjustWorkbenchSize()
   }
 )
 
