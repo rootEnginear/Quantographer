@@ -18,6 +18,9 @@
 	transform-origin: top left;
 
 	transition: transform 0.1s, opacity 0.1s;
+	.not-ready & {
+		transition: all 0s !important;
+	}
 
 	white-space: nowrap;
 }

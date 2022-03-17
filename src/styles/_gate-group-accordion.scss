@@ -26,6 +26,10 @@
 
 				transition: transform 0.3s;
 				will-change: transform;
+
+				.not-ready & {
+					transition: all 0s !important;
+				}
 			}
 		}
 	}

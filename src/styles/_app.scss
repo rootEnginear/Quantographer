@@ -49,6 +49,10 @@ body {
 
 		transition: width 0.3s;
 		will-change: width;
+
+		.not-ready & {
+			transition: all 0s !important;
+		}
 	}
 
 	&.palette-open::before,
@@ -70,6 +74,10 @@ body {
 
 	transition: transform 0.3s;
 	will-change: transform;
+
+	.not-ready & {
+		transition: all 0s !important;
+	}
 }
 
 .palette {

@@ -255,4 +255,5 @@ Object.assign(window, {
 // If everything loaded correctly, show the content
 requestAnimationFrame(() => {
   document.documentElement.style.opacity = ''
+  document.documentElement.classList.remove('not-ready')
 })

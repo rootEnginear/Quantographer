@@ -102,6 +102,10 @@ div.code-toolbar > .toolbar {
 	right: 0.2em;
 	transition: opacity 0.3s ease-in-out;
 	opacity: 0;
+
+	.not-ready & {
+		transition: all 0s !important;
+	}
 }
 div.code-toolbar:hover > .toolbar {
 	opacity: 1;
