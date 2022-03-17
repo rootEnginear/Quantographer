@@ -68,6 +68,18 @@
         <i class="fa-solid fa-rotate-right"></i>
       </button>
       <div class="toolbar-separator"></div>
+      <div class="select is-small">
+        <select>
+          <option>25%</option>
+          <option>50%</option>
+          <option>75%</option>
+          <option selected>100%</option>
+          <option>125%</option>
+          <option>150%</option>
+          <option>175%</option>
+          <option>200%</option>
+        </select>
+      </div>
       <button class="toolbar-btn ghost" data-tooltip="Zoom In">
         <i class="fa-solid fa-magnifying-glass-plus"></i>
       </button>
@@ -766,6 +778,85 @@
   </div>
 
   <div id="tooltip"></div>
+
+  <div id="execute-circuit-dialog">
+    <div class="field">
+      <label class="label">Execute on</label>
+      <div class="control">
+        <div class="select is-fullwidth">
+          <select>
+            <option>ibmq_guadalupe (Recommended)</option>
+          </select>
+        </div>
+      </div>
+    </div>
+    <strong>This is your transpiler configurations:</strong>
+    <div class="row">
+      <div class="col">
+        <div class="field">
+          <label class="label">Optimization Level</label>
+          <div class="control">
+            <div class="select is-fullwidth">
+              <select>
+                <option>0</option>
+                <option>1</option>
+                <option selected>2</option>
+                <option>3</option>
+              </select>
+            </div>
+          </div>
+        </div>
+        <div class="field">
+          <label class="label">Routing Method</label>
+          <div class="control">
+            <div class="select is-fullwidth">
+              <select>
+                <option>Noise Adaptive</option>
+              </select>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div class="col">
+        <div class="field">
+          <label class="label">Layout Method</label>
+          <div class="control">
+            <div class="select is-fullwidth">
+              <select>
+                <option>Stochastic</option>
+              </select>
+            </div>
+          </div>
+        </div>
+        <div class="field">
+          <label class="label">Schedule Method</label>
+          <div class="control">
+            <div class="select is-fullwidth">
+              <select>
+                <option>As late as possible</option>
+              </select>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+    <strong>Transpilation Result:</strong>
+    <div class="circuit-preview">
+      <img src="circuit.png" alt="">
+    </div>
+    <div class="separator"></div>
+    <div class="row">
+      <div class="col"></div>
+      <button class="button is-primary is-small">
+        <span class="icon is-small">
+          <i class="fa-solid fa-play"></i>
+        </span>
+        <span>
+          Execute
+        </span>
+      </button>
+    </div>
+  </div>
 
   <script
     src="https://rawcdn.githack.com/nextapps-de/winbox/0.2.0/dist/js/winbox.min.js"></script>

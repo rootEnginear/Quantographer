@@ -239,10 +239,22 @@ const toggleCode = () => {
   workspaceElement.classList.toggle('code-open')
 }
 
+let isExecuteDialogOpen = false
 const execute = () => {
+  if (isExecuteDialogOpen) return
+  isExecuteDialogOpen = true
   new window.WinBox({
     title: 'Execute',
-    border: 4
+    border: 4,
+    mount: document.getElementById('execute-circuit-dialog') as Node,
+    onclose: () => {
+      isExecuteDialogOpen = false
+      return false
+    },
+    width: 750,
+    height: 540,
+    x: 'center',
+    y: 'center'
   })
 }
 
@@ -256,4 +268,5 @@ Object.assign(window, {
 requestAnimationFrame(() => {
   document.documentElement.style.opacity = ''
   document.documentElement.classList.remove('not-ready')
+  execute()
 })
