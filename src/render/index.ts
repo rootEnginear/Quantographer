@@ -256,8 +256,8 @@ workbenchElement.addEventListener(
       const opToAddIndex = stepOperations.findIndex(
         (op) => op.qubit === loc.index || 'targetQubit' in op && op.targetQubit === loc.index
       )
+      if (opToAddIndex === -1) return
       const opToAdd = stepOperations[opToAddIndex]
-      console.log(stepOperations, opToAddIndex, opToAdd)
       if (
         !('controlQubits' in opToAdd)
       ) return
@@ -281,6 +281,7 @@ workbenchElement.addEventListener(
           break
         }
       }
+      // TODO: might show some feedback here?
       break
     default:
       const op = constructOperation(gateid as OperationTypes, loc.index, loc.step)
@@ -293,7 +294,7 @@ workbenchElement.addEventListener(
             getOpSpan(op)
           )
         )
-      ) return
+      ) return // TODO: might show some feedback in here?
       const i = circuitData.ops.push(op) - 1
       populateOperation(op, i)
     }
