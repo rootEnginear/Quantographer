@@ -339,10 +339,20 @@ const constructOperation = (type: OperationTypes, qubit: number, step: number): 
       }
     }
   case 'x':
+  case 'y':
   case 'z':
   case 'h':
-  case 'sx':
+  case 's':
   case 'sdg':
+  case 'sx':
+  case 'sxdg':
+  case '4x':
+  case '4xdg':
+  case 'sy':
+  case 'sydg':
+  case '4y':
+  case '4ydg':
+  case 't':
   case 'tdg':
     return {
       type,
@@ -365,8 +375,12 @@ const constructOperation = (type: OperationTypes, qubit: number, step: number): 
 
       targetQubit: qubit + 1
     }
+  case 'u1':
+  case 'u2':
   case 'u3':
   case 'rx':
+  case 'ry':
+  case 'rz':
     return {
       type,
       step,
@@ -409,8 +423,8 @@ workbenchElement.addEventListener(
     clearOps()
     populateOps()
 
-    startX = e.offsetX / renderConfig.zoomLevel
-    startY = e.offsetY / renderConfig.zoomLevel
+    startX = endX = e.offsetX / renderConfig.zoomLevel
+    startY = endY = e.offsetY / renderConfig.zoomLevel
 
     selectElement.setAttribute('stroke', 'blue')
 
@@ -448,8 +462,48 @@ workbenchElement.addEventListener(
   'mouseup',
   () => {
     if (!dragging) return
+
     dragging = false
+
     selectElement.setAttribute('stroke', 'none')
+
+    // swap location to make start location always less than end location
+    const rectStartX = Math.min(startX, endX)
+    const rectStartY = Math.min(startY, endY)
+
+    const rectLengthX = Math.abs(endX - startX)
+    const rectLengthY = Math.abs(endY - startY)
+
+    const startLoc = getLocationInfo(rectStartX, rectStartY)
+    const endLoc = getLocationInfo(
+      rectStartX + rectLengthX,
+      rectStartY + rectLengthY
+    )
+
+    const correct = (x: LocationInfo) => {
+      if (x.bitType === 'bit') x.index = circuitData.qubits.length - 1
+      if (x.laneType === 'head') x.step = 0
+    }
+
+    correct(startLoc)
+    correct(endLoc)
+
+    const {index: startQubit, step: startStep} = startLoc
+    const {index: endQubit, step: endStep} = endLoc
+
+    circuitData.ops.forEach(
+      (op) => {
+        const {qubit, step} = op
+        op.active =
+          qubit >= startQubit &&
+          qubit <= endQubit &&
+          step >= startStep &&
+          step <= endStep
+      }
+    )
+
+    clearOps()
+    populateOps()
   }
 )
 
