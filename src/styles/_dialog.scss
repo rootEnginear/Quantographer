@@ -4,7 +4,9 @@
 	display: none;
 
 	.wb-body & {
-		display: block;
+		display: flex;
+		min-height: 100%;
+		flex-direction: column;
 	}
 
 	padding: 1rem;
@@ -19,6 +21,11 @@
 		height: 4px;
 		background: linear-gradient(90deg, #0061ff, #8a3ffc);
 		margin: 1.25rem -1rem 1rem;
+	}
+
+	> .space {
+		flex: 1 1 0%;
+		height: 0;
 	}
 }
 

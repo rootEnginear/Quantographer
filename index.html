@@ -271,10 +271,10 @@
         </svg>
       </button>
       <div class="toolbar-separator"></div>
-      <button class="toolbar-btn gate fluid" draggable="true"
+      <button class="toolbar-btn gate fluid"
         data-tooltip="Lorem ipsum dolor sit amet."
         data-tooltip-title="Create New Gate"
-        data-gateid="toff">
+        onclick="openNewGateDialog()">
         <i class="fa-solid fa-plus" style="margin-right:0.25rem"></i>New
       </button>
       <!-- Separator -->
@@ -335,7 +335,8 @@
             <button class="toolbar-btn gate fluid" draggable="true"
               data-tooltip="Lorem ipsum dolor sit amet."
               data-tooltip-title="Create New Gate"
-              data-gateid="toff">
+              data-gateid="toff"
+              onclick="openNewGateDialog()">
               <i class="fa-solid fa-plus" style="margin-right:0.25rem"></i>New
             </button>
           </section>
@@ -845,6 +846,7 @@
     <div class="circuit-preview">
       <img src="circuit.png" alt="">
     </div>
+    <div class="space"></div>
     <div class="separator"></div>
     <div class="row">
       <div class="col"></div>
@@ -861,7 +863,7 @@
 
   <div id="export-circuit-dialog" class="common-dialog">
     <div class="field">
-      <label class="label">Execute as</label>
+      <label class="label">Export as</label>
       <div class="control">
         <div class="select is-fullwidth">
           <select>
@@ -910,6 +912,7 @@ circuit.measure(qreg, creg)
 
 circuit.draw(output='mpl')
     </textarea>
+    <div class="space"></div>
     <div class="separator"></div>
     <div class="row">
       <div class="col"></div>
@@ -923,6 +926,8 @@ circuit.draw(output='mpl')
       </button>
     </div>
   </div>
+
+  <div id="new-gate-dialog" class="common-dialog"></div>
 
   <script
     src="https://rawcdn.githack.com/nextapps-de/winbox/0.2.0/dist/js/winbox.min.js"></script>

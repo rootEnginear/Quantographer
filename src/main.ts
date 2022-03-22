@@ -55,27 +55,43 @@ import './render'
 // Chrome: Ctrl+Shift+N, Ctrl+T, Ctrl+Shift+T, Ctrl+W, Ctrl+Shift+W don't work
 // https://stackoverflow.com/questions/7295508/javascript-capture-browser-shortcuts-ctrlt-n-w/7296303#7296303
 const handlingShortcuts = (e: KeyboardEvent) => {
-  if (e.ctrlKey && e.key === 'p')
+  if (e.ctrlKey && e.key === 'p') {
     togglePalette()
+    e.stopPropagation()
+    e.preventDefault()
+    return 0
+  }
 
 
-  if (e.ctrlKey && e.key === 'b')
+  if (e.ctrlKey && e.key === 'b') {
     toggleCode()
+    e.stopPropagation()
+    e.preventDefault()
+    return 0
+  }
 
 
-  if (e.ctrlKey && e.key === 'e')
+  if (e.ctrlKey && e.key === 'e') {
     openExecuteDialog()
+    e.stopPropagation()
+    e.preventDefault()
+    return 0
+  }
 
 
-  if (e.ctrlKey && e.key === 'n')
+  if (e.ctrlKey && e.key === 'n') {
     location.reload()
+    e.stopPropagation()
+    e.preventDefault()
+    return 0
+  }
 
-  if (e.key === 'F11' || e.key === 'F12' || e.key === 'F5') return 0
+  // if (e.key === 'F11' || e.key === 'F12' || e.key === 'F5') return 0
 
 
-  e.stopPropagation()
-  e.preventDefault()
-  return 0
+  // e.stopPropagation()
+  // e.preventDefault()
+  // return 0
 }
 
 window.addEventListener('keydown', handlingShortcuts)
@@ -241,6 +257,9 @@ const toggleCode = () => {
   workspaceElement.classList.toggle('code-open')
 }
 
+// -----------------------------------------------------------------------------
+// Dialogs
+// -----------------------------------------------------------------------------
 let isExecuteDialogOpen = false
 const openExecuteDialog = () => {
   if (isExecuteDialogOpen) return
@@ -254,7 +273,7 @@ const openExecuteDialog = () => {
       return false
     },
     width: 750,
-    height: 540,
+    height: 550,
     x: 'center',
     y: 'center'
   })
@@ -279,11 +298,36 @@ const openExportDialog = () => {
   })
 }
 
+let newGateDialogInstance = null
+let isNewGateDialogOpen = false
+const openNewGateDialog = () => {
+  if (isNewGateDialogOpen) return
+  isNewGateDialogOpen = true
+  newGateDialogInstance = new window.WinBox({
+    title: 'New Gate',
+    border: 4,
+    mount: document.getElementById('new-gate-dialog') as Node,
+    onclose: () => {
+      isNewGateDialogOpen = false
+      return false
+    },
+    width: 750,
+    height: 500,
+    x: 'center',
+    y: 'center'
+  })
+}
+
+import NewGate from './components/NewGate.vue'
+const new_gate_instance = createApp(NewGate).mount('#new-gate-dialog')
+
 Object.assign(window, {
   openExportDialog,
   openExecuteDialog,
+  openNewGateDialog,
   togglePalette,
-  toggleCode
+  toggleCode,
+  new_gate_instance
 })
 
 // If everything loaded correctly, show the content
