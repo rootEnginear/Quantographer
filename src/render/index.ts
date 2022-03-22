@@ -404,6 +404,13 @@ workbenchElement.addEventListener(
   (e) => {
     dragging = true
 
+    circuitData.ops.forEach(
+      (op) => op.active = false
+    )
+
+    clearOps()
+    populateOps()
+
     startX = e.offsetX
     startY = e.offsetY
 

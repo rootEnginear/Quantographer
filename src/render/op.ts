@@ -516,6 +516,20 @@ export const populateOperation = (op: Operation, opIndex: number) => {
     opElement.append(controlLine1, controlLine2, assignSymbol)
   }
 
+  const activateGate = (e: MouseEvent) => {
+    if (!e.shiftKey)
+      ops.forEach(
+        (op) => op.active = false
+      )
+
+    op.active = true
+
+    clearOps()
+    populateOps()
+  }
+
+  // ------------ gate rendition ------------
+
   if (type === 'barrier') {
     // populate barrier
     const {qubitSpan: span} = op
@@ -575,6 +589,10 @@ export const populateOperation = (op: Operation, opIndex: number) => {
 
           return
         }
+
+        if (e.buttons !== 1) return
+
+        activateGate(e)
 
         // new operation to be changed and validated
         const newOp = deepClone(op)
@@ -835,6 +853,10 @@ export const populateOperation = (op: Operation, opIndex: number) => {
           return
         }
 
+        if (e.buttons !== 1) return
+
+        activateGate(e)
+
         // new operation to be changed and validated
         const newOp = deepClone(op)
 
@@ -930,6 +952,10 @@ export const populateOperation = (op: Operation, opIndex: number) => {
 
           return
         }
+
+        if (e.buttons !== 1) return
+
+        activateGate(e)
 
         // new operation to be changed and validated
         const newOp = deepClone(op)
@@ -1077,6 +1103,10 @@ export const populateOperation = (op: Operation, opIndex: number) => {
 
           return
         }
+
+        if (e.buttons !== 1) return
+
+        activateGate(e)
 
         // new operation to be changed and validated
         const newOp = deepClone(op)
