@@ -287,13 +287,17 @@ workbenchElement.addEventListener(
       break
     default:
       const op = constructOperation(gateid as OperationTypes, loc.index, loc.step)
+      const opSpan = getOpSpan(op)
       if (
         !op ||
+        // prevent gate span out of qubit lane
+        opSpan.qubit.lower < 0 ||
+        opSpan.qubit.upper >= circuitData.qubits.length ||
         // prevent overlaps
         circuitData.ops.some(
           (opi) => opOverlaps(
             getOpSpan(opi),
-            getOpSpan(op)
+            opSpan
           )
         )
       ) return // TODO: might show some feedback in here?
@@ -306,6 +310,31 @@ workbenchElement.addEventListener(
 
 const constructOperation = (type: OperationTypes, qubit: number, step: number): Operation => {
   switch (type) {
+  // @ts-expect-error
+  case 'cnot':
+    return {
+      type: 'x',
+      step,
+      qubit,
+      active: false,
+
+      controlBits: [],
+      controlQubits: [qubit + 1]
+    }
+  // @ts-expect-error
+  case 'toff':
+    return {
+      type: 'x',
+      step,
+      qubit,
+      active: false,
+
+      controlBits: [],
+      controlQubits: [
+        qubit + 1,
+        qubit + 2
+      ]
+    }
   case 'barrier':
     return {
       type,
