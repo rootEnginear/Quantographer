@@ -8,6 +8,10 @@ export const svgNamespace = 'http://www.w3.org/2000/svg'
 
 export const workbenchElement = document.querySelector<SVGElement>('#workbench')!
 
+const zoomInButton = document.querySelector<HTMLElement>('#zoom-in-btn')!
+const zoomOutButton = document.querySelector<HTMLElement>('#zoom-out-btn')!
+const zoomLevelSelector = document.querySelector<HTMLSelectElement>('#zoom-level')!
+
 // create drawing layers
 const trackGroupElement = document.createElementNS(svgNamespace, 'g')
 export const opGroupElement = document.createElementNS(svgNamespace, 'g')
@@ -221,12 +225,6 @@ workbenchElement.addEventListener(
     const {dataTransfer} = e
     const transfer = dataTransfer as DataTransfer
 
-    const {
-      items: [
-        {type: gateid}
-      ]
-    } = transfer
-
     const loc = getLocationInfo(e.offsetX, e.offsetY)
 
     transfer.dropEffect =
@@ -411,8 +409,8 @@ workbenchElement.addEventListener(
     clearOps()
     populateOps()
 
-    startX = e.offsetX
-    startY = e.offsetY
+    startX = e.offsetX / renderConfig.zoomLevel
+    startY = e.offsetY / renderConfig.zoomLevel
 
     selectElement.setAttribute('stroke', 'blue')
 
@@ -429,8 +427,8 @@ workbenchElement.addEventListener(
   (e) => {
     if (!dragging) return
 
-    endX = e.offsetX
-    endY = e.offsetY
+    endX = e.offsetX / renderConfig.zoomLevel
+    endY = e.offsetY / renderConfig.zoomLevel
 
     const rectStartX = Math.min(startX, endX)
     const rectStartY = Math.min(startY, endY)
@@ -459,3 +457,38 @@ populateTrack()
 populateOps()
 
 adjustWorkbenchSize()
+
+zoomLevelSelector.addEventListener(
+  'change',
+  () => {
+    const val = zoomLevelSelector.value
+    renderConfig.zoomLevel = +val
+
+    adjustWorkbenchSize()
+  }
+)
+
+const changeZoomLevel = (offset: number) => {
+  const {options, selectedIndex} = zoomLevelSelector
+  const target = selectedIndex + offset
+  if (target < 0 || target > options.length - 1) return
+  zoomLevelSelector.selectedIndex = target
+  zoomLevelSelector.dispatchEvent(
+    new Event('change')
+  )
+}
+
+zoomInButton.addEventListener(
+  'click',
+  () => changeZoomLevel(1)
+)
+
+zoomOutButton.addEventListener(
+  'click',
+  () => changeZoomLevel(-1)
+)
+
+// trigger zoom level readout
+zoomLevelSelector.dispatchEvent(
+  new Event('change')
+)
