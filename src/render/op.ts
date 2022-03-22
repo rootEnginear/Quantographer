@@ -70,6 +70,8 @@ export const populateOperation = (op: Operation, opIndex: number) => {
   // construct halo
   const haloElement = document.createElementNS(svgNamespace, 'rect')
 
+  haloElement.classList.add('halo')
+
   opElement.append(haloElement)
 
   if ('controlBits' in op) {
@@ -524,8 +526,13 @@ export const populateOperation = (op: Operation, opIndex: number) => {
 
     op.active = true
 
-    clearOps()
-    populateOps()
+    // update halo of other operation
+    ops.forEach(
+      (op, i) => {
+        const e = opGroupElement.querySelector(`g[data-index="${i}"]>.halo`)!
+        e.setAttribute('stroke', op.active ? 'red' : 'none')
+      }
+    )
   }
 
   // ------------ gate rendition ------------
