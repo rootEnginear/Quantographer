@@ -90,6 +90,32 @@ export const populateTrack = () => {
       labelElement.textContent = `q${name}`
 
       labelElement.classList.add('track-label')
+      labelElement.classList.add('opaque')
+
+      labelElement.addEventListener(
+        'dblclick',
+        (e) => {
+          e.stopPropagation()
+
+          let newName: string
+          for (;;) {
+            const newNamePrompt = prompt('Rename qubit', name)
+            // press cancel
+            if (newNamePrompt === null) return
+            // validation
+            if (!newNamePrompt.trim()) continue
+            // update
+            newName = newNamePrompt
+            break
+          }
+
+          item.name = newName
+
+          clearTrack()
+          populateTrack()
+          adjustWorkbenchSize()
+        }
+      )
 
       const lineElement = document.createElementNS(svgNamespace, 'line')
 
@@ -124,6 +150,32 @@ export const populateTrack = () => {
       labelElement.textContent = `c${name}`
 
       labelElement.classList.add('track-label')
+      labelElement.classList.add('opaque')
+
+      labelElement.addEventListener(
+        'dblclick',
+        (e) => {
+          e.stopPropagation()
+
+          let newName: string
+          for (;;) {
+            const newNamePrompt = prompt('Rename qubit', name)
+            // press cancel
+            if (newNamePrompt === null) return
+            // validation
+            if (!newNamePrompt.trim()) continue
+            // update
+            newName = newNamePrompt
+            break
+          }
+
+          item.name = newName
+
+          clearTrack()
+          populateTrack()
+          adjustWorkbenchSize()
+        }
+      )
 
       const startY1 = startY - bitLineSpacing
       const startY2 = startY + bitLineSpacing
@@ -247,8 +299,6 @@ workbenchElement.addEventListener(
       ]
     } = transfer
 
-    console.log(gateid)
-
     const loc = getLocationInfo(e.offsetX, e.offsetY)
     switch (gateid) {
     case 'ctrl':
@@ -258,21 +308,27 @@ workbenchElement.addEventListener(
       const opToAddIndex = stepOperations.findIndex(
         (op) => op.qubit === loc.index || 'targetQubit' in op && op.targetQubit === loc.index
       )
+      // drag on nothing, stop
       if (opToAddIndex === -1) return
       const opToAdd = stepOperations[opToAddIndex]
       if (
         !('controlQubits' in opToAdd)
       ) return
+      // find suitable qubit for control
       for (let ctrlIndex = 0; ctrlIndex < circuitData.qubits.length; ctrlIndex += 1) {
+        // don't place on these location
         if (
           opToAdd.controlQubits.includes(ctrlIndex) ||
           ctrlIndex === opToAdd.qubit ||
           'targetQubit' in opToAdd && ctrlIndex === opToAdd.targetQubit
         ) continue
+        // try adding control
         const newOp = deepClone(opToAdd)
         newOp.controlQubits.push(ctrlIndex)
+        // measure its span
         const opSpan = getOpSpan(newOp)
         if (
+          // not overlap with anything
           stepOperations.every(
             (op, i) => !(opOverlaps(getOpSpan(op), opSpan) && i !== opToAddIndex)
           )
