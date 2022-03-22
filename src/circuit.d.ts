@@ -65,10 +65,10 @@ type MeasureInstruction = BaseInstruction<'measure'> & {
   assignBit: AssignBitProperty
 }
 
-type Gates = BaseGate<'x' | 'z' | 'h' | 'sx' | 'sdg' | 'tdg'>
+type Gates = BaseGate<'x' | 'y' | 'z' | 'h' | 's' | 'sx' | 'sxdg' | '4x' | '4xdg' | 'sy' | '4y' | '4ydg' | 'sydg' | 'sdg' | 't' | 'tdg'>
 
 type SwapGate = BaseGate<'swap'> & {
   targetQubit: number
 }
 
-type ParameterizedGates = BaseParameterizedGate<'u3' | 'rx'>
+type ParameterizedGates = BaseParameterizedGate<'u1' | 'u2' | 'u3' | 'rx' | 'ry' | 'rz'>
