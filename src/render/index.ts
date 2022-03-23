@@ -27,7 +27,8 @@ const calcOperationSize = (): {width: number, height: number} => {
   const {
     stepWidth,
     qubitLaneHeight,
-    bitLaneHeight
+    bitLaneHeight,
+    headerPadding
   } = renderConfig
 
   const {qubits, bits, ops} = circuitData
@@ -42,7 +43,7 @@ const calcOperationSize = (): {width: number, height: number} => {
       )
   )
 
-  const opWidth = stepWidth * overlongStep
+  const opWidth = stepWidth * overlongStep + headerPadding
   const opHeight =
     qubitLaneHeight * qubits.length +
     bitLaneHeight * bits.length
@@ -535,23 +536,24 @@ workbenchElement.addEventListener(
 
     const startLoc = getLocationInfo(eX, eY)
 
-    if (startLoc.bitType === 'qubit' && startLoc.laneType === 'op') {
-      const halfGateSize = renderConfig.gateSize / 2
-
-      const halfStepWidth = renderConfig.stepWidth / 2
-      const halfQubitLaneHeight = renderConfig.qubitLaneHeight / 2
-
-      const centerX = renderConfig.stepWidth * startLoc.step + halfStepWidth
-      const centerY = renderConfig.qubitLaneHeight * startLoc.index + halfQubitLaneHeight
-
-      const startX = centerX - halfGateSize
-      const startY = centerY - halfGateSize
+    if (startLoc.laneType === 'op') {
+      const startX = renderConfig.stepWidth * startLoc.step
+      const startY =
+        renderConfig.qubitLaneHeight * (
+          startLoc.bitType === 'qubit' ?
+            startLoc.index :
+            circuitData.qubits.length
+        ) + (
+          startLoc.bitType === 'qubit' ?
+            0 :
+            renderConfig.bitLaneHeight * startLoc.index
+        )
 
       cellHoverElement.setAttribute('x', `${startX}`)
       cellHoverElement.setAttribute('y', `${startY}`)
 
-      cellHoverElement.setAttribute('width', `${renderConfig.gateSize}`)
-      cellHoverElement.setAttribute('height', `${renderConfig.gateSize}`)
+      cellHoverElement.setAttribute('width', `${renderConfig.stepWidth}`)
+      cellHoverElement.setAttribute('height', `${startLoc.bitType === 'qubit' ? renderConfig.qubitLaneHeight : renderConfig.bitLaneHeight}`)
     } else {
       cellHoverElement.setAttribute('width', '0')
       cellHoverElement.setAttribute('height', '0')
