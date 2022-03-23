@@ -631,3 +631,70 @@ zoomOutButton.addEventListener(
 zoomLevelSelector.dispatchEvent(
   new Event('change')
 )
+
+const chooseAndLoadFile = () => {
+  const f = document.createElement('input')
+  f.type = 'file'
+  f.addEventListener(
+    'change',
+    () => {
+      const reader = new FileReader()
+      reader.addEventListener(
+        'load',
+        () => loadCircuit(reader.result as string)
+      )
+      reader.readAsBinaryString(
+        f.files![0]
+      )
+    }
+  )
+
+  f.click()
+}
+
+const loadCircuit = (data: string) => {
+  const loadedCircuitData = JSON.parse(data)
+  Object.assign(
+    circuitData,
+    loadedCircuitData
+  )
+
+  clearOps()
+  clearTrack()
+
+  populateTrack()
+  populateOps()
+
+  adjustWorkbenchSize()
+}
+
+const saveFileDialog = (fileName: string, data: string) => {
+  const blobData = new Blob(
+    [data],
+    {type: 'text/plain'}
+  )
+
+  const urlData = URL.createObjectURL(blobData)
+
+  const linkElement = document.createElement('a')
+
+  linkElement.href = urlData
+  linkElement.download = fileName
+
+  linkElement.click()
+
+  URL.revokeObjectURL(urlData)
+}
+
+const saveFile = () => {
+  const data = JSON.stringify(circuitData)
+  saveFileDialog('circuit.json', data)
+}
+
+Object.assign(
+  window,
+  {
+    chooseAndLoadFile,
+    saveFile
+  }
+)

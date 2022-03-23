@@ -86,6 +86,20 @@ const handlingShortcuts = (e: KeyboardEvent) => {
     return 0
   }
 
+  if (e.ctrlKey && e.key === 'o') {
+    e.stopPropagation()
+    e.preventDefault()
+    // @ts-expect-error
+    window.chooseAndLoadFile()
+  }
+
+  if (e.ctrlKey && e.key === 's') {
+    e.stopPropagation()
+    e.preventDefault()
+    // @ts-expect-error
+    window.saveFile()
+  }
+
   // if (e.key === 'F11' || e.key === 'F12' || e.key === 'F5') return 0
 
 
