@@ -15,8 +15,8 @@ const zoomLevelSelector = document.querySelector<HTMLSelectElement>('#zoom-level
 // create drawing layers
 const trackGroupElement = document.createElementNS(svgNamespace, 'g')
 export const opGroupElement = document.createElementNS(svgNamespace, 'g')
-
-workbenchElement.append(trackGroupElement, opGroupElement)
+const opGroupOverlayElement = document.createElementNS(svgNamespace, 'g')
+workbenchElement.append(trackGroupElement, opGroupOverlayElement, opGroupElement)
 
 export const trackLabelGroupElement = document.createElementNS(svgNamespace, 'g')
 export const trackLineGroupElement = document.createElementNS(svgNamespace, 'g')
@@ -223,6 +223,7 @@ export const populateTrack = () => {
   trackLineGroupElement.style.transform = `translateX(${labelsWidth}px)`
 
   opGroupElement.style.transform = `translateX(${labelsWidth}px)`
+  opGroupOverlayElement.style.transform = `translateX(${labelsWidth}px)`
 }
 
 export const clearTrack = () => {
@@ -488,13 +489,18 @@ let endX = 0
 let endY = 0
 
 const selectElement = document.createElementNS(svgNamespace, 'rect')
+const cellHoverElement = document.createElementNS(svgNamespace, 'rect')
 
 workbenchElement.append(selectElement)
+opGroupOverlayElement.append(cellHoverElement)
 
 selectElement.setAttribute('fill', 'none')
 
 selectElement.setAttribute('stroke', 'none')
 selectElement.setAttribute('stroke-dasharray', '6 5')
+
+cellHoverElement.setAttribute('fill', 'blue')
+cellHoverElement.setAttribute('fill-opacity', '0.3')
 
 workbenchElement.addEventListener(
   'mousedown',
@@ -524,10 +530,37 @@ workbenchElement.addEventListener(
 workbenchElement.addEventListener(
   'mousemove',
   (e) => {
+    const eX = e.offsetX / renderConfig.zoomLevel
+    const eY = e.offsetY / renderConfig.zoomLevel
+
+    const startLoc = getLocationInfo(eX, eY)
+
+    if (startLoc.bitType === 'qubit' && startLoc.laneType === 'op') {
+      const halfGateSize = renderConfig.gateSize / 2
+
+      const halfStepWidth = renderConfig.stepWidth / 2
+      const halfQubitLaneHeight = renderConfig.qubitLaneHeight / 2
+
+      const centerX = renderConfig.stepWidth * startLoc.step + halfStepWidth
+      const centerY = renderConfig.qubitLaneHeight * startLoc.index + halfQubitLaneHeight
+
+      const startX = centerX - halfGateSize
+      const startY = centerY - halfGateSize
+
+      cellHoverElement.setAttribute('x', `${startX}`)
+      cellHoverElement.setAttribute('y', `${startY}`)
+
+      cellHoverElement.setAttribute('width', `${renderConfig.gateSize}`)
+      cellHoverElement.setAttribute('height', `${renderConfig.gateSize}`)
+    } else {
+      cellHoverElement.setAttribute('width', '0')
+      cellHoverElement.setAttribute('height', '0')
+    }
+
     if (!dragging) return
 
-    endX = e.offsetX / renderConfig.zoomLevel
-    endY = e.offsetY / renderConfig.zoomLevel
+    endX = eX
+    endY = eY
 
     const rectStartX = Math.min(startX, endX)
     const rectStartY = Math.min(startY, endY)
