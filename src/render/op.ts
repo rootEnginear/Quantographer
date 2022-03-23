@@ -519,12 +519,14 @@ export const populateOperation = (op: Operation, opIndex: number) => {
   }
 
   const activateGate = (e: MouseEvent) => {
+    const a = op.active
+
     if (!e.shiftKey)
       ops.forEach(
         (op) => op.active = false
       )
 
-    op.active = true
+    op.active = !a
 
     // update halo of other operation
     ops.forEach(
