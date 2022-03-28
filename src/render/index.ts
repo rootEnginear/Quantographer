@@ -627,6 +627,14 @@ workbenchElement.addEventListener(
   }
 )
 
+workbenchElement.addEventListener(
+  'mouseleave',
+  () => {
+    cellHoverElement.setAttribute('width', '0')
+    cellHoverElement.setAttribute('height', '0')
+  }
+)
+
 populateTrack()
 populateOps()
 
