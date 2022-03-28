@@ -73,8 +73,8 @@ type SwapGate = BaseGate<'swap'> & {
   targetQubit: number
 }
 
-type CustomGate = BaseGate<'custom'> & {
-  templateId: string
+type CustomGate = BaseInstruction<'custom'> & {
+  template: string
 }
 
 type ParameterizedGates = BaseParameterizedGate<'u1' | 'u2' | 'u3' | 'rx' | 'ry' | 'rz'>
