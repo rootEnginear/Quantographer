@@ -9,6 +9,7 @@
           :data-newcategory="!!submenu_item.newCategory"
           data-submenu-item
           tabindex="-1"
+          @click="submenu_item.onClick"
         >{{ submenu_item.name }}</li>
       </ul>
     </li>
@@ -24,7 +25,7 @@ import { ref, onMounted } from 'vue'
 interface SubMenuItem {
   name: string
   newCategory?: boolean
-  onClick?: () => any
+  onClick: () => any
 }
 
 interface MenuItem {
@@ -41,90 +42,185 @@ const MENU_ITEMS: MenuItem[] = [
     items: [
       {
         name: 'New',
+        onClick() {
+          location.reload();
+        }
       },
       {
-        name: 'Open'
+        name: 'Open',
+        onClick() {
+          // @ts-expect-error
+          window.chooseAndLoadFile()
+        }
       },
       {
         name: 'Save',
-        newCategory: true
+        newCategory: true,
+        onClick() {
+          // @ts-expect-error
+          window.saveFile()
+        }
       },
       {
-        name: 'Save as'
+        name: 'Export',
+        newCategory: true,
+        onClick() {
+          // @ts-expect-error
+          window.openExportDialog()
+        }
       },
-      {
-        name: 'Print',
-        newCategory: true
-      },
-      {
-        name: 'Exit',
-        newCategory: true
-      }
     ]
   },
   {
     name: 'Edit',
     items: [
       {
-        name: 'Undo'
+        name: 'Undo',
+        onClick() {}
       },
       {
-        name: 'Redo'
+        name: 'Redo',
+        onClick() {}
       },
       {
         name: 'Cut',
-        newCategory: true
+        newCategory: true,
+        onClick() {}
       },
       {
-        name: 'Copy'
+        name: 'Copy',
+        onClick() {}
       },
       {
-        name: 'Paste'
+        name: 'Paste',
+        onClick() {}
       },
       {
-        name: 'Delete'
+        name: 'Delete',
+        onClick() {}
       },
       {
         name: 'Select all',
-        newCategory: true
+        newCategory: true,
+        onClick() {}
       },
       {
         name: 'Duplicate to left',
-        newCategory: true
+        newCategory: true,
+        onClick() {}
       },
       {
-        name: 'Duplicate to right'
+        name: 'Duplicate to right',
+        onClick() {}
       },
       {
         name: 'Flip horizontally',
-        newCategory: true
+        newCategory: true,
+        onClick() {}
       },
-      { name: 'Conjugate transpose' }
+      {
+        name: 'Conjugate transpose',
+        onClick() {}
+      }
     ]
   },
   {
-    name: 'View'
-  },
-  {
-    name: 'Insert'
-  },
-  {
-    name: 'Execute'
-  },
-  {
-    name: 'Tools'
-  },
-  {
-    name: 'Windows'
+    name: 'View',
+    items: [
+      {
+        name: 'Zoom in',
+        onClick() {
+          // @ts-expect-error
+          window.changeZoomLevel(1)
+        }
+      },
+      {
+        name: 'Zoom out',
+        onClick() {
+          // @ts-expect-error
+          window.changeZoomLevel(-1)
+        }
+      },
+      {
+        name: '25%',
+        newCategory: true,
+        onClick() {
+          // @ts-expect-error
+          window.setZoomLevel(0)
+        }
+      },
+      {
+        name: '50%',
+        onClick() {
+          // @ts-expect-error
+          window.setZoomLevel(1)
+        }
+      },
+      {
+        name: '75%',
+        onClick() {
+          // @ts-expect-error
+          window.setZoomLevel(2)
+        }
+      },
+      {
+        name: '100%',
+        onClick() {
+          // @ts-expect-error
+          window.setZoomLevel(3)
+        }
+      },
+      {
+        name: '125%',
+        onClick() {
+          // @ts-expect-error
+          window.setZoomLevel(4)
+        }
+      },
+      {
+        name: '150%',
+        onClick() {
+          // @ts-expect-error
+          window.setZoomLevel(5)
+        }
+      },
+      {
+        name: '175%',
+        onClick() {
+          // @ts-expect-error
+          window.setZoomLevel(6)
+        }
+      },
+      {
+        name: '200%',
+        onClick() {
+          // @ts-expect-error
+          window.setZoomLevel(7)
+        }
+      },
+      {
+        name: 'Toggle Gate Palette',
+        newCategory: true,
+        onClick() {
+          // @ts-expect-error
+          window.togglePalette()
+        }
+      },
+      {
+        name: 'Toggle Code Palette',
+        onClick() {
+          // @ts-expect-error
+          window.toggleCode()
+        }
+      },
+    ]
   },
   {
     name: 'Help',
     items: [
       {
-        name: 'Update'
-      },
-      {
-        name: 'About'
+        name: 'About',
+        onClick() {}
       }
     ]
   }

@@ -1,0 +1,26 @@
+#contextmenu {
+	display: none;
+	position: absolute;
+
+	background: #f3f8ff;
+	border: 2px solid #0061ff;
+	box-sizing: border-box;
+	border-radius: 4px;
+
+	font-size: 0.8rem;
+
+	padding: 4px;
+
+	pointer-events: none;
+
+	transform: scale(0.8);
+	opacity: 0;
+	transform-origin: top left;
+
+	transition: transform 0.1s, opacity 0.1s;
+	.not-ready & {
+		transition: all 0s !important;
+	}
+
+	white-space: nowrap;
+}

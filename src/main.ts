@@ -15,6 +15,7 @@ const toggleCodeButton = document.getElementById('btn-toggle-code')!
 const accordionGroups = document.querySelectorAll('details')
 
 import './ui/gate_tooltip'
+import './ui/contextmenu'
 
 for (const gateButton of gateButtons)
   gateButton.addEventListener(

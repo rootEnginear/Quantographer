@@ -24,9 +24,16 @@ const opSymbolMapping: Partial<OperationRegistry<string>> = {
   measure: 'measure-operation',
 
   x: 'x-gate',
-  sx: 'sx-gate',
   sdg: 'sdg-gate',
-  tdg: 'tdg-gate'
+  tdg: 'tdg-gate',
+  sx: 'sx-gate',
+  sxdg: 'sxdg-gate',
+  '4x': '4x-gate',
+  '4xdg': '4xdg-gate',
+  sy: 'sy-gate',
+  sydg: 'sydg-gate',
+  '4y': '4y-gate',
+  '4ydg': '4ydg-gate'
 }
 
 export const populateOperation = (op: Operation, opIndex: number) => {
