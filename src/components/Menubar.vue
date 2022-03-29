@@ -129,16 +129,90 @@ const MENU_ITEMS: MenuItem[] = [
     items: [
       {
         name: 'Zoom in',
-        onClick() {}
+        onClick() {
+          // @ts-expect-error
+          window.changeZoomLevel(1)
+        }
       },
       {
         name: 'Zoom out',
-        onClick() {}
+        onClick() {
+          // @ts-expect-error
+          window.changeZoomLevel(-1)
+        }
+      },
+      {
+        name: '25%',
+        newCategory: true,
+        onClick() {
+          // @ts-expect-error
+          window.setZoomLevel(0)
+        }
+      },
+      {
+        name: '50%',
+        onClick() {
+          // @ts-expect-error
+          window.setZoomLevel(1)
+        }
+      },
+      {
+        name: '75%',
+        onClick() {
+          // @ts-expect-error
+          window.setZoomLevel(2)
+        }
       },
       {
         name: '100%',
-        onClick() {}
-      }
+        onClick() {
+          // @ts-expect-error
+          window.setZoomLevel(3)
+        }
+      },
+      {
+        name: '125%',
+        onClick() {
+          // @ts-expect-error
+          window.setZoomLevel(4)
+        }
+      },
+      {
+        name: '150%',
+        onClick() {
+          // @ts-expect-error
+          window.setZoomLevel(5)
+        }
+      },
+      {
+        name: '175%',
+        onClick() {
+          // @ts-expect-error
+          window.setZoomLevel(6)
+        }
+      },
+      {
+        name: '200%',
+        onClick() {
+          // @ts-expect-error
+          window.setZoomLevel(7)
+        }
+      },
+      {
+        name: 'Toggle Gate Palette',
+        newCategory: true,
+        onClick() {
+          // @ts-expect-error
+          window.togglePalette()
+        }
+      },
+      {
+        name: 'Toggle Code Palette',
+        onClick() {
+          // @ts-expect-error
+          window.toggleCode()
+        }
+      },
     ]
   },
   {
