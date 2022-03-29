@@ -708,14 +708,18 @@ zoomLevelSelector.addEventListener(
   }
 )
 
-const changeZoomLevel = (offset: number) => {
-  const {options, selectedIndex} = zoomLevelSelector
-  const target = selectedIndex + offset
-  if (target < 0 || target > options.length - 1) return
+const setZoomLevel = (target: number) => {
   zoomLevelSelector.selectedIndex = target
   zoomLevelSelector.dispatchEvent(
     new Event('change')
   )
+}
+
+const changeZoomLevel = (offset: number) => {
+  const {options, selectedIndex} = zoomLevelSelector
+  const target = selectedIndex + offset
+  if (target < 0 || target > options.length - 1) return
+  setZoomLevel(target)
 }
 
 zoomInButton.addEventListener(
@@ -835,6 +839,8 @@ Object.assign(
     chooseAndLoadFile,
     saveFile,
     addCustomGate,
-    generateQasm
+    generateQasm,
+    setZoomLevel,
+    changeZoomLevel
   }
 )
