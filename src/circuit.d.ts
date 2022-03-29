@@ -2,6 +2,7 @@ type Circuit = {
   qubits: QubitProperty[]
   bits: BitProperty[]
   ops: Operation[]
+  customOperations: Record<string, CustomGateProperties>
 }
 
 type QubitProperty = {
@@ -31,6 +32,7 @@ type Operation =
   | Gates
   | ParameterizedGates
   | SwapGate
+  | CustomGate
 
 type OperationTypes = Operation['type']
 
@@ -71,4 +73,33 @@ type SwapGate = BaseGate<'swap'> & {
   targetQubit: number
 }
 
+type CustomGate = BaseInstruction<'custom'> & {
+  template: string
+}
+
 type ParameterizedGates = BaseParameterizedGate<'u1' | 'u2' | 'u3' | 'rx' | 'ry' | 'rz'>
+
+type CustomGateProperties =
+  | MatrixCustomGateProperty
+  | RotationCustomGateProperty
+  | OperationsCustomGateProperty
+
+type CustomGateProperty<T> = {
+  type: T
+}
+
+type RotationCustomGateProperty = CustomGateProperty<'rotation'> & {
+  theta: number
+  phi: number
+  phase: number
+}
+
+type MatrixCustomGateProperty = CustomGateProperty<'matrix'> & {
+  qubitCount: number
+  matrix: number[][]
+}
+
+type OperationsCustomGateProperty = CustomGateProperty<'operation'> & {
+  qubitCount: number
+  ops: Operation[]
+}

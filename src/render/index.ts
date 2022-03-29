@@ -15,8 +15,8 @@ const zoomLevelSelector = document.querySelector<HTMLSelectElement>('#zoom-level
 // create drawing layers
 const trackGroupElement = document.createElementNS(svgNamespace, 'g')
 export const opGroupElement = document.createElementNS(svgNamespace, 'g')
-
-workbenchElement.append(trackGroupElement, opGroupElement)
+const opGroupOverlayElement = document.createElementNS(svgNamespace, 'g')
+workbenchElement.append(trackGroupElement, opGroupOverlayElement, opGroupElement)
 
 export const trackLabelGroupElement = document.createElementNS(svgNamespace, 'g')
 export const trackLineGroupElement = document.createElementNS(svgNamespace, 'g')
@@ -27,7 +27,8 @@ const calcOperationSize = (): {width: number, height: number} => {
   const {
     stepWidth,
     qubitLaneHeight,
-    bitLaneHeight
+    bitLaneHeight,
+    headerPadding
   } = renderConfig
 
   const {qubits, bits, ops} = circuitData
@@ -42,7 +43,7 @@ const calcOperationSize = (): {width: number, height: number} => {
       )
   )
 
-  const opWidth = stepWidth * overlongStep
+  const opWidth = stepWidth * overlongStep + headerPadding
   const opHeight =
     qubitLaneHeight * qubits.length +
     bitLaneHeight * bits.length
@@ -90,6 +91,32 @@ export const populateTrack = () => {
       labelElement.textContent = `q${name}`
 
       labelElement.classList.add('track-label')
+      labelElement.classList.add('opaque')
+
+      labelElement.addEventListener(
+        'dblclick',
+        (e) => {
+          e.stopPropagation()
+
+          let newName: string
+          for (;;) {
+            const newNamePrompt = prompt('Rename qubit', name)
+            // press cancel
+            if (newNamePrompt === null) return
+            // validation
+            if (!newNamePrompt.trim()) continue
+            // update
+            newName = newNamePrompt
+            break
+          }
+
+          item.name = newName
+
+          clearTrack()
+          populateTrack()
+          adjustWorkbenchSize()
+        }
+      )
 
       const lineElement = document.createElementNS(svgNamespace, 'line')
 
@@ -124,6 +151,32 @@ export const populateTrack = () => {
       labelElement.textContent = `c${name}`
 
       labelElement.classList.add('track-label')
+      labelElement.classList.add('opaque')
+
+      labelElement.addEventListener(
+        'dblclick',
+        (e) => {
+          e.stopPropagation()
+
+          let newName: string
+          for (;;) {
+            const newNamePrompt = prompt('Rename qubit', name)
+            // press cancel
+            if (newNamePrompt === null) return
+            // validation
+            if (!newNamePrompt.trim()) continue
+            // update
+            newName = newNamePrompt
+            break
+          }
+
+          item.name = newName
+
+          clearTrack()
+          populateTrack()
+          adjustWorkbenchSize()
+        }
+      )
 
       const startY1 = startY - bitLineSpacing
       const startY2 = startY + bitLineSpacing
@@ -171,6 +224,7 @@ export const populateTrack = () => {
   trackLineGroupElement.style.transform = `translateX(${labelsWidth}px)`
 
   opGroupElement.style.transform = `translateX(${labelsWidth}px)`
+  opGroupOverlayElement.style.transform = `translateX(${labelsWidth}px)`
 }
 
 export const clearTrack = () => {
@@ -247,8 +301,6 @@ workbenchElement.addEventListener(
       ]
     } = transfer
 
-    console.log(gateid)
-
     const loc = getLocationInfo(e.offsetX, e.offsetY)
     switch (gateid) {
     case 'ctrl':
@@ -258,21 +310,27 @@ workbenchElement.addEventListener(
       const opToAddIndex = stepOperations.findIndex(
         (op) => op.qubit === loc.index || 'targetQubit' in op && op.targetQubit === loc.index
       )
+      // drag on nothing, stop
       if (opToAddIndex === -1) return
       const opToAdd = stepOperations[opToAddIndex]
       if (
         !('controlQubits' in opToAdd)
       ) return
+      // find suitable qubit for control
       for (let ctrlIndex = 0; ctrlIndex < circuitData.qubits.length; ctrlIndex += 1) {
+        // don't place on these location
         if (
           opToAdd.controlQubits.includes(ctrlIndex) ||
           ctrlIndex === opToAdd.qubit ||
           'targetQubit' in opToAdd && ctrlIndex === opToAdd.targetQubit
         ) continue
+        // try adding control
         const newOp = deepClone(opToAdd)
         newOp.controlQubits.push(ctrlIndex)
+        // measure its span
         const opSpan = getOpSpan(newOp)
         if (
+          // not overlap with anything
           stepOperations.every(
             (op, i) => !(opOverlaps(getOpSpan(op), opSpan) && i !== opToAddIndex)
           )
@@ -432,13 +490,18 @@ let endX = 0
 let endY = 0
 
 const selectElement = document.createElementNS(svgNamespace, 'rect')
+const cellHoverElement = document.createElementNS(svgNamespace, 'rect')
 
 workbenchElement.append(selectElement)
+opGroupOverlayElement.append(cellHoverElement)
 
 selectElement.setAttribute('fill', 'none')
 
 selectElement.setAttribute('stroke', 'none')
 selectElement.setAttribute('stroke-dasharray', '6 5')
+
+cellHoverElement.setAttribute('fill', 'blue')
+cellHoverElement.setAttribute('fill-opacity', '0.3')
 
 workbenchElement.addEventListener(
   'mousedown',
@@ -468,10 +531,38 @@ workbenchElement.addEventListener(
 workbenchElement.addEventListener(
   'mousemove',
   (e) => {
+    const eX = e.offsetX / renderConfig.zoomLevel
+    const eY = e.offsetY / renderConfig.zoomLevel
+
+    const startLoc = getLocationInfo(eX, eY)
+
+    if (startLoc.laneType === 'op') {
+      const startX = renderConfig.stepWidth * startLoc.step
+      const startY =
+        renderConfig.qubitLaneHeight * (
+          startLoc.bitType === 'qubit' ?
+            startLoc.index :
+            circuitData.qubits.length
+        ) + (
+          startLoc.bitType === 'qubit' ?
+            0 :
+            renderConfig.bitLaneHeight * startLoc.index
+        )
+
+      cellHoverElement.setAttribute('x', `${startX}`)
+      cellHoverElement.setAttribute('y', `${startY}`)
+
+      cellHoverElement.setAttribute('width', `${renderConfig.stepWidth}`)
+      cellHoverElement.setAttribute('height', `${startLoc.bitType === 'qubit' ? renderConfig.qubitLaneHeight : renderConfig.bitLaneHeight}`)
+    } else {
+      cellHoverElement.setAttribute('width', '0')
+      cellHoverElement.setAttribute('height', '0')
+    }
+
     if (!dragging) return
 
-    endX = e.offsetX / renderConfig.zoomLevel
-    endY = e.offsetY / renderConfig.zoomLevel
+    endX = eX
+    endY = eY
 
     const rectStartX = Math.min(startX, endX)
     const rectStartY = Math.min(startY, endY)
@@ -536,6 +627,14 @@ workbenchElement.addEventListener(
   }
 )
 
+workbenchElement.addEventListener(
+  'mouseleave',
+  () => {
+    cellHoverElement.setAttribute('width', '0')
+    cellHoverElement.setAttribute('height', '0')
+  }
+)
+
 populateTrack()
 populateOps()
 
@@ -574,4 +673,71 @@ zoomOutButton.addEventListener(
 // trigger zoom level readout
 zoomLevelSelector.dispatchEvent(
   new Event('change')
+)
+
+const chooseAndLoadFile = () => {
+  const f = document.createElement('input')
+  f.type = 'file'
+  f.addEventListener(
+    'change',
+    () => {
+      const reader = new FileReader()
+      reader.addEventListener(
+        'load',
+        () => loadCircuit(reader.result as string)
+      )
+      reader.readAsBinaryString(
+        f.files![0]
+      )
+    }
+  )
+
+  f.click()
+}
+
+const loadCircuit = (data: string) => {
+  const loadedCircuitData = JSON.parse(data)
+  Object.assign(
+    circuitData,
+    loadedCircuitData
+  )
+
+  clearOps()
+  clearTrack()
+
+  populateTrack()
+  populateOps()
+
+  adjustWorkbenchSize()
+}
+
+const saveFileDialog = (fileName: string, data: string) => {
+  const blobData = new Blob(
+    [data],
+    {type: 'text/plain'}
+  )
+
+  const urlData = URL.createObjectURL(blobData)
+
+  const linkElement = document.createElement('a')
+
+  linkElement.href = urlData
+  linkElement.download = fileName
+
+  linkElement.click()
+
+  URL.revokeObjectURL(urlData)
+}
+
+const saveFile = () => {
+  const data = JSON.stringify(circuitData)
+  saveFileDialog('circuit.json', data)
+}
+
+Object.assign(
+  window,
+  {
+    chooseAndLoadFile,
+    saveFile
+  }
 )

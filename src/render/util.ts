@@ -76,7 +76,8 @@ export const getOpSpan = (op: Operation): OperationLocation => {
   const {
     qubits: {
       length: qubitCount
-    }
+    },
+    customOperations
   } = circuitData
 
   const {step, qubit} = op
@@ -115,6 +116,17 @@ export const getOpSpan = (op: Operation): OperationLocation => {
   // operation that span across multiple qubit
   if ('qubitSpan' in op) {
     const {qubitSpan} = op
+
+    maxQubit = Math.max(maxQubit, qubit + qubitSpan - 1)
+  }
+
+  if ('template' in op) {
+    const {template} = op
+
+    const custom = customOperations[template]!
+
+    // rotation interact on 1 qubt
+    const qubitSpan = custom.type === 'rotation' ? 1 : custom.qubitCount
 
     maxQubit = Math.max(maxQubit, qubit + qubitSpan - 1)
   }
