@@ -11,6 +11,7 @@ export const workbenchElement = document.querySelector<SVGElement>('#workbench')
 const zoomInButton = document.querySelector<HTMLElement>('#zoom-in-btn')!
 const zoomOutButton = document.querySelector<HTMLElement>('#zoom-out-btn')!
 const zoomLevelSelector = document.querySelector<HTMLSelectElement>('#zoom-level')!
+const newGateArea = document.querySelector<HTMLElement>('#new-gate-area')!
 
 // create drawing layers
 const trackGroupElement = document.createElementNS(svgNamespace, 'g')
@@ -303,7 +304,7 @@ workbenchElement.addEventListener(
 
     const loc = getLocationInfo(e.offsetX, e.offsetY)
     switch (gateid) {
-    case 'ctrl':
+    case 'ctrl': {
       const stepOperations = circuitData.ops.filter(
         (op) => op.step === loc.step
       )
@@ -343,6 +344,50 @@ workbenchElement.addEventListener(
       }
       // TODO: might show some feedback here?
       break
+    }
+    case 'ctrlbit': {
+      const stepOperations = circuitData.ops.filter(
+        (op) => op.step === loc.step
+      )
+      const opToAddIndex = stepOperations.findIndex(
+        (op) => op.qubit === loc.index || 'targetQubit' in op && op.targetQubit === loc.index
+      )
+      // drag on nothing, stop
+      if (opToAddIndex === -1) return
+      const opToAdd = stepOperations[opToAddIndex]
+      if (
+        !('controlBits' in opToAdd)
+      ) return
+      // find suitable bit for control
+      for (let ctrlIndex = 0; ctrlIndex < circuitData.bits.length; ctrlIndex += 1) {
+        const addedControl = {
+          index: ctrlIndex,
+          invert: false,
+          value: 1
+        }
+        // try adding control
+        const newOp = deepClone(opToAdd)
+        newOp.controlBits.push(addedControl)
+        // measure its span
+        const opSpan = getOpSpan(newOp)
+        if (
+          // not already existed
+          opToAdd.controlBits.every(
+            (entry) => entry.index !== ctrlIndex
+          ) &&
+          // not overlap with anything
+          stepOperations.every(
+            (op, i) => !(opOverlaps(getOpSpan(op), opSpan) && i !== opToAddIndex)
+          )
+        ) {
+          opToAdd.controlBits.push(addedControl)
+          clearOps()
+          populateOps()
+          break
+        }
+      }
+      break
+    }
     default:
       const op = constructOperation(gateid as OperationTypes, loc.index, loc.step)
       const opSpan = getOpSpan(op)
@@ -478,6 +523,20 @@ const constructOperation = (type: OperationTypes, qubit: number, step: number): 
       controlQubits: [],
       params: {}
     }
+  default:
+    if (type.startsWith('custom:')) {
+      const subtype = type.replace('custom:', '')
+      return {
+        type: 'custom',
+        step,
+        qubit,
+        active: false,
+
+        controlBits: [],
+        template: subtype
+      }
+    }
+    throw new Error('unknow gate')
   }
 }
 
@@ -696,7 +755,7 @@ const chooseAndLoadFile = () => {
 }
 
 const loadCircuit = (data: string) => {
-  const loadedCircuitData = JSON.parse(data)
+  const loadedCircuitData = JSON.parse(data) as Circuit
   Object.assign(
     circuitData,
     loadedCircuitData
@@ -729,6 +788,29 @@ const saveFileDialog = (fileName: string, data: string) => {
   URL.revokeObjectURL(urlData)
 }
 
+const addCustomGate = (name: string, gate: CustomGateProperties) => {
+  if (name in circuitData.customOperations)
+    throw new Error('duplicate name')
+
+  circuitData.customOperations[name] = gate
+
+  const userGateBtn = document.createElement('button')
+
+  userGateBtn.draggable = true
+
+  userGateBtn.classList.add('toolbar-btn')
+  userGateBtn.classList.add('gate')
+  userGateBtn.classList.add('fluid')
+  userGateBtn.classList.add('custom')
+
+  userGateBtn.dataset.gateid = 'custom:' + name
+  userGateBtn.dataset.tooltip = name + ' Gate'
+
+  userGateBtn.textContent = name
+
+  newGateArea.prepend(userGateBtn)
+}
+
 const saveFile = () => {
   const data = JSON.stringify(circuitData)
   saveFileDialog('circuit.json', data)
@@ -738,6 +820,7 @@ Object.assign(
   window,
   {
     chooseAndLoadFile,
-    saveFile
+    saveFile,
+    addCustomGate
   }
 )
