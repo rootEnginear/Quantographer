@@ -815,11 +815,26 @@ const saveFile = () => {
   saveFileDialog('circuit.json', data)
 }
 
+const generateQasm = (): string => `
+OPENQASM 2.0;
+include "qelib1.inc";
+qreg q[${circuitData.qubits.length}];
+creg c[${circuitData.bits.length}];
+${
+  circuitData.ops
+    .map(
+      (op) => op.toString()
+    )
+    .join('\n')
+}
+`
+
 Object.assign(
   window,
   {
     chooseAndLoadFile,
     saveFile,
-    addCustomGate
+    addCustomGate,
+    generateQasm
   }
 )
