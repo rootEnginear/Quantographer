@@ -342,7 +342,6 @@ workbenchElement.addEventListener(
           break
         }
       }
-      // TODO: might show some feedback here?
       break
     }
     case 'ctrlbit': {
@@ -403,7 +402,7 @@ workbenchElement.addEventListener(
             opSpan
           )
         )
-      ) return // TODO: might show some feedback in here?
+      ) return
       const i = circuitData.ops.push(op) - 1
       populateOperation(op, i)
     }
