@@ -9,6 +9,7 @@
           :data-newcategory="!!submenu_item.newCategory"
           data-submenu-item
           tabindex="-1"
+          @click="submenu_item.onClick"
         >{{ submenu_item.name }}</li>
       </ul>
     </li>
@@ -24,7 +25,7 @@ import { ref, onMounted } from 'vue'
 interface SubMenuItem {
   name: string
   newCategory?: boolean
-  onClick?: () => any
+  onClick: () => any
 }
 
 interface MenuItem {
@@ -41,90 +42,111 @@ const MENU_ITEMS: MenuItem[] = [
     items: [
       {
         name: 'New',
+        onClick() {
+          location.reload();
+        }
       },
       {
-        name: 'Open'
+        name: 'Open',
+        onClick() {
+          // @ts-expect-error
+          window.chooseAndLoadFile()
+        }
       },
       {
         name: 'Save',
-        newCategory: true
+        newCategory: true,
+        onClick() {
+          // @ts-expect-error
+          window.saveFile()
+        }
       },
       {
-        name: 'Save as'
+        name: 'Export',
+        newCategory: true,
+        onClick() {
+          // @ts-expect-error
+          window.openExportDialog
+        }
       },
-      {
-        name: 'Print',
-        newCategory: true
-      },
-      {
-        name: 'Exit',
-        newCategory: true
-      }
     ]
   },
   {
     name: 'Edit',
     items: [
       {
-        name: 'Undo'
+        name: 'Undo',
+        onClick() {}
       },
       {
-        name: 'Redo'
+        name: 'Redo',
+        onClick() {}
       },
       {
         name: 'Cut',
-        newCategory: true
+        newCategory: true,
+        onClick() {}
       },
       {
-        name: 'Copy'
+        name: 'Copy',
+        onClick() {}
       },
       {
-        name: 'Paste'
+        name: 'Paste',
+        onClick() {}
       },
       {
-        name: 'Delete'
+        name: 'Delete',
+        onClick() {}
       },
       {
         name: 'Select all',
-        newCategory: true
+        newCategory: true,
+        onClick() {}
       },
       {
         name: 'Duplicate to left',
-        newCategory: true
+        newCategory: true,
+        onClick() {}
       },
       {
-        name: 'Duplicate to right'
+        name: 'Duplicate to right',
+        onClick() {}
       },
       {
         name: 'Flip horizontally',
-        newCategory: true
+        newCategory: true,
+        onClick() {}
       },
-      { name: 'Conjugate transpose' }
+      {
+        name: 'Conjugate transpose',
+        onClick() {}
+      }
     ]
   },
   {
-    name: 'View'
-  },
-  {
-    name: 'Insert'
-  },
-  {
-    name: 'Execute'
-  },
-  {
-    name: 'Tools'
-  },
-  {
-    name: 'Windows'
+    name: 'View',
+    items: [
+      {
+        name: 'Zoom in',
+        onClick() {}
+      },
+      {
+        name: 'Zoom out',
+        onClick() {}
+      },
+      {
+        name: '100%',
+        onClick() {}
+      }
+    ]
   },
   {
     name: 'Help',
     items: [
       {
-        name: 'Update'
-      },
-      {
-        name: 'About'
+        name: 'About',
+        onClick() {}
       }
     ]
   }
