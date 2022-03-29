@@ -589,10 +589,7 @@ workbenchElement.addEventListener(
 workbenchElement.addEventListener(
   'mousemove',
   (e) => {
-    const eX = e.offsetX / renderConfig.zoomLevel
-    const eY = e.offsetY / renderConfig.zoomLevel
-
-    const startLoc = getLocationInfo(eX, eY)
+    const startLoc = getLocationInfo(e.offsetX, e.offsetY)
 
     if (startLoc.laneType === 'op') {
       const startX = renderConfig.stepWidth * startLoc.step
@@ -619,8 +616,8 @@ workbenchElement.addEventListener(
 
     if (!dragging) return
 
-    endX = eX
-    endY = eY
+    endX = e.offsetX / renderConfig.zoomLevel
+    endY = e.offsetY / renderConfig.zoomLevel
 
     const rectStartX = Math.min(startX, endX)
     const rectStartY = Math.min(startY, endY)
