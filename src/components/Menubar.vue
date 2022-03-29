@@ -66,7 +66,7 @@ const MENU_ITEMS: MenuItem[] = [
         newCategory: true,
         onClick() {
           // @ts-expect-error
-          window.openExportDialog
+          window.openExportDialog()
         }
       },
     ]
