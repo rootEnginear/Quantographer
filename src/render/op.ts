@@ -70,6 +70,8 @@ export const populateOperation = (op: Operation, opIndex: number) => {
   // construct halo
   const haloElement = document.createElementNS(svgNamespace, 'rect')
 
+  haloElement.classList.add('halo')
+
   opElement.append(haloElement)
 
   if ('controlBits' in op) {
@@ -516,6 +518,25 @@ export const populateOperation = (op: Operation, opIndex: number) => {
     opElement.append(controlLine1, controlLine2, assignSymbol)
   }
 
+  const activateGate = (e: MouseEvent) => {
+    if (!e.shiftKey)
+      ops.forEach(
+        (op) => op.active = false
+      )
+
+    op.active = true
+
+    // update halo of other operation
+    ops.forEach(
+      (op, i) => {
+        const e = opGroupElement.querySelector(`g[data-index="${i}"]>.halo`)!
+        e.setAttribute('stroke', op.active ? 'red' : 'none')
+      }
+    )
+  }
+
+  // ------------ gate rendition ------------
+
   if (type === 'barrier') {
     // populate barrier
     const {qubitSpan: span} = op
@@ -575,6 +596,10 @@ export const populateOperation = (op: Operation, opIndex: number) => {
 
           return
         }
+
+        if (e.buttons !== 1) return
+
+        activateGate(e)
 
         // new operation to be changed and validated
         const newOp = deepClone(op)
@@ -835,6 +860,10 @@ export const populateOperation = (op: Operation, opIndex: number) => {
           return
         }
 
+        if (e.buttons !== 1) return
+
+        activateGate(e)
+
         // new operation to be changed and validated
         const newOp = deepClone(op)
 
@@ -930,6 +959,10 @@ export const populateOperation = (op: Operation, opIndex: number) => {
 
           return
         }
+
+        if (e.buttons !== 1) return
+
+        activateGate(e)
 
         // new operation to be changed and validated
         const newOp = deepClone(op)
@@ -1077,6 +1110,10 @@ export const populateOperation = (op: Operation, opIndex: number) => {
 
           return
         }
+
+        if (e.buttons !== 1) return
+
+        activateGate(e)
 
         // new operation to be changed and validated
         const newOp = deepClone(op)

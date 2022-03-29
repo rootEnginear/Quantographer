@@ -8,6 +8,10 @@ export const svgNamespace = 'http://www.w3.org/2000/svg'
 
 export const workbenchElement = document.querySelector<SVGElement>('#workbench')!
 
+const zoomInButton = document.querySelector<HTMLElement>('#zoom-in-btn')!
+const zoomOutButton = document.querySelector<HTMLElement>('#zoom-out-btn')!
+const zoomLevelSelector = document.querySelector<HTMLSelectElement>('#zoom-level')!
+
 // create drawing layers
 const trackGroupElement = document.createElementNS(svgNamespace, 'g')
 export const opGroupElement = document.createElementNS(svgNamespace, 'g')
@@ -221,12 +225,6 @@ workbenchElement.addEventListener(
     const {dataTransfer} = e
     const transfer = dataTransfer as DataTransfer
 
-    const {
-      items: [
-        {type: gateid}
-      ]
-    } = transfer
-
     const loc = getLocationInfo(e.offsetX, e.offsetY)
 
     transfer.dropEffect =
@@ -289,13 +287,17 @@ workbenchElement.addEventListener(
       break
     default:
       const op = constructOperation(gateid as OperationTypes, loc.index, loc.step)
+      const opSpan = getOpSpan(op)
       if (
         !op ||
+        // prevent gate span out of qubit lane
+        opSpan.qubit.lower < 0 ||
+        opSpan.qubit.upper >= circuitData.qubits.length ||
         // prevent overlaps
         circuitData.ops.some(
           (opi) => opOverlaps(
             getOpSpan(opi),
-            getOpSpan(op)
+            opSpan
           )
         )
       ) return // TODO: might show some feedback in here?
@@ -308,6 +310,31 @@ workbenchElement.addEventListener(
 
 const constructOperation = (type: OperationTypes, qubit: number, step: number): Operation => {
   switch (type) {
+  // @ts-expect-error
+  case 'cnot':
+    return {
+      type: 'x',
+      step,
+      qubit,
+      active: false,
+
+      controlBits: [],
+      controlQubits: [qubit + 1]
+    }
+  // @ts-expect-error
+  case 'toff':
+    return {
+      type: 'x',
+      step,
+      qubit,
+      active: false,
+
+      controlBits: [],
+      controlQubits: [
+        qubit + 1,
+        qubit + 2
+      ]
+    }
   case 'barrier':
     return {
       type,
@@ -341,10 +368,20 @@ const constructOperation = (type: OperationTypes, qubit: number, step: number): 
       }
     }
   case 'x':
+  case 'y':
   case 'z':
   case 'h':
-  case 'sx':
+  case 's':
   case 'sdg':
+  case 'sx':
+  case 'sxdg':
+  case '4x':
+  case '4xdg':
+  case 'sy':
+  case 'sydg':
+  case '4y':
+  case '4ydg':
+  case 't':
   case 'tdg':
     return {
       type,
@@ -367,8 +404,12 @@ const constructOperation = (type: OperationTypes, qubit: number, step: number): 
 
       targetQubit: qubit + 1
     }
+  case 'u1':
+  case 'u2':
   case 'u3':
   case 'rx':
+  case 'ry':
+  case 'rz':
     return {
       type,
       step,
@@ -404,8 +445,15 @@ workbenchElement.addEventListener(
   (e) => {
     dragging = true
 
-    startX = e.offsetX
-    startY = e.offsetY
+    circuitData.ops.forEach(
+      (op) => op.active = false
+    )
+
+    clearOps()
+    populateOps()
+
+    startX = endX = e.offsetX / renderConfig.zoomLevel
+    startY = endY = e.offsetY / renderConfig.zoomLevel
 
     selectElement.setAttribute('stroke', 'blue')
 
@@ -422,8 +470,8 @@ workbenchElement.addEventListener(
   (e) => {
     if (!dragging) return
 
-    endX = e.offsetX
-    endY = e.offsetY
+    endX = e.offsetX / renderConfig.zoomLevel
+    endY = e.offsetY / renderConfig.zoomLevel
 
     const rectStartX = Math.min(startX, endX)
     const rectStartY = Math.min(startY, endY)
@@ -443,8 +491,48 @@ workbenchElement.addEventListener(
   'mouseup',
   () => {
     if (!dragging) return
+
     dragging = false
+
     selectElement.setAttribute('stroke', 'none')
+
+    // swap location to make start location always less than end location
+    const rectStartX = Math.min(startX, endX)
+    const rectStartY = Math.min(startY, endY)
+
+    const rectLengthX = Math.abs(endX - startX)
+    const rectLengthY = Math.abs(endY - startY)
+
+    const startLoc = getLocationInfo(rectStartX, rectStartY)
+    const endLoc = getLocationInfo(
+      rectStartX + rectLengthX,
+      rectStartY + rectLengthY
+    )
+
+    const correct = (x: LocationInfo) => {
+      if (x.bitType === 'bit') x.index = circuitData.qubits.length - 1
+      if (x.laneType === 'head') x.step = 0
+    }
+
+    correct(startLoc)
+    correct(endLoc)
+
+    const {index: startQubit, step: startStep} = startLoc
+    const {index: endQubit, step: endStep} = endLoc
+
+    circuitData.ops.forEach(
+      (op) => {
+        const {qubit, step} = op
+        op.active =
+          qubit >= startQubit &&
+          qubit <= endQubit &&
+          step >= startStep &&
+          step <= endStep
+      }
+    )
+
+    clearOps()
+    populateOps()
   }
 )
 
@@ -452,3 +540,38 @@ populateTrack()
 populateOps()
 
 adjustWorkbenchSize()
+
+zoomLevelSelector.addEventListener(
+  'change',
+  () => {
+    const val = zoomLevelSelector.value
+    renderConfig.zoomLevel = +val
+
+    adjustWorkbenchSize()
+  }
+)
+
+const changeZoomLevel = (offset: number) => {
+  const {options, selectedIndex} = zoomLevelSelector
+  const target = selectedIndex + offset
+  if (target < 0 || target > options.length - 1) return
+  zoomLevelSelector.selectedIndex = target
+  zoomLevelSelector.dispatchEvent(
+    new Event('change')
+  )
+}
+
+zoomInButton.addEventListener(
+  'click',
+  () => changeZoomLevel(1)
+)
+
+zoomOutButton.addEventListener(
+  'click',
+  () => changeZoomLevel(-1)
+)
+
+// trigger zoom level readout
+zoomLevelSelector.dispatchEvent(
+  new Event('change')
+)

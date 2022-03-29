@@ -70,21 +70,21 @@
       </button>
       <div class="toolbar-separator"></div>
       <div class="select is-small">
-        <select>
-          <option>25%</option>
-          <option>50%</option>
-          <option>75%</option>
-          <option selected>100%</option>
-          <option>125%</option>
-          <option>150%</option>
-          <option>175%</option>
-          <option>200%</option>
+        <select id="zoom-level">
+          <option value="0.25">25%</option>
+          <option value="0.5">50%</option>
+          <option value="0.75">75%</option>
+          <option value="1" selected>100%</option>
+          <option value="1.25">125%</option>
+          <option value="1.5">150%</option>
+          <option value="1.75">175%</option>
+          <option value="2">200%</option>
         </select>
       </div>
-      <button class="toolbar-btn ghost" data-tooltip="Zoom In">
+      <button id="zoom-in-btn" class="toolbar-btn ghost" data-tooltip="Zoom In">
         <i class="fa-solid fa-magnifying-glass-plus"></i>
       </button>
-      <button class="toolbar-btn ghost" data-tooltip="Zoom Out">
+      <button id="zoom-out-btn" class="toolbar-btn ghost" data-tooltip="Zoom Out">
         <i class="fa-solid fa-magnifying-glass-minus"></i>
       </button>
       <div class="toolbar-separator"></div>
@@ -364,25 +364,25 @@
             <button class="toolbar-btn gate" draggable="true"
               data-tooltip="Lorem ipsum dolor sit amet."
               data-tooltip-title="√Y Gate"
-              data-gateid="sqrty">
+              data-gateid="sy">
               √Y
             </button>
             <button class="toolbar-btn gate has-dag" draggable="true"
               data-tooltip="Lorem ipsum dolor sit amet."
               data-tooltip-title="√Y† Gate"
-              data-gateid="sqrtydag">
+              data-gateid="sydg">
               √Y<sup>†</sup>
             </button>
             <button class="toolbar-btn gate" draggable="true"
               data-tooltip="Lorem ipsum dolor sit amet."
               data-tooltip-title="√X Gate"
-              data-gateid="sqrtx">
+              data-gateid="sx">
               √X
             </button>
             <button class="toolbar-btn gate has-dag" draggable="true"
               data-tooltip="Lorem ipsum dolor sit amet."
               data-tooltip-title="√X† Gate"
-              data-gateid="sqrtxdag">
+              data-gateid="sxdg">
               √X<sup>†</sup>
             </button>
           </section>
@@ -410,25 +410,25 @@
             <button class="toolbar-btn gate" draggable="true"
               data-tooltip="Lorem ipsum dolor sit amet."
               data-tooltip-title="∜Y Gate"
-              data-gateid="ftrty">
+              data-gateid="4y">
               ∜Y
             </button>
             <button class="toolbar-btn gate has-dag" draggable="true"
               data-tooltip="Lorem ipsum dolor sit amet."
               data-tooltip-title="∜Y† Gate"
-              data-gateid="ftrtydag">
+              data-gateid="4ydg">
               ∜Y<sup>†</sup>
             </button>
             <button class="toolbar-btn gate" draggable="true"
               data-tooltip="Lorem ipsum dolor sit amet."
               data-tooltip-title="∜X Gate"
-              data-gateid="ftrtx">
+              data-gateid="4x">
               ∜X
             </button>
             <button class="toolbar-btn gate has-dag" draggable="true"
               data-tooltip="Lorem ipsum dolor sit amet."
               data-tooltip-title="∜X† Gate"
-              data-gateid="ftrtxdag">
+              data-gateid="4xdg">
               ∜X<sup>†</sup>
             </button>
           </section>
