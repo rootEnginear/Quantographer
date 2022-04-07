@@ -54,7 +54,7 @@ type BaseGate<T extends string> = BaseInstruction<T> & {
 }
 
 type BaseParameterizedGate<T extends string> = BaseGate<T> & {
-  params: {}
+  params: []
 }
 
 type BarrierDirective = BaseOperation<'barrier'> & {
@@ -73,7 +73,7 @@ type SwapGate = BaseGate<'swap'> & {
   targetQubit: number
 }
 
-type CustomGate = BaseInstruction<'custom'> & {
+type CustomGate = BaseOperation<'custom'> & {
   template: string
 }
 

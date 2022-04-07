@@ -350,3 +350,5 @@ requestAnimationFrame(() => {
   document.documentElement.style.opacity = ''
   document.documentElement.classList.remove('not-ready')
 })
+
+import './translator/index'
