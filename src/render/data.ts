@@ -157,6 +157,13 @@ export const circuitData: Circuit = {
   }
 }
 
+// export const circuitData = new Proxy(circuitObjectData, {
+//   set(...args) {
+//     console.log('circuit changed')
+//     return Reflect.set(...args)
+//   }
+// })
+
 // export const circuitData: Circuit = {
 //   qubits: [{name: '0'}, {name: '1'}, {name: '2'}],
 //   bits: [

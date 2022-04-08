@@ -151,14 +151,12 @@ qc = QuantumCircuit(qr, cr)
 ${custom_gate_string}
 ${qiskit_string}`
 
-  console.log(full_string)
+  // console.log(full_string)
 
   return full_string
 }
 
-// translateCircuit()
-
-const updateCodeOutput = () => {
+export const updateCodeOutput = () => {
   document.getElementById('output-qiskit-result')!.innerHTML = translateCircuit()
   // @ts-expect-error
   Prism.highlightElement(document.getElementById('output-qiskit-result'))
