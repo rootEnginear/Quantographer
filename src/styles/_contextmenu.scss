@@ -7,11 +7,14 @@
 	box-sizing: border-box;
 	border-radius: 4px;
 
-	font-size: 0.8rem;
+	// font-size: 0.8rem;
 
-	padding: 4px;
+	// padding: 4px;
 
-	pointer-events: none;
+	// pointer-events: none;
+
+	filter: drop-shadow(0 10px 8px rgb(0 0 0 / 0.04))
+    drop-shadow(0 4px 3px rgb(0 0 0 / 0.1));
 
 	transform: scale(0.8);
 	opacity: 0;
@@ -23,4 +26,24 @@
 	}
 
 	white-space: nowrap;
+
+	&>ul {
+		margin: 0;
+    padding: 0;
+    list-style: none;
+	}
+
+	&>ul>li {
+		padding: 8px;
+		cursor: pointer;
+    white-space: nowrap;
+
+		&.newcategory {
+			border-top: 2px solid #0061ff;
+		}
+
+		&:hover {
+			background: rgba(0, 0, 0, 0.1);
+		}
+	}
 }
