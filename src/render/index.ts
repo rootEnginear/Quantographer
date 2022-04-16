@@ -520,7 +520,7 @@ const constructOperation = (type: OperationTypes, qubit: number, step: number): 
 
       controlBits: [],
       controlQubits: [],
-      params: {}
+      params: []
     }
   default:
     if (type.startsWith('custom:')) {

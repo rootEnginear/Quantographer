@@ -336,13 +336,55 @@ const openNewGateDialog = () => {
 import NewGate from './components/NewGate.vue'
 const new_gate_instance = createApp(NewGate).mount('#new-gate-dialog')
 
+// @ts-expect-error
+alertify.defaults = {
+  // @ts-expect-error
+  ...alertify.defaults,
+  transitionOff: true,
+  // theme settings
+  theme: {
+    // class name attached to prompt dialog input textbox.
+    input: 'ajs-input input',
+    // class name attached to ok button
+    ok: 'ajs-ok button is-primary',
+    // class name attached to cancel button
+    cancel: 'ajs-cancel button'
+  }
+}
+
+const renameFile = () => {
+  // @ts-expect-error
+  alertify.prompt('Rename File', 'Please enter the name of your file', 'Untitled1', (evt, value) => {
+    // @ts-expect-error
+    // TODO: assign `value` to file name
+    alertify.success('Ok: ' + value)
+  }, () => {
+    // alertify.error('Cancel')
+    /* do nothing when cancel */
+  })
+}
+
+const changeIbmKey = () => {
+  // @ts-expect-error
+  alertify.prompt('Connect to IBMQ', 'Please enter the API Key of your IBMQ<br>Your key will only be used when executing the circuit on particular system. We *will not* store your key in any ways.', '', (evt, value) => {
+    // @ts-expect-error
+    // TODO: assign `value` to ibm key
+    alertify.success('Ok: ' + value)
+  }, () => {
+    // alertify.error('Cancel')
+    /* do nothing when cancel */
+  })
+}
+
 Object.assign(window, {
   openExportDialog,
   openExecuteDialog,
   openNewGateDialog,
   togglePalette,
   toggleCode,
-  new_gate_instance
+  new_gate_instance,
+  renameFile,
+  changeIbmKey
 })
 
 // If everything loaded correctly, show the content

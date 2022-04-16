@@ -21,12 +21,12 @@
     <div class="menubar">
       <div id="menu" class="left"></div>
       <div class="center">
-        <button class="menubar-btn">
+        <button class="menubar-btn" onclick="renameFile()">
           Untitled1 &mdash; Quantographer
         </button>
       </div>
       <div class="right">
-        <button class="menubar-btn">
+        <button class="menubar-btn" onclick="changeIbmKey()">
           <i class="fa-solid fa-link" style="margin-right:0.375rem"></i>
           Connect to IBMQ
         </button>
@@ -247,23 +247,6 @@
             stroke-width="2" stroke-linecap="round" />
         </svg>
       </button>
-      <button class="toolbar-btn gate" draggable="true"
-        data-tooltip="Lorem ipsum dolor sit amet."
-        data-tooltip-title="Gate Control Modifier"
-        data-gateid="ctrlbit">
-        <svg class="svg-icon" width="30" height="32" viewBox="0 0 30 32" fill="none"
-          xmlns="http://www.w3.org/2000/svg">
-          <circle cx="15" cy="6.66797" r="6" fill="currentColor" />
-          <line x1="1" y1="4" x2="29" y2="4" stroke="currentColor"
-            stroke-width="2" stroke-linecap="round" />
-          <line x1="1" y1="7.5" x2="29" y2="7.5" stroke="currentColor"
-            stroke-width="2" stroke-linecap="round" />
-          <line x1="15" y1="6.66797" x2="15" y2="17.668" stroke="currentColor"
-            stroke-width="2" stroke-linecap="round" />
-          <text x="15" y="32" fill="currentColor" font-size="12"
-            text-anchor="middle">BIT</text>
-        </svg>
-      </button>
       <div class="toolbar-separator"></div>
       <button class="toolbar-btn gate" draggable="true"
         data-tooltip="Lorem ipsum dolor sit amet."
@@ -273,6 +256,19 @@
           xmlns="http://www.w3.org/2000/svg">
           <path fill-rule="evenodd" clip-rule="evenodd"
             d="M29.2606 0.0513438C29.7846 -0.123304 30.3509 0.159856 30.5255 0.683799L33.3716 9.22195C33.5462 9.74589 33.2631 10.3122 32.7391 10.4869C32.2152 10.6615 31.6489 10.3783 31.4742 9.8544L29.3916 3.60658L23.1656 16.0585C27.6001 18.6645 30.5768 23.4846 30.5768 29C30.5768 29.5523 30.1291 30 29.5768 30C29.0246 30 28.5768 29.5523 28.5768 29C28.5768 24.2678 26.0484 20.1262 22.2687 17.8524L16.4713 29.4472C16.2243 29.9412 15.6236 30.1414 15.1296 29.8945C14.6357 29.6475 14.4354 29.0468 14.6824 28.5528L20.4805 16.9566C18.9673 16.3399 17.3118 16 15.5768 16C8.39714 16 2.57684 21.8203 2.57684 29C2.57684 29.5523 2.12913 30 1.57684 30C1.02456 30 0.576843 29.5523 0.576843 29C0.576843 20.7158 7.29257 14 15.5768 14C17.6333 14 19.5931 14.4138 21.3774 15.1628L27.6027 2.71215L21.3549 4.79476C20.831 4.96941 20.2647 4.68625 20.09 4.1623C19.9154 3.63836 20.1985 3.07204 20.7225 2.89739L29.2606 0.0513438Z"
+            fill="currentColor" />
+        </svg>
+      </button>
+      <button class="toolbar-btn gate" draggable="true"
+        data-tooltip="Lorem ipsum dolor sit amet."
+        data-tooltip-title="Reset"
+        data-gateid="reset">
+        <svg class="svg-icon" width="20" height="22" viewBox="0 0 20 22" fill="none"
+          xmlns="http://www.w3.org/2000/svg">
+          <path d="M1.25 1V21" stroke="currentColor" />
+          <path d="M15.3409 1L19.4318 11L15.3409 21" stroke="currentColor" />
+          <path
+            d="M13.0318 10.9273C13.0318 8.98181 12.8318 7.79999 12.2318 6.63635C11.4318 5.03635 9.9591 4.63635 8.9591 4.63635C6.66819 4.63635 5.83182 6.34544 5.57728 6.85453C4.92273 8.18181 4.88637 9.98181 4.88637 10.9273C4.88637 12.1273 4.94091 13.9636 5.81364 15.4182C6.65 16.7636 7.99546 17.1091 8.9591 17.1091C9.83182 17.1091 11.3955 16.8364 12.3046 15.0364C12.9773 13.7273 13.0318 12.1091 13.0318 10.9273ZM11.4136 10.7091C11.4136 11.7818 11.4136 13.4182 11.1955 14.4364C10.8136 16.3454 9.55909 16.6 8.9591 16.6C8.34091 16.6 7.08637 16.3091 6.70455 14.4C6.50455 13.3636 6.50455 11.6545 6.50455 10.7091C6.50455 9.45453 6.50455 8.18181 6.70455 7.18181C7.08637 5.32726 8.50455 5.14544 8.9591 5.14544C9.57728 5.14544 10.8318 5.45453 11.1955 7.10908C11.4136 8.10908 11.4136 9.47272 11.4136 10.7091Z"
             fill="currentColor" />
         </svg>
       </button>
@@ -619,12 +615,42 @@
             </button>
             <button class="toolbar-btn gate" draggable="true"
               data-tooltip="Lorem ipsum dolor sit amet."
+              data-tooltip-title="Gate Bit Control Modifier"
+              data-gateid="ctrlbit">
+              <svg class="svg-icon" width="30" height="32" viewBox="0 0 30 32" fill="none"
+                xmlns="http://www.w3.org/2000/svg">
+                <circle cx="15" cy="6.66797" r="6" fill="currentColor" />
+                <line x1="1" y1="4" x2="29" y2="4" stroke="currentColor"
+                  stroke-width="2" stroke-linecap="round" />
+                <line x1="1" y1="7.5" x2="29" y2="7.5" stroke="currentColor"
+                  stroke-width="2" stroke-linecap="round" />
+                <line x1="15" y1="6.66797" x2="15" y2="17.668" stroke="currentColor"
+                  stroke-width="2" stroke-linecap="round" />
+                <text x="15" y="32" fill="currentColor" font-size="12"
+                  text-anchor="middle">BIT</text>
+              </svg>
+            </button>
+            <button class="toolbar-btn gate" draggable="true"
+              data-tooltip="Lorem ipsum dolor sit amet."
               data-tooltip-title="Measurement"
               data-gateid="measure">
               <svg class="svg-icon" width="34" height="30" viewBox="0 0 34 30" fill="none"
                 xmlns="http://www.w3.org/2000/svg">
                 <path fill-rule="evenodd" clip-rule="evenodd"
                   d="M29.2606 0.0513438C29.7846 -0.123304 30.3509 0.159856 30.5255 0.683799L33.3716 9.22195C33.5462 9.74589 33.2631 10.3122 32.7391 10.4869C32.2152 10.6615 31.6489 10.3783 31.4742 9.8544L29.3916 3.60658L23.1656 16.0585C27.6001 18.6645 30.5768 23.4846 30.5768 29C30.5768 29.5523 30.1291 30 29.5768 30C29.0246 30 28.5768 29.5523 28.5768 29C28.5768 24.2678 26.0484 20.1262 22.2687 17.8524L16.4713 29.4472C16.2243 29.9412 15.6236 30.1414 15.1296 29.8945C14.6357 29.6475 14.4354 29.0468 14.6824 28.5528L20.4805 16.9566C18.9673 16.3399 17.3118 16 15.5768 16C8.39714 16 2.57684 21.8203 2.57684 29C2.57684 29.5523 2.12913 30 1.57684 30C1.02456 30 0.576843 29.5523 0.576843 29C0.576843 20.7158 7.29257 14 15.5768 14C17.6333 14 19.5931 14.4138 21.3774 15.1628L27.6027 2.71215L21.3549 4.79476C20.831 4.96941 20.2647 4.68625 20.09 4.1623C19.9154 3.63836 20.1985 3.07204 20.7225 2.89739L29.2606 0.0513438Z"
+                  fill="currentColor" />
+              </svg>
+            </button>
+            <button class="toolbar-btn gate" draggable="true"
+              data-tooltip="Lorem ipsum dolor sit amet."
+              data-tooltip-title="Reset"
+              data-gateid="reset">
+              <svg class="svg-icon" width="20" height="22" viewBox="0 0 20 22" fill="none"
+                xmlns="http://www.w3.org/2000/svg">
+                <path d="M1.25 1V21" stroke="currentColor" />
+                <path d="M15.3409 1L19.4318 11L15.3409 21" stroke="currentColor" />
+                <path
+                  d="M13.0318 10.9273C13.0318 8.98181 12.8318 7.79999 12.2318 6.63635C11.4318 5.03635 9.9591 4.63635 8.9591 4.63635C6.66819 4.63635 5.83182 6.34544 5.57728 6.85453C4.92273 8.18181 4.88637 9.98181 4.88637 10.9273C4.88637 12.1273 4.94091 13.9636 5.81364 15.4182C6.65 16.7636 7.99546 17.1091 8.9591 17.1091C9.83182 17.1091 11.3955 16.8364 12.3046 15.0364C12.9773 13.7273 13.0318 12.1091 13.0318 10.9273ZM11.4136 10.7091C11.4136 11.7818 11.4136 13.4182 11.1955 14.4364C10.8136 16.3454 9.55909 16.6 8.9591 16.6C8.34091 16.6 7.08637 16.3091 6.70455 14.4C6.50455 13.3636 6.50455 11.6545 6.50455 10.7091C6.50455 9.45453 6.50455 8.18181 6.70455 7.18181C7.08637 5.32726 8.50455 5.14544 8.9591 5.14544C9.57728 5.14544 10.8318 5.45453 11.1955 7.10908C11.4136 8.10908 11.4136 9.47272 11.4136 10.7091Z"
                   fill="currentColor" />
               </svg>
             </button>
@@ -1032,13 +1058,10 @@ circuit.draw(output='mpl')
   <script src="https://kit.fontawesome.com/6b621a350d.js"
     crossorigin="anonymous"></script>
 
+  <script src="//cdn.jsdelivr.net/npm/alertifyjs@1.13.1/build/alertify.min.js"></script>
+
   <script src="/src/prismjs/prism.js"></script>
   <script type="module" src="/src/main.ts"></script>
 </body>
 
 </html>
-<!-- TODO: -->
-<!-- - rx ry rz dialog -->
-<!-- - check all gate -->
-<!-- - contextmenu -->
-<!-- - https://alertifyjs.com/ -->
