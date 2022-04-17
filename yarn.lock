@@ -450,6 +450,11 @@ braces@^3.0.1, braces@~3.0.2:
   dependencies:
     fill-range "^7.0.1"
 
+bulma-slider@^2.0.5:
+  version "2.0.5"
+  resolved "https://registry.yarnpkg.com/bulma-slider/-/bulma-slider-2.0.5.tgz#f84fb0b88704e33b76deac26801d7571c1db6a11"
+  integrity sha512-6woD/1E7q1o5bfEaQjNqpWZaCItC1oHe9bN15WYB2ELqz2gDaJYZkf+rlozGpAYOXQGDQGCCv3y+QuKjx6sQuw==
+
 bulma@^0.9.3:
   version "0.9.3"
   resolved "https://registry.yarnpkg.com/bulma/-/bulma-0.9.3.tgz#ddccb7436ebe3e21bf47afe01d3c43a296b70243"
@@ -1547,6 +1552,11 @@ text-table@^0.2.0:
   version "0.2.0"
   resolved "https://registry.yarnpkg.com/text-table/-/text-table-0.2.0.tgz#7f5ee823ae805207c00af2df4a84ec3fcfa570b4"
   integrity sha1-f17oI66AUgfACvLfSoTsP8+lcLQ=
+
+three@^0.139.2:
+  version "0.139.2"
+  resolved "https://registry.yarnpkg.com/three/-/three-0.139.2.tgz#b110799a15736df673b9293e31653a4ac73648dd"
+  integrity sha512-gV7q7QY8rogu7HLFZR9cWnOQAUedUhu2WXAnpr2kdXZP9YDKsG/0ychwQvWkZN5PlNw9mv5MoCTin6zNTXoONg==
 
 to-fast-properties@^2.0.0:
   version "2.0.0"

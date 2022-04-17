@@ -327,7 +327,7 @@ const openNewGateDialog = () => {
       return false
     },
     width: 750,
-    height: 500,
+    height: 530,
     x: 'center',
     y: 'center'
   })

@@ -4,6 +4,13 @@
 @import 'variables';
 @import 'app';
 
+@import 'bulma-slider/src/sass/index';
+
+input[type=range] {
+  border: none !important;
+  margin: 0 !important;
+}
+
 @import 'bulma/sass/utilities/_all';
 // @import 'bulma/sass/base/_all';
 // @import 'bulma/sass/elements/_all';
@@ -13,3 +20,4 @@
 // @import 'bulma/sass/grid/_all';
 // @import 'bulma/sass/helpers/_all';
 // @import 'bulma/sass/layout/_all';
+

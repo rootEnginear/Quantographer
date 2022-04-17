@@ -9,6 +9,8 @@
 	"dependencies": {
 		"@floating-ui/dom": "^0.1.7",
 		"bulma": "^0.9.3",
+		"bulma-slider": "^2.0.5",
+		"three": "^0.139.2",
 		"vue": "^3.2.25"
 	},
 	"devDependencies": {
