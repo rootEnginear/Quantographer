@@ -986,72 +986,7 @@
     </div>
   </div>
 
-  <div id="export-circuit-dialog" class="common-dialog">
-    <div class="field">
-      <label class="label">Export as</label>
-      <div class="control">
-        <div class="select is-fullwidth">
-          <select>
-            <option>QASM2</option>
-            <option>PNG</option>
-          </select>
-        </div>
-      </div>
-    </div>
-    <div class="row">
-      <div class="col">
-        <strong>Output:</strong>
-      </div>
-      <div>
-        <a class="button is-ghost is-small">
-          <span>Copy</span>
-          <span class="icon is-small">
-            <i class="fa-solid fa-copy"></i>
-          </span>
-        </a>
-      </div>
-    </div>
-
-    <textarea class="textarea" rows="10">
-qreg = QuantumRegister(3)
-creg = ClassicalRegister(3)
-circuit = QuantumCircuit(qreg, creg)
-
-circuit.h(qreg)
-circuit.cz(0,2)
-circuit.cz(0,1)
-circuit.h(qreg)
-circuit.x(qreg)
-circuit.h(0)
-circuit.ccx(2,1,0)
-circuit.h(0)
-circuit.x(qreg)
-circuit.h(qreg)
-circuit.h(qreg)
-circuit.x(qreg)
-circuit.h(0)
-circuit.ccx(2,1,0)
-circuit.h(0)
-circuit.x(qreg)
-circuit.h(qreg)
-circuit.measure(qreg, creg)
-
-circuit.draw(output='mpl')
-    </textarea>
-    <div class="space"></div>
-    <div class="separator"></div>
-    <div class="row">
-      <div class="col"></div>
-      <button class="button is-primary is-small">
-        <span class="icon is-small">
-          <i class="fa-solid fa-file-export"></i>
-        </span>
-        <span>
-          Save Output
-        </span>
-      </button>
-    </div>
-  </div>
+  <div id="export-circuit-dialog" class="common-dialog"></div>
 
   <div id="new-gate-dialog" class="common-dialog"></div>
 
