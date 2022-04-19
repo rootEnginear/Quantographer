@@ -528,14 +528,25 @@ export const populateOperation = (op: Operation, opIndex: number) => {
   const activateGate = (e: MouseEvent) => {
     let active = !op.active
 
-    if (!e.shiftKey) {
+    const multiSelect = e.shiftKey
+    const rightClick = e.buttons === 2
+
+    const inGroup = ops
+      .filter(
+        (op) => op.active
+      )
+      .find(
+        (item) => item === op
+      )
+
+    if (!(multiSelect || inGroup && rightClick)) {
       ops.forEach(
         (op) => op.active = false
       )
       active = true
     }
 
-    op.active = active
+    op.active = active || rightClick
 
     // update halo of other operation
     ops.forEach(
@@ -610,9 +621,9 @@ export const populateOperation = (op: Operation, opIndex: number) => {
           return
         }
 
-        if (e.buttons !== 1) return
-
         activateGate(e)
+
+        if (e.buttons !== 1) return
 
         // new operation to be changed and validated
         const newOp = deepClone(op)
@@ -875,9 +886,9 @@ export const populateOperation = (op: Operation, opIndex: number) => {
           return
         }
 
-        if (e.buttons !== 1) return
-
         activateGate(e)
+
+        if (e.buttons !== 1) return
 
         // new operation to be changed and validated
         const newOp = deepClone(op)
@@ -977,9 +988,9 @@ export const populateOperation = (op: Operation, opIndex: number) => {
           return
         }
 
-        if (e.buttons !== 1) return
-
         activateGate(e)
+
+        if (e.buttons !== 1) return
 
         // new operation to be changed and validated
         const newOp = deepClone(op)
@@ -1124,9 +1135,9 @@ export const populateOperation = (op: Operation, opIndex: number) => {
           return
         }
 
-        if (e.buttons !== 1) return
-
         activateGate(e)
+
+        if (e.buttons !== 1) return
 
         // new operation to be changed and validated
         const newOp = deepClone(op)
@@ -1254,7 +1265,7 @@ export const populateOperation = (op: Operation, opIndex: number) => {
 
       labelElement.classList.add('gate-label')
 
-      labelElement.textContent = type
+      labelElement.textContent = type.toUpperCase()
 
       mainElement.append(boxElement, labelElement)
     }
@@ -1280,9 +1291,9 @@ export const populateOperation = (op: Operation, opIndex: number) => {
           return
         }
 
-        if (e.buttons !== 1) return
-
         activateGate(e)
+
+        if (e.buttons !== 1) return
 
         // new operation to be changed and validated
         const newOp = deepClone(op)
