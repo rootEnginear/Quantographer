@@ -23,14 +23,14 @@
     <div class="menubar">
       <div id="menu" class="left"></div>
       <div class="center">
-        <button class="menubar-btn" onclick="renameFile()">
+        <button class="menubar-btn" onclick="renameFile()" id="filename">
           Untitled1 &mdash; Quantographer
         </button>
       </div>
       <div class="right">
         <button class="menubar-btn" onclick="changeIbmKey()">
           <i class="fa-solid fa-link" style="margin-right:0.375rem"></i>
-          Connect to IBMQ
+          <span id="ibmkey">Connect to IBMQ</span>
         </button>
       </div>
     </div>
@@ -992,7 +992,8 @@
       <div class="control">
         <div class="select is-fullwidth">
           <select>
-            <option>Qiskit</option>
+            <option>QASM2</option>
+            <option>PNG</option>
           </select>
         </div>
       </div>

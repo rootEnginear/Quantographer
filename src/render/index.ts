@@ -405,6 +405,8 @@ workbenchElement.addEventListener(
       ) return
       const i = circuitData.ops.push(op) - 1
       populateOperation(op, i)
+      // @ts-expect-error
+      window.updateCodeOutput()
     }
     adjustWorkbenchSize()
   }
@@ -689,6 +691,39 @@ workbenchElement.addEventListener(
   }
 )
 
+
+const getFileName = () => circuitData.metadata.name
+
+const updateNameInDom = () => {
+  console.log('updateNameInDom', circuitData.metadata.name)
+  const name = `${circuitData.metadata.name} — Quantographer`
+  document.title = name
+  document.getElementById('filename')!.textContent = name
+}
+
+const setFileName = (name: string) => {
+  circuitData.metadata.name = name
+  updateNameInDom()
+}
+
+const getApiKey = () => circuitData.metadata.key
+
+const updateApiInDom = () => {
+  console.log('updateApiInDom', circuitData.metadata.key)
+  document.getElementById('ibmkey')!.textContent = getApiKey() ? 'Change your key' : 'Connect to IBMQ'
+}
+
+const setApiKey = (key: string) => {
+  circuitData.metadata.key = key
+  updateApiInDom()
+}
+
+// @ts-expect-error
+window.updateCodeOutput()
+
+updateNameInDom()
+updateApiInDom()
+
 populateTrack()
 populateOps()
 
@@ -759,6 +794,12 @@ const loadCircuit = (data: string) => {
     circuitData,
     loadedCircuitData
   )
+
+  // @ts-expect-error
+  window.updateCodeOutput()
+
+  updateNameInDom()
+  updateApiInDom()
 
   clearOps()
   clearTrack()
@@ -837,6 +878,10 @@ Object.assign(
     addCustomGate,
     generateQasm,
     setZoomLevel,
-    changeZoomLevel
+    changeZoomLevel,
+    getFileName,
+    setFileName,
+    getApiKey,
+    setApiKey
   }
 )

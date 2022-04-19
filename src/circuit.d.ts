@@ -1,4 +1,8 @@
 type Circuit = {
+  metadata: {
+    name: string
+    key: string
+  }
   qubits: QubitProperty[]
   bits: BitProperty[]
   ops: Operation[]

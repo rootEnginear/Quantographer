@@ -53,21 +53,31 @@ const hideCtx = () => {
 
 let is_ctx_shown = false
 
+const workbench = document.getElementById('workbench')!
+
 document.addEventListener('contextmenu', (e) => {
-  if (is_ctx_shown) {
-    hideCtx()
-    setTimeout(() => {
+  // @ts-expect-error
+  const is_on_workbench = e.path.some((el) => el === workbench)
+
+  if (is_on_workbench) {
+    if (is_ctx_shown) {
+      hideCtx()
+      setTimeout(() => {
+        is_ctx_shown = true
+        showCtx(e)
+      }, 100)
+    } else {
       is_ctx_shown = true
       showCtx(e)
-    }, 100)
+    }
+    e.preventDefault()
   } else {
-    is_ctx_shown = true
-    showCtx(e)
+    hideCtx()
+    is_ctx_shown = false
   }
-  e.preventDefault()
 }, false)
 
-document.addEventListener('mousedown', () => {
+workbench.addEventListener('mousedown', () => {
   if (is_ctx_shown) {
     hideCtx()
     is_ctx_shown = false
