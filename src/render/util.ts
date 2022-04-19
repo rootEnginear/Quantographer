@@ -5,20 +5,7 @@ import {trackLabelGroupElement} from '.'
 
 export const rangeOverlaps = (left: NumberRange, right: NumberRange) => Math.max(left.lower, right.lower) <= Math.min(left.upper, right.upper)
 
-export const deepClone = <T>(target: T): T => {
-  if (typeof target !== 'object')
-    // primitive type
-    return target
-  // object type
-  // create container
-  const newTargert: any = Array.isArray(target) ? [] : {}
-  for (const key in target)
-    // clone child
-    newTargert[key] = deepClone(
-      target[key]
-    )
-  return newTargert
-}
+export {deepClone} from '../util'
 
 export const getLocationInfo = (x: number, y: number): LocationInfo => {
   // prepare data
