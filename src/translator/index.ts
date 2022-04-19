@@ -165,5 +165,6 @@ export const updateCodeOutput = () => {
 updateCodeOutput()
 
 Object.assign(window, {
+  translateCircuit,
   updateCodeOutput
 })

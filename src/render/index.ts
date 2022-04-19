@@ -695,7 +695,6 @@ workbenchElement.addEventListener(
 const getFileName = () => circuitData.metadata.name
 
 const updateNameInDom = () => {
-  console.log('updateNameInDom', circuitData.metadata.name)
   const name = `${circuitData.metadata.name} — Quantographer`
   document.title = name
   document.getElementById('filename')!.textContent = name
@@ -709,7 +708,6 @@ const setFileName = (name: string) => {
 const getApiKey = () => circuitData.metadata.key
 
 const updateApiInDom = () => {
-  console.log('updateApiInDom', circuitData.metadata.key)
   document.getElementById('ibmkey')!.textContent = getApiKey() ? 'Change your key' : 'Connect to IBMQ'
 }
 
