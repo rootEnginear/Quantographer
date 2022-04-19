@@ -336,7 +336,10 @@ const openNewGateDialog = () => {
 }
 
 import NewGate from './components/NewGate.vue'
-const new_gate_instance = createApp(NewGate).mount('#new-gate-dialog')
+createApp(NewGate).mount('#new-gate-dialog')
+
+import Export from './components/Export.vue'
+createApp(Export).mount('#export-circuit-dialog')
 
 // @ts-expect-error
 alertify.defaults = {
@@ -382,7 +385,6 @@ Object.assign(window, {
   openNewGateDialog,
   togglePalette,
   toggleCode,
-  new_gate_instance,
   renameFile,
   changeIbmKey
 })

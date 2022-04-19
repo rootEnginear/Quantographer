@@ -57,6 +57,10 @@ const workbench = document.getElementById('workbench')!
 
 document.addEventListener('contextmenu', (e) => {
   // @ts-expect-error
+  const is_on_self = e.path.some((el) => el === ctxmenu)
+  if (is_on_self) e.preventDefault()
+
+  // @ts-expect-error
   const is_on_workbench = e.path.some((el) => el === workbench)
 
   if (is_on_workbench) {
@@ -76,6 +80,8 @@ document.addEventListener('contextmenu', (e) => {
     is_ctx_shown = false
   }
 }, false)
+
+ctxmenu?.addEventListener('contextmenu', (e) => e.preventDefault())
 
 workbench.addEventListener('mousedown', () => {
   if (is_ctx_shown) {

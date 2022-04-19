@@ -60,7 +60,7 @@ export const translateCircuit = () => {
   const qubit_count = qubits.length
   const bit_count = bits.length
 
-  const sortedOps = ops.sort((a, b) => a.step === b.step ? a.qubit - b.qubit : a.step - b.step)
+  const sortedOps = (JSON.parse(JSON.stringify(ops)) as Operation[]).sort((a, b) => a.step === b.step ? a.qubit - b.qubit : a.step - b.step)
 
   const expanded_gate_info = expandClassicalConditions(sortedOps, bits.length)
 
