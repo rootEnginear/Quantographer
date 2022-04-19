@@ -3,9 +3,9 @@
   - วาดวงจร
     - ## Can Do
     - [ ] Cut, Copy, Paste, Select All, Delete Selected
-    - [ ] Flip Horizontally, Conjugate Transpose
+    - [ ] Flip Horizontally
     - [ ] Select on right click
-    - [ ] Use uppercase for normal gate
+    - Use uppercase for normal gate
     - [ ] Add/Delete Qubits/Bits
     - ## Need Thinking
     - [ ] Undo, Redo
@@ -18,7 +18,7 @@
   - user เลือกระบบ
   - จับ run
   - แสดงผล
-- [ ] Save file name and ibm key into file
+- Save file name and ibm key into file
 - [ ] Export
   - PNG
   - QASM

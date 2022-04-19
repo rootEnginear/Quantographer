@@ -599,6 +599,8 @@ export const populateOperation = (op: Operation, opIndex: number) => {
         if (e.buttons === 4) {
           // delete
           ops.splice(opIndex, 1)
+          // @ts-expect-error
+          window.updateCodeOutput()
 
           clearOps()
           populateOps()
@@ -862,6 +864,8 @@ export const populateOperation = (op: Operation, opIndex: number) => {
         if (e.buttons === 4) {
           // delete
           ops.splice(opIndex, 1)
+          // @ts-expect-error
+          window.updateCodeOutput()
 
           clearOps()
           populateOps()
@@ -962,6 +966,8 @@ export const populateOperation = (op: Operation, opIndex: number) => {
         if (e.buttons === 4) {
           // delete
           ops.splice(opIndex, 1)
+          // @ts-expect-error
+          window.updateCodeOutput()
 
           clearOps()
           populateOps()
@@ -1107,6 +1113,8 @@ export const populateOperation = (op: Operation, opIndex: number) => {
         if (e.buttons === 4) {
           // delete
           ops.splice(opIndex, 1)
+          // @ts-expect-error
+          window.updateCodeOutput()
 
           clearOps()
           populateOps()
@@ -1261,6 +1269,8 @@ export const populateOperation = (op: Operation, opIndex: number) => {
         if (e.buttons === 4) {
           // delete
           ops.splice(opIndex, 1)
+          // @ts-expect-error
+          window.updateCodeOutput()
 
           clearOps()
           populateOps()

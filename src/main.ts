@@ -48,6 +48,8 @@ for (const gateButton of gateButtons)
     }
   )
 
+
+import './translator/index'
 import './render'
 
 // -----------------------------------------------------------------------------
@@ -354,10 +356,9 @@ alertify.defaults = {
 
 const renameFile = () => {
   // @ts-expect-error
-  alertify.prompt('Rename File', 'Please enter the name of your file', 'Untitled1', (evt, value) => {
+  alertify.prompt('Rename File', 'Please enter the name of your file', window.getFileName(), (evt, value) => {
     // @ts-expect-error
-    // TODO: assign `value` to file name
-    alertify.success('Ok: ' + value)
+    window.setFileName(value)
   }, () => {
     // alertify.error('Cancel')
     /* do nothing when cancel */
@@ -366,10 +367,9 @@ const renameFile = () => {
 
 const changeIbmKey = () => {
   // @ts-expect-error
-  alertify.prompt('Connect to IBMQ', 'Please enter the API Key of your IBMQ<br>Your key will only be used when executing the circuit on particular system. We *will not* store your key in any ways.', '', (evt, value) => {
+  alertify.prompt('Connect to IBMQ', 'Please enter the API Key of your IBMQ<br>Your key will only be used when executing the circuit on particular system. We *will not* store your key in any ways.', window.getApiKey(), (evt, value) => {
     // @ts-expect-error
-    // TODO: assign `value` to ibm key
-    alertify.success('Ok: ' + value)
+    window.setApiKey(value)
   }, () => {
     // alertify.error('Cancel')
     /* do nothing when cancel */
@@ -392,5 +392,3 @@ requestAnimationFrame(() => {
   document.documentElement.style.opacity = ''
   document.documentElement.classList.remove('not-ready')
 })
-
-import './translator/index'
