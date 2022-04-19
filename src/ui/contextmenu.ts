@@ -18,6 +18,8 @@ deleteMenu.addEventListener(
       if (ops[i].active)
         ops.splice(i, 1)
     }
+    // @ts-expect-error
+    window.updateCodeOutput?.()
     clearOps()
     populateOps()
     adjustWorkbenchSize()
@@ -33,8 +35,6 @@ selectAllMenu.addEventListener(
     )
     clearOps()
     populateOps()
-    // @ts-expect-error
-    window.updateCodeOutput?.()
     hideCtx()
   }
 )
