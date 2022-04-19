@@ -1,13 +1,50 @@
 import {computePosition, shift, offset} from '@floating-ui/dom'
 
-const ctxmenu = document.querySelector<HTMLElement>('#contextmenu')
+import {circuitData} from '../render/data'
+import {adjustWorkbenchSize, clearOps, populateOps} from '../render'
+
+const ctxmenu = document.querySelector<HTMLElement>('#contextmenu')!
+
+const deleteMenu = ctxmenu.querySelector<HTMLElement>('.delete')!
+const selectAllMenu = ctxmenu.querySelector<HTMLElement>('.select-all')!
+
+deleteMenu.addEventListener(
+  'click',
+  () => {
+    const {ops} = circuitData
+    let i = ops.length
+    while (i) {
+      i -= 1
+      if (ops[i].active)
+        ops.splice(i, 1)
+    }
+    clearOps()
+    populateOps()
+    adjustWorkbenchSize()
+    hideCtx()
+  }
+)
+
+selectAllMenu.addEventListener(
+  'click',
+  () => {
+    circuitData.ops.forEach(
+      (op) => op.active = true
+    )
+    clearOps()
+    populateOps()
+    // @ts-expect-error
+    window.updateCodeOutput?.()
+    hideCtx()
+  }
+)
 
 const updateCtx = (target: HTMLElement | { getBoundingClientRect: () => any }) => {
-  computePosition(target, ctxmenu!, {
+  computePosition(target, ctxmenu, {
     placement: 'bottom-start',
     middleware: [shift(), offset(4)]
   }).then(({x, y}) => {
-    Object.assign(ctxmenu!.style, {
+    Object.assign(ctxmenu.style, {
       left: `${x}px`,
       top: `${y}px`,
       transform: 'scale(1)',
@@ -22,23 +59,25 @@ let ctx_timeout: number | undefined
 const showCtx = (event: MouseEvent) => {
   clearTimeout(ctx_timeout)
 
-  ctxmenu!.style.display = 'block'
-  // ctxmenu!.innerHTML = getTooltipContent(
+  ctxmenu.style.display = 'block'
+  // ctxmenu.innerHTML = getTooltipContent(
   //   target!.dataset.tooltipTitle ?? '',
   //   target!.dataset.tooltip ?? ''
   // )
 
   const virtualEl = {
     getBoundingClientRect() {
+      const x = event.clientX + 8
+      const y = event.clientY + 8
       return {
         width: 0,
         height: 0,
-        x: event.clientX + 8,
-        y: event.clientY + 8,
-        top: event.clientY + 8,
-        left: event.clientX + 8,
-        right: event.clientX + 8,
-        bottom: event.clientY + 8
+        x,
+        y,
+        left: x,
+        top: y,
+        right: x,
+        bottom: y
       }
     }
   }
@@ -46,9 +85,9 @@ const showCtx = (event: MouseEvent) => {
 }
 
 const hideCtx = () => {
-  ctxmenu!.style.transform = ''
-  ctxmenu!.style.opacity = ''
-  ctx_timeout = setTimeout(() => ctxmenu!.style.display = '', 100)
+  ctxmenu.style.transform = ''
+  ctxmenu.style.opacity = ''
+  ctx_timeout = setTimeout(() => ctxmenu.style.display = '', 100)
 }
 
 let is_ctx_shown = false

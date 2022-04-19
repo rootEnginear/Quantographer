@@ -719,7 +719,7 @@ const setApiKey = (key: string) => {
 }
 
 // @ts-expect-error
-window.updateCodeOutput()
+window.updateCodeOutput?.()
 
 updateNameInDom()
 updateApiInDom()
