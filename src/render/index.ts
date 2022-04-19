@@ -531,7 +531,6 @@ const constructOperation = (type: OperationTypes, qubit: number, step: number): 
         qubit,
         active: false,
 
-        controlBits: [],
         template: subtype
       }
     }
