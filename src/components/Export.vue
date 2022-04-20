@@ -78,15 +78,43 @@ circuit.measure(qreg, creg)
 
 circuit.draw(output='mpl')`)
 
-watch(selectedType, (newVal) => {
-  switch (newVal) {
+const exportDialogCompile = () => {
+  switch (selectedType.value) {
     case "qasm":
-      // TODO: Make an api call here
+      fetch("https://quantum-backend-flask.herokuapp.com/qasm", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json"
+        },
+        body: JSON.stringify({
+          // @ts-expect-error
+          "code": window.translateCircuit()
+        }),
+      }).then(r => r.text()).then(r => {
+        currentCode.value = r
+      })
       break
     case "png":
-      // TODO: Make an api call here
+      fetch("https://quantum-backend-flask.herokuapp.com/qiskit_draw", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json"
+        },
+        body: JSON.stringify({
+          // @ts-expect-error
+          "code": window.translateCircuit()
+        }),
+      }).then(r => r.text()).then(r => {
+        // TODO: Assign `r` to image
+        // console.log(r)
+        currentCode.value = r
+      })
       break
   }
+}
+
+watch(selectedType, () => {
+  exportDialogCompile()
 })
 
 const copyCode = () => {
@@ -96,6 +124,11 @@ const copyCode = () => {
     copyText.value = "Copy"
   }, 1000)
 }
+
+Object.assign(
+  window,
+  { exportDialogCompile }
+)
 </script>
 
 <style scoped lang="scss">
