@@ -98,7 +98,7 @@ const exportDialogCompile = () => {
           currentCode.value = r.code
         })
         .catch(
-          () => currentCode.value = '// cannot convert given Qisาit แนกำ into QASM2'
+          () => currentCode.value = '// cannot convert given Qiskit code into QASM2'
         )
       break
     case "png":
