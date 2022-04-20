@@ -667,16 +667,17 @@ workbenchElement.addEventListener(
     const {index: startQubit, step: startStep} = startLoc
     const {index: endQubit, step: endStep} = endLoc
 
-    circuitData.ops.forEach(
-      (op) => {
-        const {qubit, step} = op
-        op.active =
-          qubit >= startQubit &&
-          qubit <= endQubit &&
-          step >= startStep &&
-          step <= endStep
-      }
-    )
+    if (startLoc.bitType === 'qubit' || endLoc.bitType === 'qubit')
+      circuitData.ops.forEach(
+        (op) => {
+          const {qubit, step} = op
+          op.active =
+            qubit >= startQubit &&
+            qubit <= endQubit &&
+            step >= startStep &&
+            step <= endStep
+        }
+      )
 
     clearOps()
     populateOps()
