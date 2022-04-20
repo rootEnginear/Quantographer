@@ -29,7 +29,7 @@
     v-model="currentCode"></textarea>
 
   <div class="image_display" v-if="selectedType === 'png'">
-    <img src="circuit.png">
+    <img v-bind:src="currentImg">
   </div>
 
   <div class="space"></div>
@@ -78,6 +78,8 @@ circuit.measure(qreg, creg)
 
 circuit.draw(output='mpl')`)
 
+const currentImg = ref('circuit.png')
+
 const exportDialogCompile = () => {
   switch (selectedType.value) {
     case "qasm":
@@ -90,9 +92,14 @@ const exportDialogCompile = () => {
           // @ts-expect-error
           "code": window.translateCircuit()
         }),
-      }).then(r => r.text()).then(r => {
-        currentCode.value = r
       })
+        .then(r => r.json())
+        .then(r => {
+          currentCode.value = r.code
+        })
+        .catch(
+          () => currentCode.value = '// cannot convert given Qisาit แนกำ into QASM2'
+        )
       break
     case "png":
       fetch("https://quantum-backend-flask.herokuapp.com/qiskit_draw", {
@@ -104,10 +111,8 @@ const exportDialogCompile = () => {
           // @ts-expect-error
           "code": window.translateCircuit()
         }),
-      }).then(r => r.text()).then(r => {
-        // TODO: Assign `r` to image
-        // console.log(r)
-        currentCode.value = r
+      }).then(r => r.json()).then(r => {
+        currentImg.value = r.pic
       })
       break
   }

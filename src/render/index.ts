@@ -716,17 +716,6 @@ const setApiKey = (key: string) => {
   updateApiInDom()
 }
 
-// @ts-expect-error
-window.updateCodeOutput?.()
-
-updateNameInDom()
-updateApiInDom()
-
-populateTrack()
-populateOps()
-
-adjustWorkbenchSize()
-
 zoomLevelSelector.addEventListener(
   'change',
   () => {
@@ -806,6 +795,8 @@ const loadCircuit = (data: string) => {
   populateOps()
 
   adjustWorkbenchSize()
+
+  addCustomGatesUI()
 }
 
 const saveFileDialog = (fileName: string, data: string) => {
@@ -849,6 +840,29 @@ const addCustomGate = (name: string, gate: CustomGateProperties) => {
   newGateArea.prepend(userGateBtn)
 }
 
+const addCustomGateUI = (name: string) => {
+  const userGateBtn = document.createElement('button')
+
+  userGateBtn.draggable = true
+
+  userGateBtn.classList.add('toolbar-btn')
+  userGateBtn.classList.add('gate')
+  userGateBtn.classList.add('fluid')
+  userGateBtn.classList.add('custom')
+
+  userGateBtn.dataset.gateid = 'custom:' + name
+  userGateBtn.dataset.tooltip = name + ' Gate'
+
+  userGateBtn.textContent = name
+
+  newGateArea.prepend(userGateBtn)
+}
+
+const addCustomGatesUI = () => {
+  for (const name in circuitData.customOperations)
+    addCustomGateUI(name)
+}
+
 const saveFile = () => {
   const data = JSON.stringify(circuitData)
   saveFileDialog('circuit.json', data)
@@ -867,6 +881,19 @@ ${
     .join('\n')
 }
 `
+
+// @ts-expect-error
+window.updateCodeOutput?.()
+
+updateNameInDom()
+updateApiInDom()
+
+populateTrack()
+populateOps()
+
+adjustWorkbenchSize()
+
+addCustomGatesUI()
 
 Object.assign(
   window,
