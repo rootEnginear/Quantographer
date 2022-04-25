@@ -13,6 +13,7 @@ export const getLocationInfo = (x: number, y: number): LocationInfo => {
     zoomLevel,
     qubitLaneHeight,
     bitLaneHeight,
+    headerPadding,
     stepWidth
   } = renderConfig
 
@@ -32,7 +33,7 @@ export const getLocationInfo = (x: number, y: number): LocationInfo => {
   let bitType: LocationInfo['bitType'] = 'qubit'
 
   if (x > labelsWidth) {
-    x -= labelsWidth
+    x -= labelsWidth + headerPadding
 
     laneType = 'op'
   }
