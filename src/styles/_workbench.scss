@@ -10,8 +10,8 @@
 
 #workbench .gate-label {
     font-family: LMR;
-    font-size: 44px;
-    font-style: italic;
+    font-size: 32px;
+    font-style: oblique;
 
     text-anchor: middle;
     dominant-baseline: middle;
@@ -20,7 +20,7 @@
 }
 
 .gate-label.smaller {
-    font-size: 30px !important;
+    font-size: 24px !important;
 }
 
 #workbench .transparent {

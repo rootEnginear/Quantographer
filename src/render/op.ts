@@ -1118,7 +1118,7 @@ export const populateOperation = (op: Operation, opIndex: number) => {
     labelElement.setAttribute('x', `${centerX}`)
     labelElement.setAttribute('y', `${textCenterY}`)
 
-    labelElement.setAttribute('textLength', `${lengthY}`)
+    labelElement.setAttribute('textLength', `${lengthY - 8}`)
     labelElement.setAttribute('lengthAdjust', 'spacingAndGlyphs')
 
     labelElement.setAttribute('transform', `rotate(90, ${centerX}, ${textCenterY})`)
@@ -1276,7 +1276,7 @@ export const populateOperation = (op: Operation, opIndex: number) => {
       const labelElement = document.createElementNS(svgNamespace, 'text')
 
       labelElement.setAttribute('x', `${centerX}`)
-      labelElement.setAttribute('y', `${centerY}`)
+      labelElement.setAttribute('y', `${centerY + 4}`)
 
       labelElement.classList.add('gate-label')
 
