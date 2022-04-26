@@ -96,12 +96,21 @@ export const populateTrack = () => {
 
       labelElement.addEventListener(
         'dblclick',
-        (e) => {
+        async (e) => {
           e.stopPropagation()
 
           let newName: string
           for (;;) {
-            const newNamePrompt = prompt('Rename qubit', name)
+            const newNamePrompt = await new Promise<string | null>(
+              // @ts-expect-error
+              (res) => window.alertify.prompt(
+                'Quantographer',
+                'Rename qubit',
+                name,
+                (_: any, val: string) => res(val),
+                () => res(null)
+              )
+            )
             // press cancel
             if (newNamePrompt === null) return
             // validation
@@ -116,6 +125,74 @@ export const populateTrack = () => {
           clearTrack()
           populateTrack()
           adjustWorkbenchSize()
+        }
+      )
+
+      labelElement.addEventListener(
+        'mousedown',
+        (e) => {
+          e.stopPropagation()
+          if (e.buttons !== 4) return
+          // @ts-expect-error
+          window.alertify.confirm(
+            'Quantographer',
+            'Are you sure to delete this qubit?',
+
+            () => {
+              const customOpsWidth = (name: string) => {
+                const prop = circuitData.customOperations[name]
+                return prop.type === 'rotation' ? 1 : prop.qubitCount
+              }
+
+              const {ops} = circuitData
+              let opIndex = ops.length
+              while (opIndex) {
+                opIndex -= 1
+                const op = ops[opIndex]
+                if (
+                  op.qubit === i ||
+                  'controlQubits' in op && op.controlQubits.includes(i) ||
+                  op.type === 'custom' && i >= op.qubit && i <= op.qubit + customOpsWidth(op.template) ||
+                  op.type === 'barrier' && i >= op.qubit && i <= op.qubit + op.qubitSpan ||
+                  op.type === 'swap' && i == op.targetQubit
+                )
+                  ops.splice(opIndex, 1)
+              }
+              ops.forEach(
+                (op) => {
+                  if (op.qubit > i) {
+                    op.qubit -= 1
+                    if ('controlQubits' in op) {
+                      const newC: number[] = []
+                      op.controlQubits.forEach(
+                        (ii) => {
+                          if (ii > i)
+                            newC.push(ii - 1)
+                          else
+                            newC.push(ii)
+                        }
+                      )
+                      op.controlQubits.splice(0, op.controlQubits.length, ...newC)
+                    }
+                  }
+                }
+              )
+
+              qubits.splice(i, 1)
+
+              // @ts-expect-error
+              window.updateCodeOutput?.()
+
+              clearOps()
+              clearTrack()
+
+              populateTrack()
+              populateOps()
+
+              adjustWorkbenchSize()
+            },
+            () => {}
+          )
         }
       )
 
@@ -156,12 +233,21 @@ export const populateTrack = () => {
 
       labelElement.addEventListener(
         'dblclick',
-        (e) => {
+        async (e) => {
           e.stopPropagation()
 
           let newName: string
           for (;;) {
-            const newNamePrompt = prompt('Rename qubit', name)
+            const newNamePrompt = await new Promise<string | null>(
+              // @ts-expect-error
+              (res) => window.alertify.prompt(
+                'Quantographer',
+                'Rename bit',
+                name,
+                (_: any, val: string) => res(val),
+                () => res(null)
+              )
+            )
             // press cancel
             if (newNamePrompt === null) return
             // validation
@@ -176,6 +262,59 @@ export const populateTrack = () => {
           clearTrack()
           populateTrack()
           adjustWorkbenchSize()
+        }
+      )
+
+      labelElement.addEventListener(
+        'mousedown',
+        (e) => {
+          e.stopPropagation()
+          if (e.buttons !== 4) return
+          // @ts-expect-error
+          window.alertify.confirm(
+            'Quantographer',
+            'Are you sure to delete this bit?',
+
+            () => {
+              const {ops} = circuitData
+              let opIndex = ops.length
+              while (opIndex) {
+                opIndex -= 1
+                const op = ops[opIndex]
+                if (
+                  'controlBits' in op && op.controlBits.some(
+                    (b) => b.index == i
+                  )
+                )
+                  ops.splice(opIndex, 1)
+              }
+              ops.forEach(
+                (op) => {
+                  if ('controlBits' in op)
+                    op.controlBits.forEach(
+                      (e) => {
+                        if (e.index > i)
+                          e.index -= 1
+                      }
+                    )
+                }
+              )
+
+              bits.splice(i, 1)
+
+              // @ts-expect-error
+              window.updateCodeOutput?.()
+
+              clearOps()
+              clearTrack()
+
+              populateTrack()
+              populateOps()
+
+              adjustWorkbenchSize()
+            },
+            () => {}
+          )
         }
       )
 
