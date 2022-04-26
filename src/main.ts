@@ -84,7 +84,7 @@ const handlingShortcuts = (e: KeyboardEvent) => {
     window.gateSelectAll()
   }
 
-  if (e.key == 'Delete' || e.key == 'Backspace') {
+  if (e.key == 'Delete') {
     e.stopPropagation()
     e.preventDefault()
     // @ts-expect-error
@@ -265,7 +265,15 @@ const toggleCode = () => {
 // -----------------------------------------------------------------------------
 // Dialogs
 // -----------------------------------------------------------------------------
+// convert snake case to capitalize each word
+const toTitleCase = (str: string) => str.split('_').map((w) => w[0].toUpperCase() + w.slice(1))
+  .join(' ')
+
 let isExecuteDialogOpen = false
+let recommend_oplv = ''
+let recommend_rtmt = ''
+let recommend_lomt = ''
+let recommend_sdmt = ''
 const openExecuteDialog = () => {
   if (isExecuteDialogOpen) return
   isExecuteDialogOpen = true
@@ -284,6 +292,7 @@ const openExecuteDialog = () => {
     x: 'center',
     y: 'center'
   })
+  updateTranspileResult()
   fetch('https://quantum-backend-flask.herokuapp.com/recommend', {
     method: 'POST',
     headers: {
@@ -292,17 +301,56 @@ const openExecuteDialog = () => {
     body: JSON.stringify({
       // @ts-expect-error
       code: window.translateCircuit(),
+      // TODO: Change this system to other systems
       system: 'guadalupe'
     })
   }).then((r) => r.json())
     .then((r) => {
-      console.log(r[0])
+      // console.log(r[0])
       document.getElementById('waitForOptimal')!.style.display = 'none'
       document.getElementById('gotOptimal')!.style.display = ''
+      recommend_oplv = r[0].optlvl
+      recommend_rtmt = r[0].routing
+      recommend_lomt = r[0].layout
+      recommend_sdmt = r[0].scheduling
       document.getElementById('oplv')!.textContent = r[0].optlvl
-      document.getElementById('rtmt')!.textContent = r[0].routing
-      document.getElementById('lomt')!.textContent = r[0].layout
-      document.getElementById('sdmt')!.textContent = 'None'
+      document.getElementById('rtmt')!.textContent = toTitleCase(r[0].routing)
+      document.getElementById('lomt')!.textContent = toTitleCase(r[0].layout)
+      document.getElementById('sdmt')!.textContent = toTitleCase(r[0].scheduling || 'None')
+    })
+}
+
+const copyRecommendTranspile = () => {
+  if (recommend_oplv) document.querySelector<HTMLInputElement>('#input-otlv')!.value = recommend_oplv
+  if (recommend_rtmt) document.querySelector<HTMLInputElement>('#input-rtmt')!.value = recommend_rtmt
+  if (recommend_lomt) document.querySelector<HTMLInputElement>('#input-lomt')!.value = recommend_lomt
+  if (recommend_sdmt) document.querySelector<HTMLInputElement>('#input-sdmt')!.value = recommend_sdmt
+}
+
+const updateTranspileResult = () => {
+  const otlv = document.querySelector<HTMLInputElement>('#input-otlv')!.value
+  const lomt = document.querySelector<HTMLInputElement>('#input-lomt')!.value
+  const rtmt = document.querySelector<HTMLInputElement>('#input-rtmt')!.value
+  const sdmt = document.querySelector<HTMLInputElement>('#input-sdmt')!.value
+
+  fetch('https://quantum-backend-flask.herokuapp.com/transpile', {
+    method: 'POST',
+    headers: {
+      'Content-Type': 'application/json'
+    },
+    body: JSON.stringify({
+      // @ts-expect-error
+      code: window.translateCircuit(),
+      // TODO: Change this system to other systems
+      system: 'guadalupe',
+      layout: lomt,
+      routing: rtmt,
+      scheduling: sdmt === 'none' ? null : sdmt,
+      optlvl: +otlv
+    })
+  }).then((r) => r.json())
+    .then((r) => {
+      (document.getElementById('transpiled_circuit_image') as HTMLImageElement).src = r.pic
     })
 }
 
@@ -407,7 +455,9 @@ Object.assign(window, {
   toggleCode,
   renameFile,
   changeIbmKey,
-  newGateDialogInstance
+  newGateDialogInstance,
+  updateTranspileResult,
+  copyRecommendTranspile
 })
 
 // If everything loaded correctly, show the content

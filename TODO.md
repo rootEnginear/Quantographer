@@ -22,8 +22,9 @@
   - ส่งวงจรไปหลัง
     - Detect Circuit Change and update code
   - หลังเอาไปคิดและส่งแนะนำระบบมา
-    - [ ] Suggestion API [[50%]]
-    - [ ] Transpiled Circuit [[50%]]
+    - [ ] System List API
+    - Suggestion API
+    - Transpiled Circuit
   - user เลือกระบบ
   - จับ run
     - [ ] Executing API

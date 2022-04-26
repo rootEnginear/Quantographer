@@ -941,21 +941,11 @@
           <label class="label">Optimization Level</label>
           <div class="control">
             <div class="select is-fullwidth">
-              <select>
-                <option>0</option>
-                <option>1</option>
-                <option selected>2</option>
-                <option>3</option>
-              </select>
-            </div>
-          </div>
-        </div>
-        <div class="field">
-          <label class="label">Routing Method</label>
-          <div class="control">
-            <div class="select is-fullwidth">
-              <select>
-                <option>Noise Adaptive</option>
+              <select id="input-otlv">
+                <option value="0">0</option>
+                <option value="1">1</option>
+                <option value="2" selected>2</option>
+                <option value="3">3</option>
               </select>
             </div>
           </div>
@@ -964,8 +954,24 @@
           <label class="label">Layout Method</label>
           <div class="control">
             <div class="select is-fullwidth">
-              <select>
-                <option>Stochastic</option>
+              <select id="input-lomt">
+                <option value="trivial">Trivial</option>
+                <option value="dense">Dense</option>
+                <option value="noise_adaptive" selected>Noise Adaptive</option>
+                <option value="sabre">Sabre</option>
+              </select>
+            </div>
+          </div>
+        </div>
+        <div class="field">
+          <label class="label">Routing Method</label>
+          <div class="control">
+            <div class="select is-fullwidth">
+              <select id="input-rtmt">
+                <option value="basic">Basic</option>
+                <option value="stochastic" selected>Stochastic</option>
+                <option value="lookahead">Lookahead</option>
+                <option value="sabre">Sabre</option>
               </select>
             </div>
           </div>
@@ -974,12 +980,20 @@
           <label class="label">Schedule Method</label>
           <div class="control">
             <div class="select is-fullwidth">
-              <select>
-                <option>As late as possible</option>
+              <select id="input-sdmt">
+                <option value="none" selected>None</option>
+                <option value="as_soon_as_possible">As soon as possible</option>
+                <option value="as_late_as_possible">As late as possible</option>
               </select>
             </div>
           </div>
         </div>
+        <button class="button is-fullwidth" onclick="updateTranspileResult()">
+          <span class="icon is-small">
+            <i class="fa-solid fa-rotate"></i>
+          </span>
+          <span>Update Transpilation Result</span>
+        </button>
       </div>
       <div class="col">
         <div id="waitForOptimal">
@@ -1016,7 +1030,7 @@
                 <span id="sdmt"></span>
               </li>
             </ul>
-            <button class="button is-fullwidth">
+            <button class="button is-fullwidth" onclick="copyRecommendTranspile()">
               <span class="icon is-small">
                 <i class="fa-solid fa-copy"></i>
               </span>
@@ -1028,7 +1042,7 @@
     </div>
     <strong>Transpilation Result:</strong>
     <div class="circuit-preview">
-      <img src="circuit.png" alt="">
+      <img id="transpiled_circuit_image" src="circuit.png">
     </div>
     <div class="space"></div>
     <div class="separator"></div>
