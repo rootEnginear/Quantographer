@@ -1,37 +1,73 @@
 import {renderConfig} from './config'
 import {circuitData} from './data'
+import {adjustWorkbenchSize, clearOps, populateOps, trackLabelGroupElement} from '.'
 
-import {trackLabelGroupElement} from '.'
+export const addButtonDraglistener = (btn: HTMLElement) => {
+  btn.addEventListener(
+    'dragstart',
+    (e) => {
+      const {target, dataTransfer} = e
 
-export const addButtonDraglistener = (btn: HTMLElement) => btn.addEventListener(
-  'dragstart',
-  (e) => {
-    const {target, dataTransfer} = e
+      const transfer = dataTransfer as DataTransfer
+      const elem = target as HTMLElement
 
-    const transfer = dataTransfer as DataTransfer
-    const elem = target as HTMLElement
+      const {
+        dataset: {
+          gateid = ''
+        }
+      } = elem
 
-    const {
-      dataset: {
-        gateid = ''
+      // move cursor to the center of drag body
+      transfer.setDragImage(
+        elem,
+        window.devicePixelRatio * (elem.offsetWidth / 2),
+        window.devicePixelRatio * (elem.offsetHeight / 2)
+      )
+
+      // because Chrome doesn't allow reading data on other drag events
+      // except drop. to circumvent the issue, we attach data as a type instead.
+      // it can be seen from every event.
+      transfer.setData(gateid, '')
+
+      transfer.effectAllowed = 'copy'
+    }
+  )
+  btn.addEventListener(
+    'mousedown',
+    (e) => {
+      if (e.buttons !== 4) return
+
+      const {target} = e
+      const elem = target as HTMLElement
+      const {
+        dataset: {
+          gateid = ''
+        }
+      } = elem
+
+      if (!gateid.startsWith('custom:')) return
+
+      const customId = gateid.slice(7)
+
+      const {ops} = circuitData
+      let i = ops.length
+      while (i) {
+        i -= 1
+        const op = ops[i]
+        if (op.type === 'custom' && op.template === customId)
+          ops.splice(i, 1)
       }
-    } = elem
+      // @ts-expect-error
+      window.updateCodeOutput?.()
+      clearOps()
+      populateOps()
+      adjustWorkbenchSize()
 
-    // move cursor to the center of drag body
-    transfer.setDragImage(
-      elem,
-      window.devicePixelRatio * (elem.offsetWidth / 2),
-      window.devicePixelRatio * (elem.offsetHeight / 2)
-    )
-
-    // because Chrome doesn't allow reading data on other drag events
-    // except drop. to circumvent the issue, we attach data as a type instead.
-    // it can be seen from every event.
-    transfer.setData(gateid, '')
-
-    transfer.effectAllowed = 'copy'
-  }
-)
+      delete circuitData.customOperations[gateid]
+      elem.remove()
+    }
+  )
+}
 
 export const rangeOverlaps = (left: NumberRange, right: NumberRange) => Math.max(left.lower, right.lower) <= Math.min(left.upper, right.upper)
 
