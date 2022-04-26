@@ -1,22 +1,23 @@
 # TODO
 - [ ] ต่อหลังบ้าน
   - วาดวงจร
-    - ## Can Do
-    - [ ] Add/Delete Qubits/Bits [[GOLF]]
-    - [ ] Cut, Copy, Paste [[GOLF]]
-    - [ ] Gate Parameter RX RY RZ [[GOLF]]
-    - [ ] Fix font size + position [[MUMU]]
-    - [ ] Fix Global Delete
-    - [ ] Gate Parameter U1 U2 U3
-    - [ ] Make normal X gate X
-    - [ ] Flip Horizontally
+      ## Done
     - Select All, Delete Selected
     - Select on right click
     - Use uppercase for normal gate
     - Swap CX CCX Placement
+    - Fix font size + position
+    - Create Custom Gate from Rotation & Matrix
+    - ## Can Do
+    - [ ] Add/Delete Qubits/Bits [[GOLF]]
+    - [ ] Cut, Copy, Paste [[GOLF]]
+    - [ ] Gate Parameter RX RY RZ [[GOLF]]
+    - [ ] Fix Global Delete
+    - [ ] Gate Parameter U1 U2 U3
+    - [ ] Make normal X gate X
+    - [ ] Flip Horizontally
     - ## Need Thinking
     - [ ] Undo, Redo
-    - Create Custom Gate from Rotation & Matrix
     - [ ] Create Gate from Circuit
   - ส่งวงจรไปหลัง
     - Detect Circuit Change and update code
