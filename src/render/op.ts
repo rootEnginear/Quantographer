@@ -245,6 +245,21 @@ export const populateOperation = (op: Operation, opIndex: number) => {
             }
           )
 
+          gateControl.addEventListener(
+            'dblclick',
+            (e) => {
+              e.preventDefault()
+              e.stopPropagation()
+
+              entry.invert = !entry.invert
+
+              opElement.remove()
+
+              // create updated varsion
+              populateOperation(op, opIndex)
+            }
+          )
+
           return gateControl
         }
       )

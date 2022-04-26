@@ -34,25 +34,6 @@ export const circuitData: Circuit = {
     }],
     controlQubits: []
   }, {
-    type: 'x',
-    step: 0,
-    qubit: 2,
-    active: false,
-    controlBits: [{
-      index: 0,
-      invert: true,
-      value: 1
-    }, {
-      index: 1,
-      invert: false,
-      value: 1
-    }, {
-      index: 2,
-      invert: false,
-      value: 1
-    }],
-    controlQubits: []
-  }, {
     type: 'h',
     step: 1,
     qubit: 0,

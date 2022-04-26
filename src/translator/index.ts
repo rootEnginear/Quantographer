@@ -146,8 +146,8 @@ export const translateCircuit = () => {
 from qiskit import QuantumCircuit, QuantumRegister, ClassicalRegister
 from qiskit.circuit.library.standard_gates import SdgGate, TdgGate, SXGate, RXGate, RYGate, RZGate, U1Gate, U2Gate, U3Gate, SwapGate, XGate, YGate, ZGate, HGate, PhaseGate, SGate, TGate
 from qiskit.quantum_info.operators import Operator
-qr = QuantumRegister(${qubit_count})
-cr = ClassicalRegister(${bit_count})
+qr = QuantumRegister(${qubit_count}, name='q')
+cr = ClassicalRegister(${bit_count}, name='c')
 qc = QuantumCircuit(qr, cr)
 ${custom_gate_string}
 ${qiskit_string}`
