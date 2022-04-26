@@ -871,6 +871,55 @@ ${
 }
 `
 
+const appendNewQubit = () => {
+  const {qubits} = circuitData
+  let i = 0
+  while (
+    qubits.some(
+      (qub) => qub.name === `${i}`
+    )
+  ) i += 1
+
+  qubits.push(
+    {
+      name: `${i}`
+    }
+  )
+
+  clearOps()
+  clearTrack()
+
+  populateTrack()
+  populateOps()
+
+  adjustWorkbenchSize()
+}
+
+const appendNewBit = () => {
+  const {bits} = circuitData
+  let i = 0
+  while (
+    bits.some(
+      (b) => b.name == `${i}`
+    )
+  ) i += 1
+
+  bits.push(
+    {
+      name: `${i}`,
+      size: 1
+    }
+  )
+
+  clearOps()
+  clearTrack()
+
+  populateTrack()
+  populateOps()
+
+  adjustWorkbenchSize()
+}
+
 // @ts-expect-error
 window.updateCodeOutput?.()
 
@@ -896,6 +945,8 @@ Object.assign(
     getFileName,
     setFileName,
     getApiKey,
-    setApiKey
+    setApiKey,
+    appendNewQubit,
+    appendNewBit
   }
 )
