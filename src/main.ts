@@ -77,6 +77,20 @@ const handlingShortcuts = (e: KeyboardEvent) => {
     window.saveFile()
   }
 
+  if (e.ctrlKey && e.key === 'a') {
+    e.stopPropagation()
+    e.preventDefault()
+    // @ts-expect-error
+    window.gateSelectAll()
+  }
+
+  if (e.key == 'Delete' || e.key == 'Backspace') {
+    e.stopPropagation()
+    e.preventDefault()
+    // @ts-expect-error
+    window.gateDeleteSelected()
+  }
+
   // if (e.key === 'F11' || e.key === 'F12' || e.key === 'F5') return 0
 
 
@@ -268,6 +282,20 @@ const openExecuteDialog = () => {
     x: 'center',
     y: 'center'
   })
+  fetch('https://quantum-backend-flask.herokuapp.com/recommend', {
+    method: 'POST',
+    headers: {
+      'Content-Type': 'application/json'
+    },
+    body: JSON.stringify({
+      // @ts-expect-error
+      code: window.translateCircuit(),
+      backend: 'guadalupe'
+    })
+  }).then((r) => r.json())
+    .then((r) => {
+      console.log(r)
+    })
 }
 
 let isExportDialogOpen = false
@@ -293,7 +321,7 @@ const openExportDialog = () => {
   })
 }
 
-let newGateDialogInstance = null
+let newGateDialogInstance: any = null
 let isNewGateDialogOpen = false
 const openNewGateDialog = () => {
   if (isNewGateDialogOpen) return
@@ -304,12 +332,18 @@ const openNewGateDialog = () => {
     mount: document.getElementById('new-gate-dialog') as Node,
     onclose: () => {
       isNewGateDialogOpen = false
+      Object.assign(window, {
+        newGateDialogInstance
+      })
       return false
     },
     width: 750,
     height: 530,
     x: 'center',
     y: 'center'
+  })
+  Object.assign(window, {
+    newGateDialogInstance
   })
 }
 
@@ -364,7 +398,8 @@ Object.assign(window, {
   togglePalette,
   toggleCode,
   renameFile,
-  changeIbmKey
+  changeIbmKey,
+  newGateDialogInstance
 })
 
 // If everything loaded correctly, show the content

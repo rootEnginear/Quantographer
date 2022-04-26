@@ -2,9 +2,11 @@
   <div class="field">
     <label class="label">Gate Name</label>
     <div class="control">
-      <input class="input" type="text" placeholder="anAwesomeGate" />
+      <input v-model="gate_name" class="input" type="text" placeholder="anAwesomeGate" />
     </div>
-    <p class="help">The name must be in lowercase or uppercase letters.</p>
+    <p class="help">
+      The name must be in lowercase or uppercase letters without any spaces.
+    </p>
   </div>
   <div class="field">
     <label class="label">Create from</label>
@@ -107,7 +109,7 @@
   <!-- <div class="separator"></div> -->
   <div class="row">
     <div class="col"></div>
-    <button class="button is-primary is-small">
+    <button class="button is-primary is-small" @click="addGate">
       <span class="icon is-small">
         <i class="fa-solid fa-plus"></i>
       </span>
@@ -121,6 +123,7 @@ import { ref, reactive, watch } from 'vue'
 import Bloch from './Bloch.vue'
 
 const build_method = ref(0)
+const gate_name = ref(null)
 
 const rot_theta = ref(0)
 const rot_phi = ref(0)
@@ -135,6 +138,38 @@ watch(mat_qubits, () => {
   if (!isNaN(+mat_qubits.value))
     mat_data.value = new Array(((2 ** (+mat_qubits.value)) ** 2)).fill(0) as number[]
 })
+
+const addGate = () => {
+  // TODO: validate gate name
+  if (!/[A-Za-z]/g.test(gate_name.value || "")) {
+    // @ts-expect-error
+    window.alertify.alert("Gate Name is Invalid!", "Gate name must be in lowercase or uppercase letters without any spaces.")
+    return
+  }
+
+  switch (build_method.value) {
+    case 0:
+      // @ts-expect-error
+      window.addCustomGate(gate_name.value, {
+        type: 'rotation',
+        theta: rot_theta.value * Math.PI / 180,
+        phi: rot_phi.value * Math.PI / 180,
+        phase: rot_lambda.value * Math.PI / 180,
+      })
+      break;
+    case 1:
+      // @ts-expect-error
+      window.addCustomGate(gate_name.value, {
+        type: 'matrix',
+        qubitCount: mat_qubits.value,
+        matrix: mat_data.value
+      })
+      break;
+  }
+  // @ts-expect-error
+  window.newGateDialogInstance.close()
+}
+
 
 
 </script>
