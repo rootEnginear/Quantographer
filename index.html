@@ -37,13 +37,16 @@
     <!-- Primary Toolbar -->
     <div class="toolbar toolbar-primary">
       <!-- Left -->
-      <button class="toolbar-btn ghost" data-tooltip="New file">
+      <button class="toolbar-btn ghost" data-tooltip="New file"
+        onclick="location.reload()">
         <i class="fa-solid fa-file-medical"></i>
       </button>
-      <button class="toolbar-btn ghost" data-tooltip="Open file">
+      <button class="toolbar-btn ghost" data-tooltip="Open file"
+        onclick="chooseAndLoadFile()">
         <i class="fa-solid fa-folder-open"></i>
       </button>
-      <button class="toolbar-btn ghost" data-tooltip="Save file">
+      <button class="toolbar-btn ghost" data-tooltip="Save file"
+        onclick="saveFile()">
         <i class="fa-solid fa-floppy-disk"></i>
       </button>
       <button class="toolbar-btn ghost" data-tooltip="Export file"
@@ -1062,6 +1065,45 @@
   <div id="export-circuit-dialog" class="common-dialog"></div>
 
   <div id="new-gate-dialog" class="common-dialog"></div>
+
+  <div id="introduction-dialog" class="common-dialog">
+    <h1>Quantographer</h1>
+    <hr>
+    <div class="row" style="margin:1rem 0">
+      <div class="col" style="align-self:flex-start">
+        <button class="button is-fullwidth"
+          style="justify-content:flex-start;text-align:left;margin-bottom:.5rem"
+          onclick="introductionDialogInstance.close(true)">
+          <span class="icon is-small">
+            <i class="fa-solid fa-file-medical"></i>
+          </span>
+          <span>Create a blank quantum circuit</span>
+        </button>
+        <button class="button is-fullwidth"
+          style="justify-content:flex-start;text-align:left"
+          onclick="chooseAndLoadFile()">
+          <span class="icon is-small">
+            <i class="fa-solid fa-folder-open"></i>
+          </span>
+          <span>Open a quantum circuit</span>
+        </button>
+      </div>
+      <div class="col">
+        <div class="box">
+          <h2 style="margin-bottom:1rem">Tip of the day</h2>
+          <p>
+            You can quickly delete <em>anything</em> you want using
+            <strong style="display:inline">the middle mouse</strong>.
+          </p>
+        </div>
+      </div>
+    </div>
+    <hr>
+    <label style="margin-top:1rem;display:block">
+      <input type="checkbox" checked onchange="changeIntroductionDialogPref(this)">
+      Show this on startup.
+    </label>
+  </div>
 
   <script
     src="https://rawcdn.githack.com/nextapps-de/winbox/0.2.0/dist/js/winbox.min.js"></script>

@@ -8,14 +8,15 @@
     - Swap CX CCX Placement
     - Fix font size + position
     - Create Custom Gate from Rotation & Matrix
+    - Add Qubits/Bits
+    - Delete Qubits/Bits
+    - Fix Global Delete
     - ## Can Do
-    - [ ] Add/Delete Qubits/Bits [[GOLF]]
     - [ ] Cut, Copy, Paste [[GOLF]]
     - [ ] Gate Parameter RX RY RZ [[GOLF]]
-    - [ ] Fix Global Delete
     - [ ] Gate Parameter U1 U2 U3
     - [ ] Make normal X gate X
-    - [ ] Flip Horizontally
+    - [ ] Flip Horizontally, Duplicate to Right, Duplicate to Left
     - ## Need Thinking
     - [ ] Undo, Redo
     - [ ] Create Gate from Circuit
@@ -33,7 +34,7 @@
 - Export
   - PNG
   - QASM
-- [ ] Introduction Modal [[MUMU]]
+- Introduction Modal
 
 # IF CAN DO WELL GOOD
 - [ ] Check editor mouse cursors

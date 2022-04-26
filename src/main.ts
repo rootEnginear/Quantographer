@@ -465,3 +465,30 @@ requestAnimationFrame(() => {
   document.documentElement.style.opacity = ''
   document.documentElement.classList.remove('not-ready')
 })
+
+// if `hide-introduction` is set in localstorage, don't show the introduction
+let introductionDialogInstance: any = null
+if (!localStorage.getItem('quantoHideIntroduction'))
+  introductionDialogInstance = new window.WinBox({
+    title: 'Welcome to Quantographer!',
+    border: 4,
+    mount: document.getElementById('introduction-dialog') as Node,
+    onclose: () => false,
+    width: 750,
+    height: 350,
+    x: 'center',
+    y: 'center'
+  })
+
+const changeIntroductionDialogPref = (el: HTMLInputElement) => {
+  console.log(el.checked)
+  if (el.checked)
+    localStorage.removeItem('quantoHideIntroduction')
+  else
+    localStorage.setItem('quantoHideIntroduction', 'true')
+}
+
+Object.assign(window, {
+  changeIntroductionDialogPref,
+  introductionDialogInstance
+})
