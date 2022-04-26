@@ -419,24 +419,24 @@ const constructOperation = (type: OperationTypes, qubit: number, step: number): 
     return {
       type: 'x',
       step,
-      qubit,
+      qubit: qubit + 1,
       active: false,
 
       controlBits: [],
-      controlQubits: [qubit + 1]
+      controlQubits: [qubit]
     }
   // @ts-expect-error
   case 'toff':
     return {
       type: 'x',
       step,
-      qubit,
+      qubit: qubit + 2,
       active: false,
 
       controlBits: [],
       controlQubits: [
-        qubit + 1,
-        qubit + 2
+        qubit,
+        qubit + 1
       ]
     }
   case 'barrier':
