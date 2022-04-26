@@ -166,6 +166,8 @@ const addGate = () => {
       })
       break;
   }
+  // @ts-expect-error
+  window.newGateDialogInstance.close()
 }
 
 

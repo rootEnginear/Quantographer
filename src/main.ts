@@ -319,7 +319,7 @@ const openExportDialog = () => {
   })
 }
 
-let newGateDialogInstance = null
+let newGateDialogInstance: any = null
 let isNewGateDialogOpen = false
 const openNewGateDialog = () => {
   if (isNewGateDialogOpen) return
@@ -330,12 +330,18 @@ const openNewGateDialog = () => {
     mount: document.getElementById('new-gate-dialog') as Node,
     onclose: () => {
       isNewGateDialogOpen = false
+      Object.assign(window, {
+        newGateDialogInstance
+      })
       return false
     },
     width: 750,
     height: 530,
     x: 'center',
     y: 'center'
+  })
+  Object.assign(window, {
+    newGateDialogInstance
   })
 }
 
@@ -390,7 +396,8 @@ Object.assign(window, {
   togglePalette,
   toggleCode,
   renameFile,
-  changeIbmKey
+  changeIbmKey,
+  newGateDialogInstance
 })
 
 // If everything loaded correctly, show the content
