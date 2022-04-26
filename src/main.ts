@@ -100,6 +100,7 @@ const handlingShortcuts = (e: KeyboardEvent) => {
 }
 
 window.addEventListener('keydown', handlingShortcuts)
+document.addEventListener('keydown', handlingShortcuts)
 
 // -----------------------------------------------------------------------------
 // Accordion
@@ -309,7 +310,7 @@ const openExecuteDialog = () => {
       // console.log(r[0])
       document.getElementById('waitForOptimal')!.style.display = 'none'
       document.getElementById('gotOptimal')!.style.display = ''
-      recommend_oplv = r[0].optlvl
+      recommend_oplv = `${r[0].optlvl}`
       recommend_rtmt = r[0].routing
       recommend_lomt = r[0].layout
       recommend_sdmt = r[0].scheduling
@@ -492,3 +493,8 @@ Object.assign(window, {
   changeIntroductionDialogPref,
   introductionDialogInstance
 })
+
+document.body.onmousedown = function (e) {
+  if (e.button === 1) return false
+  return true
+}

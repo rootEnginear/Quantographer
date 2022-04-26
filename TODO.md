@@ -17,6 +17,7 @@
     - [ ] Gate Parameter U1 U2 U3
     - [ ] Make normal X gate X
     - [ ] Flip Horizontally, Duplicate to Right, Duplicate to Left
+    - [ ] Check why blue expand to q0 q1
     - ## Need Thinking
     - [ ] Undo, Redo
     - [ ] Create Gate from Circuit

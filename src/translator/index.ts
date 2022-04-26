@@ -70,7 +70,17 @@ export const translateCircuit = () => {
 
     if (op.type === 'rotation') return `qc_${name} = Operator(U3Gate(${op.theta},${op.phi},${op.phase}))`
 
-    if (op.type === 'matrix') return `qc_${name} = Operator(${JSON.stringify(op.matrix)})`
+    if (op.type === 'matrix') {
+      const perChunk = 2 ** op.qubitCount
+      const matrix = op.matrix.reduce((all, one, i) => {
+        const ch = Math.floor(i / perChunk)
+        // @ts-expect-error
+        all[ch] = [].concat(all[ch] || [], one)
+        return all
+      }, [])
+
+      return `qc_${name} = Operator(${JSON.stringify(matrix)})`
+    }
 
     return ''
   })
