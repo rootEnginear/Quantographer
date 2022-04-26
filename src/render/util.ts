@@ -47,24 +47,32 @@ export const addButtonDraglistener = (btn: HTMLElement) => {
 
       if (!gateid.startsWith('custom:')) return
 
-      const customId = gateid.slice(7)
-
-      const {ops} = circuitData
-      let i = ops.length
-      while (i) {
-        i -= 1
-        const op = ops[i]
-        if (op.type === 'custom' && op.template === customId)
-          ops.splice(i, 1)
-      }
       // @ts-expect-error
-      window.updateCodeOutput?.()
-      clearOps()
-      populateOps()
-      adjustWorkbenchSize()
+      window.alertify.confirm(
+        'Quantographer',
+        'Are you sure?',
+        () => {
+          const customId = gateid.slice(7)
+          const {ops} = circuitData
+          let i = ops.length
+          while (i) {
+            i -= 1
+            const op = ops[i]
+            if (op.type === 'custom' && op.template === customId)
+              ops.splice(i, 1)
+          }
 
-      delete circuitData.customOperations[gateid]
-      elem.remove()
+          // @ts-expect-error
+          window.updateCodeOutput?.()
+          clearOps()
+          populateOps()
+          adjustWorkbenchSize()
+
+          delete circuitData.customOperations[gateid]
+          elem.remove()
+        },
+        () => {}
+      )
     }
   )
 }
