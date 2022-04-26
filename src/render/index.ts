@@ -96,12 +96,21 @@ export const populateTrack = () => {
 
       labelElement.addEventListener(
         'dblclick',
-        (e) => {
+        async (e) => {
           e.stopPropagation()
 
           let newName: string
           for (;;) {
-            const newNamePrompt = prompt('Rename qubit', name)
+            const newNamePrompt = await new Promise<string | null>(
+              // @ts-expect-error
+              (res) => window.alertify.prompt(
+                'Quantographer',
+                'Rename qubit',
+                name,
+                (_: any, val: string) => res(val),
+                () => res(null)
+              )
+            )
             // press cancel
             if (newNamePrompt === null) return
             // validation
@@ -156,12 +165,21 @@ export const populateTrack = () => {
 
       labelElement.addEventListener(
         'dblclick',
-        (e) => {
+        async (e) => {
           e.stopPropagation()
 
           let newName: string
           for (;;) {
-            const newNamePrompt = prompt('Rename qubit', name)
+            const newNamePrompt = await new Promise<string | null>(
+              // @ts-expect-error
+              (res) => window.alertify.prompt(
+                'Quantographer',
+                'Rename bit',
+                name,
+                (_: any, val: string) => res(val),
+                () => res(null)
+              )
+            )
             // press cancel
             if (newNamePrompt === null) return
             // validation
