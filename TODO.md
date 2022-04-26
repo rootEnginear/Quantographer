@@ -2,30 +2,35 @@
 - [ ] ต่อหลังบ้าน
   - วาดวงจร
     - ## Can Do
-    - [ ] Cut, Copy, Paste, Select All, Delete Selected
+    - [ ] Swap CX CCX Placement [[GOLF]]
+    - [ ] Cut, Copy, Paste [[GOLF]]
+    - [ ] Gate Parameter RX RY RZ [[GOLF]]
+    - [ ] Add/Delete Qubits/Bits [[GOLF]]
+    - [ ] Fix font size + position [[MUMU]]
+    - [ ] Gate Parameter U1 U2 U3
+    - [ ] Make normal X gate X
     - [ ] Flip Horizontally
+    - Select All, Delete Selected
     - Select on right click
     - Use uppercase for normal gate
-    - [ ] Add/Delete Qubits/Bits
-    - [ ] Make normal X gate X
-    - [ ] Fix font size + position
     - ## Need Thinking
     - [ ] Undo, Redo
-    - [ ] Create Custom Gate [[MUMU]]
-    - [ ] Gate Parameter
+    - Create Custom Gate from Rotation & Matrix
+    - [ ] Create Gate from Circuit
   - ส่งวงจรไปหลัง
     - Detect Circuit Change and update code
   - หลังเอาไปคิดและส่งแนะนำระบบมา
-    - [ ] Suggestion API
+    - [ ] Suggestion API [[50%]]
+    - [ ] Transpiled Circuit [[50%]]
   - user เลือกระบบ
   - จับ run
     - [ ] Executing API
   - แสดงผล
 - Save file name and ibm key into file
-- [ ] Export
+- Export
   - PNG
   - QASM
-- [ ] Introduction Modal
+- [ ] Introduction Modal [[MUMU]]
 
 # IF CAN DO WELL GOOD
 - [ ] Check editor mouse cursors
