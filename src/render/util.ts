@@ -3,6 +3,36 @@ import {circuitData} from './data'
 
 import {trackLabelGroupElement} from '.'
 
+export const addButtonDraglistener = (btn: HTMLElement) => btn.addEventListener(
+  'dragstart',
+  (e) => {
+    const {target, dataTransfer} = e
+
+    const transfer = dataTransfer as DataTransfer
+    const elem = target as HTMLElement
+
+    const {
+      dataset: {
+        gateid = ''
+      }
+    } = elem
+
+    // move cursor to the center of drag body
+    transfer.setDragImage(
+      elem,
+      window.devicePixelRatio * (elem.offsetWidth / 2),
+      window.devicePixelRatio * (elem.offsetHeight / 2)
+    )
+
+    // because Chrome doesn't allow reading data on other drag events
+    // except drop. to circumvent the issue, we attach data as a type instead.
+    // it can be seen from every event.
+    transfer.setData(gateid, '')
+
+    transfer.effectAllowed = 'copy'
+  }
+)
+
 export const rangeOverlaps = (left: NumberRange, right: NumberRange) => Math.max(left.lower, right.lower) <= Math.min(left.upper, right.upper)
 
 export {deepClone} from '../util'
