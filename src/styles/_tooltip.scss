@@ -22,5 +22,12 @@
 		transition: all 0s !important;
 	}
 
+	// white-space: nowrap;
+	line-height: 1.5;
+	max-width: 300px;
+}
+
+#tooltip > strong {
 	white-space: nowrap;
+	font-size: 0.9rem;
 }

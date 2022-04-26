@@ -13,7 +13,7 @@
         <select v-model="build_method">
           <option :value="0">Rotation</option>
           <option :value="1">Matrix</option>
-          <option :value="2">Circuit/Gates</option>
+          <!-- <option :value="2">Circuit/Gates</option> -->
         </select>
       </div>
     </div>

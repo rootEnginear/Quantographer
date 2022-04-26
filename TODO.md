@@ -16,8 +16,10 @@
   - ส่งวงจรไปหลัง
     - Detect Circuit Change and update code
   - หลังเอาไปคิดและส่งแนะนำระบบมา
+    - [ ] Suggestion API
   - user เลือกระบบ
   - จับ run
+    - [ ] Executing API
   - แสดงผล
 - Save file name and ibm key into file
 - [ ] Export

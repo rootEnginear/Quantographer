@@ -4,9 +4,8 @@ const toolbar_gates = [...document.querySelectorAll<HTMLElement>('[data-tooltip]
 const tooltip = document.querySelector<HTMLElement>('#tooltip')
 
 const getTooltipContent = (title: string, description: string) => {
-  // if (!title) return `<b>${description}<b>`
-  if (!title) return description
-  return `<b>${title}</b><br>${description}`
+  if (!title) return `<strong>${description}<strong>`
+  return `<strong>${title}</strong><br>${description}`
 }
 
 const updateTooltip = (target: HTMLElement | { getBoundingClientRect: () => any }) => {

@@ -89,7 +89,7 @@
       <button id="zoom-out-btn" class="toolbar-btn ghost" data-tooltip="Zoom Out">
         <i class="fa-solid fa-magnifying-glass-minus"></i>
       </button>
-      <div class="toolbar-separator"></div>
+      <!-- <div class="toolbar-separator"></div>
       <button class="toolbar-btn ghost" data-tooltip="Group Gates">
         <i class="fa-solid fa-object-group"></i>
       </button>
@@ -107,7 +107,7 @@
           <path d="M23 23.25V8.75H19V6.25H23V0.75H25.5V6.25H29.5V8.75H25.5V23.25H23Z"
             fill="currentColor" />
         </svg>
-      </button>
+      </button> -->
       <!-- Separator -->
       <div class="toolbar-flex"></div>
       <!-- Right -->
@@ -127,58 +127,58 @@
       </button>
       <div class="toolbar-separator"></div>
       <button class="toolbar-btn gate" draggable="true"
-        data-tooltip="Lorem ipsum dolor sit amet."
         data-tooltip-title="Z Gate"
+        data-tooltip="Transform |1⟩ to i|1⟩. But not affect |0⟩. Mathematically, this gate rotates a qubit around Z axis by 180°."
         data-gateid="z">
         Z
       </button>
       <button class="toolbar-btn gate" draggable="true"
-        data-tooltip="Lorem ipsum dolor sit amet."
         data-tooltip-title="Y Gate"
+        data-tooltip="Transform |0⟩ into i|1⟩. And transform |1⟩ to -i|0⟩. Mathematically, this gate rotates a qubit around Y axis by 180°."
         data-gateid="y">
         Y
       </button>
       <button class="toolbar-btn gate" draggable="true"
-        data-tooltip="Lorem ipsum dolor sit amet."
         data-tooltip-title="X Gate"
+        data-tooltip="Transform |0⟩ into |1⟩. And transform |1⟩ to |0⟩. Mathematically, this gate rotates a qubit around X axis by 180°."
         data-gateid="x">
         X
       </button>
       <button class="toolbar-btn gate" draggable="true"
-        data-tooltip="Lorem ipsum dolor sit amet."
         data-tooltip-title="H Gate"
+        data-tooltip="Transform |0⟩ into √½|0⟩+√½|1⟩. And transform |1⟩ to √½|0⟩-√½|1⟩. Mathematically, this gate rotates a qubit around X and Z axis by 180°."
         data-gateid="h">
         H
       </button>
       <div class="toolbar-separator"></div>
       <button class="toolbar-btn gate" draggable="true"
-        data-tooltip="Lorem ipsum dolor sit amet."
         data-tooltip-title="U3 Gate"
+        data-tooltip="Rotate a qubit with parameterized angle of theta, phi, and lambda."
         data-gateid="u3">
         U<sub>3</sub>
       </button>
       <button class="toolbar-btn gate" draggable="true"
-        data-tooltip="Lorem ipsum dolor sit amet."
         data-tooltip-title="RZ Gate"
+        data-tooltip="Rotate a qubit with parameterized angle around Z axis."
         data-gateid="rz">
         RZ
       </button>
       <button class="toolbar-btn gate" draggable="true"
-        data-tooltip="Lorem ipsum dolor sit amet."
         data-tooltip-title="RY Gate"
+        data-tooltip="Rotate a qubit with parameterized angle around Y axis."
         data-gateid="ry">
         RY
       </button>
       <button class="toolbar-btn gate" draggable="true"
-        data-tooltip="Lorem ipsum dolor sit amet."
         data-tooltip-title="RX Gate"
+        data-tooltip="Rotate a qubit with parameterized angle around X axis."
         data-gateid="rx">
         RX
       </button>
       <div class="toolbar-separator"></div>
       <button class="toolbar-btn gate" draggable="true"
-        data-tooltip="Lorem ipsum dolor sit amet."
         data-tooltip-title="Controlled-Not Gate"
+        data-tooltip="Create an X gate controlled by 1 qubit."
         data-gateid="cnot">
         <svg class="svg-icon" width="16" height="32" viewBox="0 0 16 32" fill="none"
           xmlns="http://www.w3.org/2000/svg">
@@ -192,8 +192,8 @@
         </svg>
       </button>
       <button class="toolbar-btn gate" draggable="true"
-        data-tooltip="Lorem ipsum dolor sit amet."
         data-tooltip-title="Toffoli Gate"
+        data-tooltip="Create an X gate controlled by 2 qubits."
         data-gateid="toff">
         <svg class="svg-icon" width="16" height="32" viewBox="0 0 16 32" fill="none"
           xmlns="http://www.w3.org/2000/svg">
@@ -208,8 +208,8 @@
         </svg>
       </button>
       <button class="toolbar-btn gate" draggable="true"
-        data-tooltip="Lorem ipsum dolor sit amet."
         data-tooltip-title="Swap Gate"
+        data-tooltip="Create a swap gate that swap two qubits."
         data-gateid="swap">
         <svg class="svg-icon" width="11" height="32" viewBox="0 0 11 32" fill="none"
           xmlns="http://www.w3.org/2000/svg">
@@ -226,8 +226,8 @@
         </svg>
       </button>
       <button class="toolbar-btn gate" draggable="true"
-        data-tooltip="Lorem ipsum dolor sit amet."
-        data-tooltip-title="Gate Control Modifier"
+        data-tooltip-title="Gate Qubit Control Modifier"
+        data-tooltip="Modify a gate by adding a control qubit onto it."
         data-gateid="ctrl">
         <svg class="svg-icon" width="30" height="32" viewBox="0 0 30 32" fill="none"
           xmlns="http://www.w3.org/2000/svg">
@@ -250,8 +250,8 @@
         </svg>
       </button>
       <button class="toolbar-btn gate" draggable="true"
-        data-tooltip="Lorem ipsum dolor sit amet."
-        data-tooltip-title="Gate Control Modifier"
+        data-tooltip-title="Gate Bit Control Modifier"
+        data-tooltip="Modify a gate by adding a control bit onto it."
         data-gateid="ctrlbit">
         <svg class="svg-icon" width="30" height="32" viewBox="0 0 30 32" fill="none"
           xmlns="http://www.w3.org/2000/svg">
@@ -262,13 +262,14 @@
             stroke-width="2" stroke-linecap="round" />
           <line x1="15" y1="6.66797" x2="15" y2="17.668" stroke="currentColor"
             stroke-width="2" stroke-linecap="round" />
-          <text x="15" y="32" fill="currentColor" font-size="12" text-anchor="middle">BIT</text>
+          <text x="15" y="32" fill="currentColor" font-size="12"
+            text-anchor="middle">BIT</text>
         </svg>
       </button>
       <div class="toolbar-separator"></div>
       <button class="toolbar-btn gate" draggable="true"
-        data-tooltip="Lorem ipsum dolor sit amet."
         data-tooltip-title="Measurement"
+        data-tooltip="Measure a particular qubit."
         data-gateid="measure">
         <svg class="svg-icon" width="34" height="30" viewBox="0 0 34 30" fill="none"
           xmlns="http://www.w3.org/2000/svg">
@@ -278,8 +279,8 @@
         </svg>
       </button>
       <button class="toolbar-btn gate" draggable="true"
-        data-tooltip="Lorem ipsum dolor sit amet."
         data-tooltip-title="Reset"
+        data-tooltip="Reset a particular qubit to state |0⟩."
         data-gateid="reset">
         <svg class="svg-icon" width="20" height="22" viewBox="0 0 20 22" fill="none"
           xmlns="http://www.w3.org/2000/svg">
@@ -291,8 +292,8 @@
         </svg>
       </button>
       <button class="toolbar-btn gate" draggable="true"
-        data-tooltip="Lorem ipsum dolor sit amet."
         data-tooltip-title="Barrier"
+        data-tooltip="Separate the circuit into sections. This will also prevent the transpiler to merge or optimize the gates across that separation."
         data-gateid="barrier">
         <svg class="svg-icon" width="2" height="32" viewBox="0 0 2 32" fill="none"
           xmlns="http://www.w3.org/2000/svg">
@@ -303,8 +304,8 @@
       </button>
       <div class="toolbar-separator"></div>
       <button class="toolbar-btn gate fluid"
-        data-tooltip="Lorem ipsum dolor sit amet."
         data-tooltip-title="Create New Gate"
+        data-tooltip="Create a new gate from a qubit rotation or a matrix."
         onclick="openNewGateDialog()">
         <i class="fa-solid fa-plus" style="margin-right:0.25rem"></i>New
       </button>
@@ -330,26 +331,26 @@
           </summary>
           <section>
             <button class="toolbar-btn gate" draggable="true"
-              data-tooltip="Lorem ipsum dolor sit amet."
               data-tooltip-title="Z Gate"
+              data-tooltip="Transform |1⟩ to i|1⟩. But not affect |0⟩. Mathematically, this gate rotates a qubit around Z axis by 180°."
               data-gateid="z">
               Z
             </button>
             <button class="toolbar-btn gate" draggable="true"
-              data-tooltip="Lorem ipsum dolor sit amet."
               data-tooltip-title="Y Gate"
+              data-tooltip="Transform |0⟩ into i|1⟩. And transform |1⟩ to -i|0⟩. Mathematically, this gate rotates a qubit around Y axis by 180°."
               data-gateid="y">
               Y
             </button>
             <button class="toolbar-btn gate" draggable="true"
-              data-tooltip="Lorem ipsum dolor sit amet."
               data-tooltip-title="X Gate"
+              data-tooltip="Transform |0⟩ into |1⟩. And transform |1⟩ to |0⟩. Mathematically, this gate rotates a qubit around X axis by 180°."
               data-gateid="x">
               X
             </button>
             <button class="toolbar-btn gate" draggable="true"
-              data-tooltip="Lorem ipsum dolor sit amet."
               data-tooltip-title="H Gate"
+              data-tooltip="Transform |0⟩ into √½|0⟩+√½|1⟩. And transform |1⟩ to √½|0⟩-√½|1⟩. Mathematically, this gate rotates a qubit around X and Z axis by 180°."
               data-gateid="h">
               H
             </button>
@@ -363,10 +364,9 @@
             </span>
           </summary>
           <section id="new-gate-area">
-            <button class="toolbar-btn gate fluid" draggable="true"
-              data-tooltip="Lorem ipsum dolor sit amet."
+            <button class="toolbar-btn gate fluid"
               data-tooltip-title="Create New Gate"
-              data-gateid="toff"
+              data-tooltip="Create a new gate from a qubit rotation or a matrix."
               onclick="openNewGateDialog()">
               <i class="fa-solid fa-plus" style="margin-right:0.25rem"></i>New
             </button>
@@ -381,38 +381,38 @@
           </summary>
           <section>
             <button class="toolbar-btn gate" draggable="true"
-              data-tooltip="Lorem ipsum dolor sit amet."
               data-tooltip-title="S Gate"
+              data-tooltip="Square root of Z gate, hence the name. This gate rotates a qubit around Z axis by 90°."
               data-gateid="s">
               S
             </button>
             <button class="toolbar-btn gate has-dag" draggable="true"
-              data-tooltip="Lorem ipsum dolor sit amet."
               data-tooltip-title="S† Gate"
+              data-tooltip="Conjugate Transpose of a square root of Z gate. This gate rotates a qubit around Z axis by -90°."
               data-gateid="sdg">
               S<sup>†</sup>
             </button>
             <button class="toolbar-btn gate" draggable="true"
-              data-tooltip="Lorem ipsum dolor sit amet."
               data-tooltip-title="√Y Gate"
+              data-tooltip="Rotate a qubit around Y axis by 90°."
               data-gateid="sy">
               √Y
             </button>
             <button class="toolbar-btn gate has-dag" draggable="true"
-              data-tooltip="Lorem ipsum dolor sit amet."
               data-tooltip-title="√Y† Gate"
+              data-tooltip="Conjugate Transpose of a square root of Y gate. This gate rotates a qubit around Y axis by -90°."
               data-gateid="sydg">
               √Y<sup>†</sup>
             </button>
             <button class="toolbar-btn gate" draggable="true"
-              data-tooltip="Lorem ipsum dolor sit amet."
               data-tooltip-title="√X Gate"
+              data-tooltip="Rotate a qubit around X axis by 90°."
               data-gateid="sx">
               √X
             </button>
             <button class="toolbar-btn gate has-dag" draggable="true"
-              data-tooltip="Lorem ipsum dolor sit amet."
               data-tooltip-title="√X† Gate"
+              data-tooltip="Conjugate Transpose of a square root of X gate. This gate rotates a qubit around X axis by -90°."
               data-gateid="sxdg">
               √X<sup>†</sup>
             </button>
@@ -427,38 +427,38 @@
           </summary>
           <section>
             <button class="toolbar-btn gate" draggable="true"
-              data-tooltip="Lorem ipsum dolor sit amet."
               data-tooltip-title="T Gate"
+              data-tooltip="forTh root of Z gate, hence the name. This gate rotates a qubit around Z axis by 45°."
               data-gateid="t">
               T
             </button>
             <button class="toolbar-btn gate has-dag" draggable="true"
-              data-tooltip="Lorem ipsum dolor sit amet."
               data-tooltip-title="T† Gate"
+              data-tooltip="Conjugate Transpose of a forth root of Z gate. This gate rotates a qubit around Z axis by -45°."
               data-gateid="tdg">
               T<sup>†</sup>
             </button>
             <button class="toolbar-btn gate" draggable="true"
-              data-tooltip="Lorem ipsum dolor sit amet."
               data-tooltip-title="∜Y Gate"
+              data-tooltip="Rotate a qubit around Y axis by 45°."
               data-gateid="4y">
               ∜Y
             </button>
             <button class="toolbar-btn gate has-dag" draggable="true"
-              data-tooltip="Lorem ipsum dolor sit amet."
               data-tooltip-title="∜Y† Gate"
+              data-tooltip="Conjugate Transpose of a forth root of Y gate. This gate rotates a qubit around Y axis by -45°."
               data-gateid="4ydg">
               ∜Y<sup>†</sup>
             </button>
             <button class="toolbar-btn gate" draggable="true"
-              data-tooltip="Lorem ipsum dolor sit amet."
               data-tooltip-title="∜X Gate"
+              data-tooltip="Rotate a qubit around X axis by 45°."
               data-gateid="4x">
               ∜X
             </button>
             <button class="toolbar-btn gate has-dag" draggable="true"
-              data-tooltip="Lorem ipsum dolor sit amet."
               data-tooltip-title="∜X† Gate"
+              data-tooltip="Conjugate Transpose of a forth root of X gate. This gate rotates a qubit around X axis by -45°."
               data-gateid="4xdg">
               ∜X<sup>†</sup>
             </button>
@@ -473,20 +473,20 @@
           </summary>
           <section>
             <button class="toolbar-btn gate" draggable="true"
-              data-tooltip="Lorem ipsum dolor sit amet."
               data-tooltip-title="RZ Gate"
+              data-tooltip="Rotate a qubit with parameterized angle around Z axis."
               data-gateid="rz">
               RZ
             </button>
             <button class="toolbar-btn gate" draggable="true"
-              data-tooltip="Lorem ipsum dolor sit amet."
               data-tooltip-title="RY Gate"
+              data-tooltip="Rotate a qubit with parameterized angle around Y axis."
               data-gateid="ry">
               RY
             </button>
             <button class="toolbar-btn gate" draggable="true"
-              data-tooltip="Lorem ipsum dolor sit amet."
               data-tooltip-title="RX Gate"
+              data-tooltip="Rotate a qubit with parameterized angle around X axis."
               data-gateid="rx">
               RX
             </button>
@@ -501,20 +501,20 @@
           </summary>
           <section>
             <button class="toolbar-btn gate" draggable="true"
-              data-tooltip="Lorem ipsum dolor sit amet."
               data-tooltip-title="U3 Gate"
+              data-tooltip="Rotate a qubit with parameterized angle of theta, phi, and lambda."
               data-gateid="u3">
               U<sub>3</sub>
             </button>
             <button class="toolbar-btn gate" draggable="true"
-              data-tooltip="Lorem ipsum dolor sit amet."
               data-tooltip-title="U2 Gate"
+              data-tooltip="Rotate a qubit with parameterized angle of theta, and phi."
               data-gateid="u2">
               U<sub>2</sub>
             </button>
             <button class="toolbar-btn gate" draggable="true"
-              data-tooltip="Lorem ipsum dolor sit amet."
               data-tooltip-title="U1 Gate"
+              data-tooltip="Rotate a qubit with parameterized angle of theta."
               data-gateid="u1">
               U<sub>1</sub>
             </button>
@@ -529,8 +529,8 @@
           </summary>
           <section>
             <button class="toolbar-btn gate" draggable="true"
-              data-tooltip="Lorem ipsum dolor sit amet."
               data-tooltip-title="Controlled-Not Gate"
+              data-tooltip="Create an X gate controlled by 1 qubit."
               data-gateid="cnot">
               <svg class="svg-icon" width="16" height="32" viewBox="0 0 16 32" fill="none"
                 xmlns="http://www.w3.org/2000/svg">
@@ -546,8 +546,8 @@
               </svg>
             </button>
             <button class="toolbar-btn gate" draggable="true"
-              data-tooltip="Lorem ipsum dolor sit amet."
               data-tooltip-title="Swap Gate"
+              data-tooltip="Create a swap gate that swap two qubits."
               data-gateid="swap">
               <svg class="svg-icon" width="11" height="32" viewBox="0 0 11 32" fill="none"
                 xmlns="http://www.w3.org/2000/svg">
@@ -579,8 +579,8 @@
           </summary>
           <section>
             <button class="toolbar-btn gate" draggable="true"
-              data-tooltip="Lorem ipsum dolor sit amet."
               data-tooltip-title="Toffoli Gate"
+              data-tooltip="Create an X gate controlled by 2 qubits."
               data-gateid="toff">
               <svg class="svg-icon" width="16" height="32" viewBox="0 0 16 32" fill="none"
                 xmlns="http://www.w3.org/2000/svg">
@@ -608,8 +608,8 @@
           </summary>
           <section>
             <button class="toolbar-btn gate" draggable="true"
-              data-tooltip="Lorem ipsum dolor sit amet."
-              data-tooltip-title="Gate Control Modifier"
+              data-tooltip-title="Gate Qubit Control Modifier"
+              data-tooltip="Modify a gate by adding a control qubit onto it."
               data-gateid="ctrl">
               <svg class="svg-icon" width="30" height="32" viewBox="0 0 30 32" fill="none"
                 xmlns="http://www.w3.org/2000/svg">
@@ -632,8 +632,8 @@
               </svg>
             </button>
             <button class="toolbar-btn gate" draggable="true"
-              data-tooltip="Lorem ipsum dolor sit amet."
               data-tooltip-title="Gate Bit Control Modifier"
+              data-tooltip="Modify a gate by adding a control bit onto it."
               data-gateid="ctrlbit">
               <svg class="svg-icon" width="30" height="32" viewBox="0 0 30 32" fill="none"
                 xmlns="http://www.w3.org/2000/svg">
@@ -649,8 +649,8 @@
               </svg>
             </button>
             <button class="toolbar-btn gate" draggable="true"
-              data-tooltip="Lorem ipsum dolor sit amet."
               data-tooltip-title="Measurement"
+              data-tooltip="Measure a particular qubit."
               data-gateid="measure">
               <svg class="svg-icon" width="34" height="30" viewBox="0 0 34 30" fill="none"
                 xmlns="http://www.w3.org/2000/svg">
@@ -660,8 +660,8 @@
               </svg>
             </button>
             <button class="toolbar-btn gate" draggable="true"
-              data-tooltip="Lorem ipsum dolor sit amet."
               data-tooltip-title="Reset"
+              data-tooltip="Reset a particular qubit to state |0⟩."
               data-gateid="reset">
               <svg class="svg-icon" width="20" height="22" viewBox="0 0 20 22" fill="none"
                 xmlns="http://www.w3.org/2000/svg">
@@ -673,8 +673,8 @@
               </svg>
             </button>
             <button class="toolbar-btn gate" draggable="true"
-              data-tooltip="Lorem ipsum dolor sit amet."
               data-tooltip-title="Barrier"
+              data-tooltip="Separate the circuit into sections. This will also prevent the transpiler to merge or optimize the gates across that separation."
               data-gateid="barrier">
               <svg class="svg-icon" width="2" height="32" viewBox="0 0 2 32" fill="none"
                 xmlns="http://www.w3.org/2000/svg">
