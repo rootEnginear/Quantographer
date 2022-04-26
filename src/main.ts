@@ -17,36 +17,38 @@ const accordionGroups = document.querySelectorAll('details')
 import './ui/gate_tooltip'
 import './ui/contextmenu'
 
+export const addButtonDraglistener = (btn: HTMLElement) => btn.addEventListener(
+  'dragstart',
+  (e) => {
+    const {target, dataTransfer} = e
+
+    const transfer = dataTransfer as DataTransfer
+    const elem = target as HTMLElement
+
+    const {
+      dataset: {
+        gateid = ''
+      }
+    } = elem
+
+    // move cursor to the center of drag body
+    transfer.setDragImage(
+      elem,
+      window.devicePixelRatio * (elem.offsetWidth / 2),
+      window.devicePixelRatio * (elem.offsetHeight / 2)
+    )
+
+    // because Chrome doesn't allow reading data on other drag events
+    // except drop. to circumvent the issue, we attach data as a type instead.
+    // it can be seen from every event.
+    transfer.setData(gateid, '')
+
+    transfer.effectAllowed = 'copy'
+  }
+)
+
 for (const gateButton of gateButtons)
-  gateButton.addEventListener(
-    'dragstart',
-    (e) => {
-      const {target, dataTransfer} = e
-
-      const transfer = dataTransfer as DataTransfer
-      const elem = target as HTMLElement
-
-      const {
-        dataset: {
-          gateid = ''
-        }
-      } = elem
-
-      // move cursor to the center of drag body
-      transfer.setDragImage(
-        elem,
-        window.devicePixelRatio * (elem.offsetWidth / 2),
-        window.devicePixelRatio * (elem.offsetHeight / 2)
-      )
-
-      // because Chrome doesn't allow reading data on other drag events
-      // except drop. to circumvent the issue, we attach data as a type instead.
-      // it can be seen from every event.
-      transfer.setData(gateid, '')
-
-      transfer.effectAllowed = 'copy'
-    }
-  )
+  addButtonDraglistener(gateButton)
 
 
 import './translator/index'

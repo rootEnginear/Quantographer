@@ -4,6 +4,8 @@ import {circuitData} from './data'
 import {populateOperation} from './op'
 import {deepClone, getLocationInfo, getOpSpan, opOverlaps} from './util'
 
+import {addButtonDraglistener} from '../main'
+
 export const svgNamespace = 'http://www.w3.org/2000/svg'
 
 export const workbenchElement = document.querySelector<SVGElement>('#workbench')!
@@ -824,21 +826,7 @@ const addCustomGate = (name: string, gate: CustomGateProperties) => {
 
   circuitData.customOperations[name] = gate
 
-  const userGateBtn = document.createElement('button')
-
-  userGateBtn.draggable = true
-
-  userGateBtn.classList.add('toolbar-btn')
-  userGateBtn.classList.add('gate')
-  userGateBtn.classList.add('fluid')
-  userGateBtn.classList.add('custom')
-
-  userGateBtn.dataset.gateid = 'custom:' + name
-  userGateBtn.dataset.tooltip = name + ' Gate'
-
-  userGateBtn.textContent = name
-
-  newGateArea.prepend(userGateBtn)
+  addCustomGateUI(name)
 }
 
 const addCustomGateUI = (name: string) => {
@@ -855,6 +843,8 @@ const addCustomGateUI = (name: string) => {
   userGateBtn.dataset.tooltip = name + ' Gate'
 
   userGateBtn.textContent = name
+
+  addButtonDraglistener(userGateBtn)
 
   newGateArea.prepend(userGateBtn)
 }
