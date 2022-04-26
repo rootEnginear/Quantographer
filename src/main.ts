@@ -77,6 +77,20 @@ const handlingShortcuts = (e: KeyboardEvent) => {
     window.saveFile()
   }
 
+  if (e.ctrlKey && e.key === 'a') {
+    e.stopPropagation()
+    e.preventDefault()
+    // @ts-expect-error
+    window.gateSelectAll()
+  }
+
+  if (e.key == 'Delete' || e.key == 'Backspace') {
+    e.stopPropagation()
+    e.preventDefault()
+    // @ts-expect-error
+    window.gateDeleteSelected()
+  }
+
   // if (e.key === 'F11' || e.key === 'F12' || e.key === 'F5') return 0
 
 
