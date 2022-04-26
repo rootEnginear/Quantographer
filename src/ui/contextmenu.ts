@@ -9,6 +9,15 @@ const deleteMenu = ctxmenu.querySelector<HTMLElement>('.delete')!
 const selectAllMenu = ctxmenu.querySelector<HTMLElement>('.select-all')!
 
 const gateSelectAll = () => {
+  circuitData.ops.forEach(
+    (op) => op.active = true
+  )
+  clearOps()
+  populateOps()
+  hideCtx()
+}
+
+const gateDeleteSelected = () => {
   const {ops} = circuitData
   let i = ops.length
   while (i) {
@@ -24,23 +33,14 @@ const gateSelectAll = () => {
   hideCtx()
 }
 
-const gateDeleteSelected = () => {
-  circuitData.ops.forEach(
-    (op) => op.active = true
-  )
-  clearOps()
-  populateOps()
-  hideCtx()
-}
-
 deleteMenu.addEventListener(
   'click',
-  gateSelectAll
+  gateDeleteSelected
 )
 
 selectAllMenu.addEventListener(
   'click',
-  gateDeleteSelected
+  gateSelectAll
 )
 
 Object.assign(
