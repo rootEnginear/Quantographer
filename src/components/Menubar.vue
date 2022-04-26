@@ -9,8 +9,7 @@
           :data-newcategory="!!submenu_item.newCategory"
           data-submenu-item
           tabindex="-1"
-          @click="submenu_item.onClick"
-        >{{ submenu_item.name }}</li>
+          @click="submenu_item.onClick">{{ submenu_item.name }}</li>
       </ul>
     </li>
   </ul>
@@ -97,12 +96,18 @@ const MENU_ITEMS: MenuItem[] = [
       },
       {
         name: 'Delete',
-        onClick() {}
+        newCategory: true,
+        onClick() {
+          // @ts-expect-error
+          window.gateDeleteSelected()
+        }
       },
       {
         name: 'Select all',
-        newCategory: true,
-        onClick() {}
+        onClick() {
+          // @ts-expect-error
+          window.gateSelectAll()
+        }
       },
       {
         name: 'Duplicate to left',
@@ -408,7 +413,7 @@ const initMenu = () => {
   --menu-still-open: 1;
 }
 
-.menubar-body > li {
+.menubar-body>li {
   position: relative;
 
   display: flex;
@@ -419,11 +424,11 @@ const initMenu = () => {
   transition: background 0.1s;
 }
 
-.menubar-body > li.active {
+.menubar-body>li.active {
   background: rgba(0, 0, 0, 0.1);
 }
 
-.menubar-body > li > ul {
+.menubar-body>li>ul {
   display: none;
 
   list-style: none;
@@ -433,11 +438,11 @@ const initMenu = () => {
   color: black;
 }
 
-.menubar-body.active > li.active {
+.menubar-body.active>li.active {
   // border-bottom: 1px solid rgba(0, 0, 0, 0.1);
 }
 
-.menubar-body.active > li.active > ul {
+.menubar-body.active>li.active>ul {
   position: absolute;
   z-index: 99;
 
@@ -448,11 +453,10 @@ const initMenu = () => {
   top: calc(100% + 1px);
   background: #f5f9ff;
 
-  filter: drop-shadow(0 10px 8px rgb(0 0 0 / 0.04))
-    drop-shadow(0 4px 3px rgb(0 0 0 / 0.1));
+  filter: drop-shadow(0 10px 8px rgb(0 0 0 / 0.04)) drop-shadow(0 4px 3px rgb(0 0 0 / 0.1));
 }
 
-.menubar-body > li > ul > li {
+.menubar-body>li>ul>li {
   position: relative;
   padding: 8px;
 
@@ -462,11 +466,11 @@ const initMenu = () => {
   transition: background 0.1s;
 }
 
-.menubar-body > li > ul > li.active {
+.menubar-body>li>ul>li.active {
   background: rgba(0, 0, 0, 0.1);
 }
 
-.menubar-body > li > ul > li[data-newcategory="true"] {
+.menubar-body>li>ul>li[data-newcategory="true"] {
   border-top: 1px solid #0061ff;
 }
 </style>
