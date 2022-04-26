@@ -294,6 +294,20 @@ const openExecuteDialog = () => {
     x: 'center',
     y: 'center'
   })
+  fetch('https://quantum-backend-flask.herokuapp.com/recommend', {
+    method: 'POST',
+    headers: {
+      'Content-Type': 'application/json'
+    },
+    body: JSON.stringify({
+      // @ts-expect-error
+      code: window.translateCircuit(),
+      backend: 'guadalupe'
+    })
+  }).then((r) => r.json())
+    .then((r) => {
+      console.log(r)
+    })
 }
 
 let isExportDialogOpen = false
