@@ -126,6 +126,21 @@ const MENU_ITEMS: MenuItem[] = [
       {
         name: 'Conjugate transpose',
         onClick() {}
+      },
+      {
+        name: 'Add Qubit',
+        newCategory: true,
+        onClick() {
+          // @ts-expect-error
+          window.appendNewQubit()
+        }
+      },
+      {
+        name: 'Add Bit',
+        onClick() {
+          // @ts-expect-error
+          window.appendNewBit()
+          }
       }
     ]
   },
