@@ -292,7 +292,7 @@ const openExecuteDialog = () => {
     body: JSON.stringify({
       // @ts-expect-error
       code: window.translateCircuit(),
-      backend: 'guadalupe'
+      system: 'guadalupe'
     })
   }).then((r) => r.json())
     .then((r) => {

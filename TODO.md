@@ -2,17 +2,18 @@
 - [ ] ต่อหลังบ้าน
   - วาดวงจร
     - ## Can Do
-    - [ ] Swap CX CCX Placement [[GOLF]]
+    - [ ] Add/Delete Qubits/Bits [[GOLF]]
     - [ ] Cut, Copy, Paste [[GOLF]]
     - [ ] Gate Parameter RX RY RZ [[GOLF]]
-    - [ ] Add/Delete Qubits/Bits [[GOLF]]
     - [ ] Fix font size + position [[MUMU]]
+    - [ ] Fix Global Delete
     - [ ] Gate Parameter U1 U2 U3
     - [ ] Make normal X gate X
     - [ ] Flip Horizontally
     - Select All, Delete Selected
     - Select on right click
     - Use uppercase for normal gate
+    - Swap CX CCX Placement
     - ## Need Thinking
     - [ ] Undo, Redo
     - Create Custom Gate from Rotation & Matrix
