@@ -959,8 +959,6 @@
             </div>
           </div>
         </div>
-      </div>
-      <div class="col">
         <div class="field">
           <label class="label">Layout Method</label>
           <div class="control">
@@ -981,6 +979,50 @@
             </div>
           </div>
         </div>
+      </div>
+      <div class="col">
+        <div id="waitForOptimal">
+          <div class="spinner">
+            <div class="double-bounce1"></div>
+            <div class="double-bounce2"></div>
+          </div>
+          <p style="text-align:center">
+            Finding the statistically-optimal configuration...
+          </p>
+        </div>
+        <article class="message is-info" id="gotOptimal" style="display:none">
+          <div class="message-body">
+            <h2 style="text-align:center">Optimal configuration found</h2>
+            <ul style="padding-left: 1.5rem;">
+              <li>
+                <strong style="display:inline">
+                  Optimization Level:</strong>&nbsp;
+                <span id="oplv"></span>
+              </li>
+              <li>
+                <strong style="display:inline">
+                  Routing Method:</strong>&nbsp;
+                <span id="rtmt"></span>
+              </li>
+              <li>
+                <strong style="display:inline">
+                  Layout Method:</strong>&nbsp;
+                <span id="lomt"></span>
+              </li>
+              <li>
+                <strong style="display:inline">
+                  Schedule Method:</strong>&nbsp;
+                <span id="sdmt"></span>
+              </li>
+            </ul>
+            <button class="button is-fullwidth">
+              <span class="icon is-small">
+                <i class="fa-solid fa-copy"></i>
+              </span>
+              <span>Copy configuration</span>
+            </button>
+          </div>
+        </article>
       </div>
     </div>
     <strong>Transpilation Result:</strong>

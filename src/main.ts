@@ -275,6 +275,8 @@ const openExecuteDialog = () => {
     mount: document.getElementById('execute-circuit-dialog') as Node,
     onclose: () => {
       isExecuteDialogOpen = false
+      document.getElementById('waitForOptimal')!.style.display = ''
+      document.getElementById('gotOptimal')!.style.display = 'none'
       return false
     },
     width: 750,
@@ -294,7 +296,13 @@ const openExecuteDialog = () => {
     })
   }).then((r) => r.json())
     .then((r) => {
-      console.log(r)
+      console.log(r[0])
+      document.getElementById('waitForOptimal')!.style.display = 'none'
+      document.getElementById('gotOptimal')!.style.display = ''
+      document.getElementById('oplv')!.textContent = r[0].optlvl
+      document.getElementById('rtmt')!.textContent = r[0].routing
+      document.getElementById('lomt')!.textContent = r[0].layout
+      document.getElementById('sdmt')!.textContent = 'None'
     })
 }
 
