@@ -8,34 +8,46 @@ const ctxmenu = document.querySelector<HTMLElement>('#contextmenu')!
 const deleteMenu = ctxmenu.querySelector<HTMLElement>('.delete')!
 const selectAllMenu = ctxmenu.querySelector<HTMLElement>('.select-all')!
 
+const gateSelectAll = () => {
+  const {ops} = circuitData
+  let i = ops.length
+  while (i) {
+    i -= 1
+    if (ops[i].active)
+      ops.splice(i, 1)
+  }
+  // @ts-expect-error
+  window.updateCodeOutput?.()
+  clearOps()
+  populateOps()
+  adjustWorkbenchSize()
+  hideCtx()
+}
+
+const gateDeleteSelected = () => {
+  circuitData.ops.forEach(
+    (op) => op.active = true
+  )
+  clearOps()
+  populateOps()
+  hideCtx()
+}
+
 deleteMenu.addEventListener(
   'click',
-  () => {
-    const {ops} = circuitData
-    let i = ops.length
-    while (i) {
-      i -= 1
-      if (ops[i].active)
-        ops.splice(i, 1)
-    }
-    // @ts-expect-error
-    window.updateCodeOutput?.()
-    clearOps()
-    populateOps()
-    adjustWorkbenchSize()
-    hideCtx()
-  }
+  gateSelectAll
 )
 
 selectAllMenu.addEventListener(
   'click',
-  () => {
-    circuitData.ops.forEach(
-      (op) => op.active = true
-    )
-    clearOps()
-    populateOps()
-    hideCtx()
+  gateDeleteSelected
+)
+
+Object.assign(
+  window,
+  {
+    gateSelectAll,
+    gateDeleteSelected
   }
 )
 
