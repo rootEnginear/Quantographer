@@ -2,9 +2,7 @@ import {renderConfig} from './config'
 import {circuitData} from './data'
 
 import {populateOperation} from './op'
-import {deepClone, getLocationInfo, getOpSpan, opOverlaps} from './util'
-
-import {addButtonDraglistener} from '../main'
+import {addButtonDraglistener, deepClone, getLocationInfo, getOpSpan, opOverlaps} from './util'
 
 export const svgNamespace = 'http://www.w3.org/2000/svg'
 
@@ -820,15 +818,6 @@ const saveFileDialog = (fileName: string, data: string) => {
   URL.revokeObjectURL(urlData)
 }
 
-const addCustomGate = (name: string, gate: CustomGateProperties) => {
-  if (name in circuitData.customOperations)
-    throw new Error('duplicate name')
-
-  circuitData.customOperations[name] = gate
-
-  addCustomGateUI(name)
-}
-
 const addCustomGateUI = (name: string) => {
   const userGateBtn = document.createElement('button')
 
@@ -847,6 +836,15 @@ const addCustomGateUI = (name: string) => {
   addButtonDraglistener(userGateBtn)
 
   newGateArea.prepend(userGateBtn)
+}
+
+const addCustomGate = (name: string, gate: CustomGateProperties) => {
+  if (name in circuitData.customOperations)
+    throw new Error('duplicate name')
+
+  circuitData.customOperations[name] = gate
+
+  addCustomGateUI(name)
 }
 
 const addCustomGatesUI = () => {
