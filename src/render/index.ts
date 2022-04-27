@@ -611,7 +611,7 @@ const constructOperation = (type: OperationTypes, qubit: number, step: number): 
       controlBits: [],
 
       assignBit: {
-        index: 0,
+        index: Math.max(qubit, circuitData.bits.length),
         bit: 0
       }
     }
