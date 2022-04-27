@@ -478,6 +478,9 @@ workbenchElement.addEventListener(
           opToAdd.controlQubits.push(ctrlIndex)
           clearOps()
           populateOps()
+
+          // @ts-expect-error
+          window.updateCodeOutput?.()
           break
         }
       }
@@ -521,6 +524,8 @@ workbenchElement.addEventListener(
           opToAdd.controlBits.push(addedControl)
           clearOps()
           populateOps()
+          // @ts-expect-error
+          window.updateCodeOutput?.()
           break
         }
       }
@@ -1030,6 +1035,8 @@ const appendNewQubit = () => {
 
   populateTrack()
   populateOps()
+  // @ts-expect-error
+  window.updateCodeOutput?.()
 
   adjustWorkbenchSize()
 }
@@ -1055,6 +1062,8 @@ const appendNewBit = () => {
 
   populateTrack()
   populateOps()
+  // @ts-expect-error
+  window.updateCodeOutput?.()
 
   adjustWorkbenchSize()
 }
