@@ -77,10 +77,10 @@ export const populateTrack = () => {
 
   // draw qubit track and label
   qubits.forEach(
-    (item, i) => {
+    (item, qubitIndex) => {
       const {name} = item
 
-      const startY = qubitLaneHeight * i + halfQubitLaneHeight
+      const startY = qubitLaneHeight * qubitIndex + halfQubitLaneHeight
 
       const labelElement = document.createElementNS(svgNamespace, 'text')
 
@@ -133,64 +133,89 @@ export const populateTrack = () => {
         (e) => {
           e.stopPropagation()
           if (e.buttons !== 4) return
+
+          const customOpsWidth = (name: string) => {
+            const prop = circuitData.customOperations[name]
+            return prop.type === 'rotation' ? 1 : prop.qubitCount
+          }
+          const doDel = () => {
+            const {ops} = circuitData
+            let opIndex = ops.length
+            while (opIndex) {
+              opIndex -= 1
+              const op = ops[opIndex]
+              if (
+                op.qubit === qubitIndex ||
+                'controlQubits' in op && op.controlQubits.includes(qubitIndex) ||
+                op.type === 'custom' && qubitIndex >= op.qubit && qubitIndex < op.qubit + customOpsWidth(op.template) ||
+                op.type === 'barrier' && qubitIndex >= op.qubit && qubitIndex <= op.qubit + op.qubitSpan ||
+                op.type === 'swap' && qubitIndex == op.targetQubit
+              )
+                ops.splice(opIndex, 1)
+            }
+            ops.forEach(
+              (op) => {
+                if (op.qubit > qubitIndex) {
+                  op.qubit -= 1
+                  if ('controlQubits' in op) {
+                    const newC: number[] = []
+                    op.controlQubits.forEach(
+                      (ii) => {
+                        if (ii > qubitIndex)
+                          newC.push(ii - 1)
+                        else
+                          newC.push(ii)
+                      }
+                    )
+                    op.controlQubits.splice(0, op.controlQubits.length, ...newC)
+                  }
+                }
+              }
+            )
+
+            qubits.splice(qubitIndex, 1)
+
+            // @ts-expect-error
+            window.updateCodeOutput?.()
+
+            clearOps()
+            clearTrack()
+
+            populateTrack()
+            populateOps()
+
+            adjustWorkbenchSize()
+          }
+
+          const anyUsed = () => {
+            const {ops} = circuitData
+            let opIndex = ops.length
+            while (opIndex) {
+              opIndex -= 1
+              const op = ops[opIndex]
+              if (
+                op.qubit === qubitIndex ||
+                'controlQubits' in op && op.controlQubits.includes(qubitIndex) ||
+                op.type === 'custom' && qubitIndex >= op.qubit && qubitIndex < op.qubit + customOpsWidth(op.template) ||
+                op.type === 'barrier' && qubitIndex >= op.qubit && qubitIndex <= op.qubit + op.qubitSpan ||
+                op.type === 'swap' && qubitIndex == op.targetQubit
+              )
+                return true
+            }
+            return false
+          }
+
+          console.log(qubitIndex, anyUsed())
+
+          if (!anyUsed())
+            return doDel()
+
           // @ts-expect-error
           window.alertify.confirm(
             'Quantographer',
             'Are you sure to delete this qubit?',
 
-            () => {
-              const customOpsWidth = (name: string) => {
-                const prop = circuitData.customOperations[name]
-                return prop.type === 'rotation' ? 1 : prop.qubitCount
-              }
-
-              const {ops} = circuitData
-              let opIndex = ops.length
-              while (opIndex) {
-                opIndex -= 1
-                const op = ops[opIndex]
-                if (
-                  op.qubit === i ||
-                  'controlQubits' in op && op.controlQubits.includes(i) ||
-                  op.type === 'custom' && i >= op.qubit && i <= op.qubit + customOpsWidth(op.template) ||
-                  op.type === 'barrier' && i >= op.qubit && i <= op.qubit + op.qubitSpan ||
-                  op.type === 'swap' && i == op.targetQubit
-                )
-                  ops.splice(opIndex, 1)
-              }
-              ops.forEach(
-                (op) => {
-                  if (op.qubit > i) {
-                    op.qubit -= 1
-                    if ('controlQubits' in op) {
-                      const newC: number[] = []
-                      op.controlQubits.forEach(
-                        (ii) => {
-                          if (ii > i)
-                            newC.push(ii - 1)
-                          else
-                            newC.push(ii)
-                        }
-                      )
-                      op.controlQubits.splice(0, op.controlQubits.length, ...newC)
-                    }
-                  }
-                }
-              )
-
-              qubits.splice(i, 1)
-
-              // @ts-expect-error
-              window.updateCodeOutput?.()
-
-              clearOps()
-              clearTrack()
-
-              populateTrack()
-              populateOps()
-
-              adjustWorkbenchSize()
-            },
+            doDel,
             () => {}
           )
         }
@@ -270,49 +295,71 @@ export const populateTrack = () => {
         (e) => {
           e.stopPropagation()
           if (e.buttons !== 4) return
+
+          const anyUsed = () => {
+            const {ops} = circuitData
+            let opIndex = ops.length
+            while (opIndex) {
+              opIndex -= 1
+              const op = ops[opIndex]
+              if (
+                'controlBits' in op && op.controlBits.some(
+                  (b) => b.index == i
+                )
+              )
+                return true
+            }
+            return false
+          }
+
+          const doDel = () => {
+            const {ops} = circuitData
+            let opIndex = ops.length
+            while (opIndex) {
+              opIndex -= 1
+              const op = ops[opIndex]
+              if (
+                'controlBits' in op && op.controlBits.some(
+                  (b) => b.index == i
+                )
+              )
+                ops.splice(opIndex, 1)
+            }
+            ops.forEach(
+              (op) => {
+                if ('controlBits' in op)
+                  op.controlBits.forEach(
+                    (e) => {
+                      if (e.index > i)
+                        e.index -= 1
+                    }
+                  )
+              }
+            )
+
+            bits.splice(i, 1)
+
+            // @ts-expect-error
+            window.updateCodeOutput?.()
+
+            clearOps()
+            clearTrack()
+
+            populateTrack()
+            populateOps()
+
+            adjustWorkbenchSize()
+          }
+
+          if (!anyUsed())
+            return doDel()
+
           // @ts-expect-error
           window.alertify.confirm(
             'Quantographer',
             'Are you sure to delete this bit?',
 
-            () => {
-              const {ops} = circuitData
-              let opIndex = ops.length
-              while (opIndex) {
-                opIndex -= 1
-                const op = ops[opIndex]
-                if (
-                  'controlBits' in op && op.controlBits.some(
-                    (b) => b.index == i
-                  )
-                )
-                  ops.splice(opIndex, 1)
-              }
-              ops.forEach(
-                (op) => {
-                  if ('controlBits' in op)
-                    op.controlBits.forEach(
-                      (e) => {
-                        if (e.index > i)
-                          e.index -= 1
-                      }
-                    )
-                }
-              )
-
-              bits.splice(i, 1)
-
-              // @ts-expect-error
-              window.updateCodeOutput?.()
-
-              clearOps()
-              clearTrack()
-
-              populateTrack()
-              populateOps()
-
-              adjustWorkbenchSize()
-            },
+            doDel,
             () => {}
           )
         }
