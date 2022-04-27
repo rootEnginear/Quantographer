@@ -176,6 +176,9 @@ export const populateOperation = (op: Operation, opIndex: number) => {
                 // create updated varsion
                 populateOperation(op, opIndex)
 
+                // @ts-expect-error
+                window.updateCodeOutput?.()
+
                 return
               }
 
@@ -330,6 +333,9 @@ export const populateOperation = (op: Operation, opIndex: number) => {
 
                 // create updated varsion
                 populateOperation(op, opIndex)
+
+                // @ts-expect-error
+                window.updateCodeOutput?.()
 
                 return
               }
