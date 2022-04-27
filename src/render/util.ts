@@ -61,15 +61,15 @@ export const addButtonDraglistener = (btn: HTMLElement) => {
             if (op.type === 'custom' && op.template === customId)
               ops.splice(i, 1)
           }
-
-          // @ts-expect-error
-          window.updateCodeOutput?.()
           clearOps()
           populateOps()
           adjustWorkbenchSize()
 
-          delete circuitData.customOperations[gateid]
+          delete circuitData.customOperations[customId]
           elem.remove()
+
+          // @ts-expect-error
+          window.updateCodeOutput?.()
         },
         () => {}
       )
@@ -106,7 +106,7 @@ export const getLocationInfo = (x: number, y: number): LocationInfo => {
   let laneType: LocationInfo['laneType'] = 'head'
   let bitType: LocationInfo['bitType'] = 'qubit'
 
-  if (x > labelsWidth) {
+  if (x > labelsWidth + headerPadding) {
     x -= labelsWidth + headerPadding
 
     laneType = 'op'

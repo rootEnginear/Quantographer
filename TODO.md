@@ -11,22 +11,30 @@
     - Add Qubits/Bits
     - Delete Qubits/Bits
     - Fix Global Delete
-    - ## Can Do
-    - [ ] Cut, Copy, Paste [[GOLF]]
+    - Check why blue expand to q0 q1
+    - ## To do
     - [ ] Gate Parameter RX RY RZ [[GOLF]]
+    - [ ] Cut, Copy, Paste [[GOLF]]
+    - [ ] Accept `i` and `e` in matrix [[MUMU]]
+    - ## Good To Have
     - [ ] Gate Parameter U1 U2 U3
     - [ ] Make normal X gate X
     - [ ] Flip Horizontally, Duplicate to Right, Duplicate to Left
-    - [ ] Check why blue expand to q0 q1
-    - ## Need Thinking
     - [ ] Undo, Redo
     - [ ] Create Gate from Circuit
   - ส่งวงจรไปหลัง
     - Detect Circuit Change and update code
   - หลังเอาไปคิดและส่งแนะนำระบบมา
-    - [ ] System List API
-    - Suggestion API
-    - Transpiled Circuit
+    - ~~System List API~~
+    - ~~Suggestion API~~
+    - ~~Transpiled Circuit~~
+    - [ ] When execute, call an API to
+      1. Get all backends (Frontend will wait)
+      2. Try on all backends
+      3. Send back
+        1. System List
+        2. Best Config
+        3. Drawn Circuit
   - user เลือกระบบ
   - จับ run
     - [ ] Executing API
