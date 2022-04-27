@@ -920,6 +920,68 @@ const chooseAndLoadFile = () => {
   f.click()
 }
 
+const reallyResetProgram = () => {
+  Object.assign(
+    circuitData,
+    {
+      metadata: {
+        name: 'Untitled',
+        key: ''
+      },
+      qubits: [
+        {name: '0'},
+        {name: '1'},
+        {name: '2'}
+      ],
+      bits: [
+        {
+          name: '0',
+          size: 1
+        },
+        {
+          name: '1',
+          size: 1
+        },
+        {
+          name: '2',
+          size: 1
+        }
+      ],
+      ops: [],
+      customOperations: {}
+    }
+  )
+
+  // @ts-expect-error
+  window.updateCodeOutput()
+
+  updateNameInDom()
+  updateApiInDom()
+
+  clearOps()
+  clearTrack()
+
+  populateTrack()
+  populateOps()
+
+  adjustWorkbenchSize()
+
+  const userGates = newGateArea.querySelectorAll('.custom')
+  userGates.forEach(
+    (el) => el.remove()
+  )
+}
+
+const resetProgram = () => {
+  // @ts-expect-error
+  window.alertify.confirm(
+    'Quantographer',
+    'Are you sure?',
+    reallyResetProgram,
+    () => {}
+  )
+}
+
 const loadCircuit = (data: string) => {
   const loadedCircuitData = JSON.parse(data) as Circuit
   Object.assign(
@@ -1084,6 +1146,7 @@ addCustomGatesUI()
 Object.assign(
   window,
   {
+    resetProgram,
     chooseAndLoadFile,
     saveFile,
     addCustomGate,
