@@ -12,9 +12,9 @@
     - Delete Qubits/Bits
     - Fix Global Delete
     - Check why blue expand to q0 q1
+    - Cut, Copy, Paste
     - ## To do
     - [ ] Gate Parameter RX RY RZ [[GOLF]]
-    - [ ] Cut, Copy, Paste [[GOLF]]
     - [ ] Accept `i` and `e` in matrix [[MUMU]]
     - ## Good To Have
     - [ ] Gate Parameter U1 U2 U3
@@ -43,6 +43,7 @@
 - Export
   - PNG
   - QASM
+  - [ ] Save output
 - Introduction Modal
 
 # IF CAN DO WELL GOOD

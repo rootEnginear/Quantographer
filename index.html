@@ -22,7 +22,7 @@
     <!-- Menubar -->
     <div class="menubar">
       <div class="left">
-        <!-- TODO: ADD LOGO LOL -->
+        <img src="logo.png" alt="">
       </div>
       <!-- <div id="menu" class="left"></div> -->
       <div class="center">
@@ -63,7 +63,8 @@
       <button class="toolbar-btn ghost" data-tooltip="Copy" onclick="gateCopySelected()">
         <i class="fa-solid fa-copy"></i>
       </button>
-      <button class="toolbar-btn ghost" data-tooltip="Paste" onclick="gatePasteClipboard()">
+      <button class="toolbar-btn ghost" data-tooltip="Paste"
+        onclick="gatePasteClipboard()">
         <i class="fa-solid fa-paste"></i>
       </button>
       <button class="toolbar-btn ghost" data-tooltip="Delete"
@@ -1080,7 +1081,11 @@
   <div id="new-gate-dialog" class="common-dialog"></div>
 
   <div id="introduction-dialog" class="common-dialog">
-    <h1>Quantographer</h1>
+    <h1 style="display:flex;align-items:center;gap:.5rem;margin-top:1rem">
+      <img src="logo.png" alt="" width="1em" height="1em"
+        style="width:1em;height:1em;">
+      Quantographer
+    </h1>
     <hr>
     <div class="row" style="margin:1rem 0">
       <div class="col" style="align-self:flex-start">
