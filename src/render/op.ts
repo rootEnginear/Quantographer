@@ -1262,7 +1262,7 @@ export const populateOperation = (op: Operation, opIndex: number) => {
   } else {
     let mainElement
 
-    if (type in opSymbolMapping) {
+    if (type in opSymbolMapping && !(type === 'x' && !op.controlQubits.length)) {
       const startX = centerX - halfGateSize
       const startY = centerY - halfGateSize
 
