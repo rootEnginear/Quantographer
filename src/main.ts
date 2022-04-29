@@ -361,7 +361,7 @@ const openExportDialog = () => {
   isExportDialogOpen = true
 
   // @ts-expect-error
-  exportDialogCompile()
+  initExportDialog()
 
   new window.WinBox({
     title: 'Export',

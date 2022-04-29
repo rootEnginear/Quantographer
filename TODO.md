@@ -43,7 +43,7 @@
 - Export
   - PNG
   - QASM
-  - [ ] Save output
+  - Save output
 - Introduction Modal
 
 # IF CAN DO WELL GOOD
