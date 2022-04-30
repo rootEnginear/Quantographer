@@ -28,6 +28,7 @@ export const addButtonDraglistener = (btn: HTMLElement) => {
       // except drop. to circumvent the issue, we attach data as a type instead.
       // it can be seen from every event.
       transfer.setData(gateid, '')
+      transfer.setData('text/plain', gateid)
 
       transfer.effectAllowed = 'copy'
     }

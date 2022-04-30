@@ -482,11 +482,7 @@ workbenchElement.addEventListener(
     const {dataTransfer} = e
     const transfer = dataTransfer as DataTransfer
 
-    const {
-      items: [
-        {type: gateid}
-      ]
-    } = transfer
+    const gateid = transfer.getData('text/plain')
 
     const loc = getLocationInfo(e.offsetX, e.offsetY)
     switch (gateid) {
