@@ -15,6 +15,13 @@
 	> .left {
 		flex: 1 1 0;
 		display: flex;
+
+		> img {
+			margin: 8px 12px;
+			display: block;
+			width: auto;
+			height: 32px;
+		}
 	}
 
 	> .center {

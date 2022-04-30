@@ -12,13 +12,13 @@
     - Delete Qubits/Bits
     - Fix Global Delete
     - Check why blue expand to q0 q1
+    - Cut, Copy, Paste
+    - Make normal X gate X
+    - Accept `i` and `e` in matrix
     - ## To do
     - [ ] Gate Parameter RX RY RZ [[GOLF]]
-    - [ ] Cut, Copy, Paste [[GOLF]]
-    - [ ] Accept `i` and `e` in matrix [[MUMU]]
     - ## Good To Have
     - [ ] Gate Parameter U1 U2 U3
-    - [ ] Make normal X gate X
     - [ ] Flip Horizontally, Duplicate to Right, Duplicate to Left
     - [ ] Undo, Redo
     - [ ] Create Gate from Circuit
@@ -43,6 +43,7 @@
 - Export
   - PNG
   - QASM
+  - Save output
 - Introduction Modal
 
 # IF CAN DO WELL GOOD

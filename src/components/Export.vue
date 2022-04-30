@@ -11,32 +11,51 @@
     </div>
   </div>
 
-  <div class="row">
-    <div class="col">
-      <strong>Output:</strong>
+  <template v-if="fetching === 'FETCHING'">
+    <div class="spinner" style="width:27%">
+      <div class="double-bounce1"></div>
+      <div class="double-bounce2"></div>
     </div>
-    <div v-if="selectedType === 'qasm'">
-      <a class="button is-ghost is-small" @click="copyCode">
-        <span>{{ copyText }}</span>
-        <span class="icon is-small">
-          <i class="fa-solid fa-copy"></i>
-        </span>
-      </a>
+    <h1 style="text-align:center">Exporting...</h1>
+  </template>
+  <template v-else-if="fetching === 'ERROR'">
+    <article class="message is-danger">
+      <div class="message-body">
+        <h1>An error occured!</h1>
+        <p>Error: {{ result }}</p>
+      </div>
+    </article>
+  </template>
+  <template v-else>
+    <div class="row">
+      <div class="col">
+        <strong>Output:</strong>
+      </div>
+      <div v-if="displayType === 'text'">
+        <a class="button is-ghost is-small" @click="copyCode">
+          <span>{{ copyText }}</span>
+          <span class="icon is-small">
+            <i class="fa-solid fa-copy"></i>
+          </span>
+        </a>
+      </div>
     </div>
-  </div>
 
-  <textarea class="textarea" rows="10" v-if="selectedType === 'qasm'"
-    v-model="currentCode"></textarea>
+    <textarea class="textarea" rows="10" v-if="displayType === 'text'"
+      v-model="result"></textarea>
 
-  <div class="image_display" v-if="selectedType === 'png'">
-    <img v-bind:src="currentImg">
-  </div>
+    <div class="image_display" v-if="displayType === 'img'">
+      <img v-bind:src="result">
+    </div>
+  </template>
+
 
   <div class="space"></div>
   <div class="separator"></div>
   <div class="row">
     <div class="col"></div>
-    <button class="button is-primary is-small">
+    <button class="button is-primary is-small" @click="saveData"
+      :disabled="fetching !== 'IDLE'">
       <span class="icon is-small">
         <i class="fa-solid fa-file-export"></i>
       </span>
@@ -48,72 +67,70 @@
 </template>
 
 <script setup lang="ts">
-import { ref, watch } from 'vue'
+import { ref, watch, computed } from 'vue'
 
-const selectedType = ref("qasm")
+const selectedType = ref<"qasm" | "png">("qasm")
 const copyText = ref("Copy")
 
-const currentCode = ref(`qreg = QuantumRegister(3)
-creg = ClassicalRegister(3)
-circuit = QuantumCircuit(qreg, creg)
+const fileType = computed(() => {
+  return {
+    "qasm": { ext: "qasm", mime: "text/plain" },
+    "png": { ext: "png", mime: "image/png" }
+  }[selectedType.value]
+})
+const displayType = computed(() => {
+  return {
+    "qasm": "text",
+    "png": "img"
+  }[selectedType.value]
+})
 
-circuit.h(qreg)
-circuit.cz(0,2)
-circuit.cz(0,1)
-circuit.h(qreg)
-circuit.x(qreg)
-circuit.h(0)
-circuit.ccx(2,1,0)
-circuit.h(0)
-circuit.x(qreg)
-circuit.h(qreg)
-circuit.h(qreg)
-circuit.x(qreg)
-circuit.h(0)
-circuit.ccx(2,1,0)
-circuit.h(0)
-circuit.x(qreg)
-circuit.h(qreg)
-circuit.measure(qreg, creg)
+const fetching = ref<'IDLE' | 'FETCHING' | 'ERROR'>('FETCHING')
+const result = ref(``)
 
-circuit.draw(output='mpl')`)
-
-const currentImg = ref('circuit.png')
-
-const exportDialogCompile = () => {
+const exportDialogCompile = async () => {
+  fetching.value = 'FETCHING'
   switch (selectedType.value) {
     case "qasm":
-      fetch("https://quantum-backend-flask.herokuapp.com/qasm", {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json"
-        },
-        body: JSON.stringify({
-          // @ts-expect-error
-          "code": window.translateCircuit()
-        }),
-      })
-        .then(r => r.json())
-        .then(r => {
-          currentCode.value = r.code
+      try {
+        const resp = await fetch("https://quantum-backend-flask.herokuapp.com/qasm", {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json"
+          },
+          body: JSON.stringify({
+            // @ts-expect-error
+            "code": window.translateCircuit()
+          }),
         })
-        .catch(
-          () => currentCode.value = '// cannot convert given Qiskit code into QASM2'
-        )
+        const data = await resp.json()
+        if (data.error) throw new Error(data.error)
+        result.value = data.code
+        fetching.value = 'IDLE'
+      } catch (e) {
+        result.value = (e as Error)?.message ?? "Some error happened"
+        fetching.value = 'ERROR'
+      }
       break
     case "png":
-      fetch("https://quantum-backend-flask.herokuapp.com/qiskit_draw", {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json"
-        },
-        body: JSON.stringify({
-          // @ts-expect-error
-          "code": window.translateCircuit()
-        }),
-      }).then(r => r.json()).then(r => {
-        currentImg.value = r.pic
-      })
+      try {
+        const resp = await fetch("https://quantum-backend-flask.herokuapp.com/qiskit_draw", {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json"
+          },
+          body: JSON.stringify({
+            // @ts-expect-error
+            "code": window.translateCircuit()
+          }),
+        })
+        const data = await resp.json()
+        result.value = data.pic
+        fetching.value = 'IDLE'
+      } catch (e) {
+        result.value = (e as Error)?.message ?? "Some error happened"
+        fetching.value = 'ERROR'
+      }
       break
   }
 }
@@ -123,17 +140,52 @@ watch(selectedType, () => {
 })
 
 const copyCode = () => {
-  navigator.clipboard.writeText(currentCode.value)
+  navigator.clipboard.writeText(result.value)
   copyText.value = "Copied!"
   setTimeout(() => {
     copyText.value = "Copy"
   }, 1000)
 }
 
+const initExportDialog = () => {
+  selectedType.value = "qasm"
+  fetching.value = 'FETCHING'
+  result.value = ``
+  exportDialogCompile()
+}
+
 Object.assign(
   window,
-  { exportDialogCompile }
+  { initExportDialog }
 )
+
+const saveData = () => {
+  let urlData = null
+
+  if (displayType.value === 'img') {
+    urlData = result.value
+  } else {
+    const blobData = new Blob(
+      [result.value],
+      { type: fileType.value.mime }
+    )
+
+    urlData = URL.createObjectURL(blobData)
+  }
+
+  console.log("🚀 ~ file: Export.vue ~ line 174 ~ saveData ~ urlData", urlData)
+  const linkElement = document.createElement('a')
+
+  linkElement.href = urlData
+  // @ts-expect-error
+  linkElement.download = `${window.getFileName()}.${fileType.value.ext}`
+
+  linkElement.click()
+
+  if (displayType.value !== 'img') {
+    URL.revokeObjectURL(urlData)
+  }
+}
 </script>
 
 <style scoped lang="scss">

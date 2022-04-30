@@ -361,7 +361,7 @@ const openExportDialog = () => {
   isExportDialogOpen = true
 
   // @ts-expect-error
-  exportDialogCompile()
+  initExportDialog()
 
   new window.WinBox({
     title: 'Export',
@@ -383,6 +383,8 @@ let isNewGateDialogOpen = false
 const openNewGateDialog = () => {
   if (isNewGateDialogOpen) return
   isNewGateDialogOpen = true
+  // @ts-expect-error
+  initNewGateDialog()
   newGateDialogInstance = new window.WinBox({
     title: 'New Gate',
     border: 4,
@@ -476,7 +478,7 @@ if (!localStorage.getItem('quantoHideIntroduction'))
     mount: document.getElementById('introduction-dialog') as Node,
     onclose: () => false,
     width: 750,
-    height: 350,
+    height: 340,
     x: 'center',
     y: 'center'
   })

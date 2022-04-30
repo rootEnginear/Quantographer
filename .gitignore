@@ -146,3 +146,5 @@ dist
 dist-ssr
 *.local
 .vscode
+
+local/

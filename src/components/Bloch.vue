@@ -161,7 +161,7 @@ onMounted(() => {
 })
 
 onUnmounted(() => {
-  console.log('unmounted')
+  // console.log('unmounted')
   update = false
 })
 </script>

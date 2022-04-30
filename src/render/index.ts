@@ -482,11 +482,7 @@ workbenchElement.addEventListener(
     const {dataTransfer} = e
     const transfer = dataTransfer as DataTransfer
 
-    const {
-      items: [
-        {type: gateid}
-      ]
-    } = transfer
+    const gateid = transfer.getData('text/plain')
 
     const loc = getLocationInfo(e.offsetX, e.offsetY)
     switch (gateid) {
@@ -1106,6 +1102,9 @@ const addCustomGate = (name: string, gate: CustomGateProperties) => {
     throw new Error('duplicate name')
 
   circuitData.customOperations[name] = gate
+
+  // @ts-expect-error
+  window.updateCodeOutput()
 
   addCustomGateUI(name)
 }

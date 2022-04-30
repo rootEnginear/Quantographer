@@ -2,10 +2,10 @@
   <div class="field">
     <label class="label">Gate Name</label>
     <div class="control">
-      <input v-model="gate_name" class="input" type="text" placeholder="anAwesomeGate" />
+      <input v-model="gate_name" class="input" type="text" placeholder="mygate" />
     </div>
     <p class="help">
-      The name must be in lowercase or uppercase letters without any spaces.
+      The name must be only in lowercase letters without any spaces.
     </p>
   </div>
   <div class="field">
@@ -96,9 +96,13 @@
         v-for="(_, i) in mat_data.value"
         :key="i"
         type="text"
-        v-model.number="mat_data.value[i]"
+        v-model="mat_data.value[i]"
         class="input is-small" />
     </div>
+    <p style="font-size:0.8em">
+      You can use <code>i</code> as an imaginary part of a complex number. For example:
+      <code>3+2i</code>
+    </p>
   </section>
   <!-- CIRCUIT/GATES -->
   <section v-if="build_method === 2">
@@ -123,55 +127,82 @@ import { ref, reactive, watch } from 'vue'
 import Bloch from './Bloch.vue'
 
 const build_method = ref(0)
-const gate_name = ref(null)
+const gate_name = ref('')
 
 const rot_theta = ref(0)
 const rot_phi = ref(0)
 const rot_lambda = ref(0)
 
 const mat_qubits = ref(1)
-const mat_data = reactive<{ value: number[] }>({
-  value: [0, 0, 0, 0]
+const mat_data = reactive<{ value: string[] }>({
+  value: ['0', '0', '0', '0']
 })
 
 watch(mat_qubits, () => {
   if (!isNaN(+mat_qubits.value))
-    mat_data.value = new Array(((2 ** (+mat_qubits.value)) ** 2)).fill(0) as number[]
+    mat_data.value = new Array(((2 ** (+mat_qubits.value)) ** 2)).fill('0') as string[]
 })
+
+// watch(mat_data, () => {
+//   mat_data.value = mat_data.value.map(v => v.toLocaleLowerCase() || '0').map(v => /e|i/i.test(v) ? v : parseInt(v) + "")
+// })
 
 const addGate = () => {
   // TODO: validate gate name
-  if (!/[A-Za-z]/g.test(gate_name.value || "")) {
+  // check if gate_name contains only lowercase letters
+  if (!gate_name.value || !gate_name.value.match(/^[a-z]+$/)) {
     // @ts-expect-error
-    window.alertify.alert("Gate Name is Invalid!", "Gate name must be in lowercase or uppercase letters without any spaces.")
+    window.alertify.alert("Gate Name is Invalid!", "Gate name must be only in lowercase letters without any spaces.")
     return
   }
 
-  switch (build_method.value) {
-    case 0:
-      // @ts-expect-error
-      window.addCustomGate(gate_name.value, {
-        type: 'rotation',
-        theta: rot_theta.value * Math.PI / 180,
-        phi: rot_phi.value * Math.PI / 180,
-        phase: rot_lambda.value * Math.PI / 180,
-      })
-      break;
-    case 1:
-      // @ts-expect-error
-      window.addCustomGate(gate_name.value, {
-        type: 'matrix',
-        qubitCount: mat_qubits.value,
-        matrix: mat_data.value
-      })
-      break;
+  try {
+
+    switch (build_method.value) {
+      case 0:
+        // @ts-expect-error
+        window.addCustomGate(gate_name.value, {
+          type: 'rotation',
+          theta: rot_theta.value * Math.PI / 180,
+          phi: rot_phi.value * Math.PI / 180,
+          phase: rot_lambda.value * Math.PI / 180,
+        })
+        break;
+      case 1:
+        // console.log(mat_qubits.value, mat_data.value)
+        // @ts-expect-error
+        window.addCustomGate(gate_name.value, {
+          type: 'matrix',
+          qubitCount: mat_qubits.value,
+          matrix: mat_data.value
+        })
+        break;
+    }
+  } catch (e) {
+    // @ts-expect-error
+    window.alertify.alert("Gate Creation Failed!", e.message)
+    return
   }
   // @ts-expect-error
   window.newGateDialogInstance.close()
 }
 
+const initNewGateDialog = () => {
+  build_method.value = 0
+  gate_name.value = ''
 
+  rot_theta.value = 0
+  rot_phi.value = 0
+  rot_lambda.value = 0
 
+  mat_qubits.value = 1
+  mat_data.value = ['0', '0', '0', '0']
+}
+
+Object.assign(
+  window,
+  { initNewGateDialog }
+)
 </script>
 
 <style scoped lang="scss">

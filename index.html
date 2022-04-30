@@ -6,15 +6,43 @@
   <meta http-equiv="X-UA-Compatible" content="IE=edge">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-  <link rel="icon" href="/favicon.svg" />
-
   <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/reseter.css" />
   <link rel="stylesheet"
     href="https://rawcdn.githack.com/nextapps-de/winbox/0.2.0/dist/css/winbox.min.css">
   <link rel="stylesheet"
     href="https://cdn.jsdelivr.net/gh/rootEnginear/Qemmet/fonts/fonts.css">
 
-  <title>Untitled1 &mdash; Quantographer</title>
+  <meta name="robots" content="none" />
+
+  <link rel="apple-touch-icon" sizes="180x180" href="/apple-touch-icon.png">
+  <link rel="icon" type="image/png" sizes="32x32" href="/favicon-32x32.png">
+  <link rel="icon" type="image/png" sizes="16x16" href="/favicon-16x16.png">
+  <link rel="manifest" href="/site.webmanifest">
+  <link rel="mask-icon" href="/safari-pinned-tab.svg" color="#0061ff">
+  <meta name="msapplication-TileColor" content="#0061ff">
+  <meta name="theme-color" content="#ffffff">
+
+  <!-- HTML Meta Tags -->
+  <title>Quantographer</title>
+  <meta name="description"
+    content="Comprehend, analyze, optimize, and choose the best IBMQ architecture for your quantum circuit with our built-in recommendation system.">
+
+  <!-- Facebook Meta Tags -->
+  <meta property="og:url" content="https://rootenginear.github.io/Qemmet/">
+  <meta property="og:type" content="website">
+  <meta property="og:title" content="Quantographer">
+  <meta property="og:description"
+    content="Comprehend, analyze, optimize, and choose the best IBMQ architecture for your quantum circuit with our built-in recommendation system.">
+  <meta property="og:image" content="https://--TBD---/og.jpg">
+
+  <!-- Twitter Meta Tags -->
+  <meta name="twitter:card" content="summary_large_image">
+  <meta property="twitter:domain" content="rootenginear.github.io">
+  <meta property="twitter:url" content="https://rootenginear.github.io/Qemmet/">
+  <meta name="twitter:title" content="Quantographer">
+  <meta name="twitter:description"
+    content="Comprehend, analyze, optimize, and choose the best IBMQ architecture for your quantum circuit with our built-in recommendation system.">
+  <meta name="twitter:image" content="https://--TBD---/og.jpg">
 </head>
 
 <body>
@@ -22,7 +50,7 @@
     <!-- Menubar -->
     <div class="menubar">
       <div class="left">
-        <!-- TODO: ADD LOGO LOL -->
+        <img src="logo.png" alt="">
       </div>
       <!-- <div id="menu" class="left"></div> -->
       <div class="center">
@@ -63,7 +91,8 @@
       <button class="toolbar-btn ghost" data-tooltip="Copy" onclick="gateCopySelected()">
         <i class="fa-solid fa-copy"></i>
       </button>
-      <button class="toolbar-btn ghost" data-tooltip="Paste" onclick="gatePasteClipboard()">
+      <button class="toolbar-btn ghost" data-tooltip="Paste"
+        onclick="gatePasteClipboard()">
         <i class="fa-solid fa-paste"></i>
       </button>
       <button class="toolbar-btn ghost" data-tooltip="Delete"
@@ -1080,7 +1109,11 @@
   <div id="new-gate-dialog" class="common-dialog"></div>
 
   <div id="introduction-dialog" class="common-dialog">
-    <h1>Quantographer</h1>
+    <h1 style="display:flex;align-items:center;gap:.5rem;margin-top:1rem">
+      <img src="logo.png" alt="" width="1em" height="1em"
+        style="width:1em;height:1em;">
+      Quantographer
+    </h1>
     <hr>
     <div class="row" style="margin:1rem 0">
       <div class="col" style="align-self:flex-start">
