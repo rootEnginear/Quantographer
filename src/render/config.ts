@@ -6,7 +6,7 @@ export const renderConfig = Object.seal(
 
     laneLineThickness: 1.7,
 
-    qubitLaneHeight: 80,
+    qubitLaneHeight: 90,
     bitLaneHeight: 50,
 
     bitLineSpacing: 1.5,

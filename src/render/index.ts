@@ -702,6 +702,16 @@ const constructOperation = (type: OperationTypes, qubit: number, step: number): 
   case 'u1':
   case 'u2':
   case 'u3':
+    return {
+      type,
+      step,
+      qubit,
+      active: false,
+
+      controlBits: [],
+      controlQubits: [],
+      params: []
+    }
   case 'rx':
   case 'ry':
   case 'rz':
@@ -713,7 +723,7 @@ const constructOperation = (type: OperationTypes, qubit: number, step: number): 
 
       controlBits: [],
       controlQubits: [],
-      params: []
+      params: [0]
     }
   default:
     if (type.startsWith('custom:')) {

@@ -57,8 +57,10 @@ type BaseGate<T extends string> = BaseInstruction<T> & {
   controlQubits: number[]
 }
 
+type ParameterType = number| string
+
 type BaseParameterizedGate<T extends string> = BaseGate<T> & {
-  params: []
+  params: ParameterType[]
 }
 
 type BarrierDirective = BaseOperation<'barrier'> & {
