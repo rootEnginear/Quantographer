@@ -79,7 +79,15 @@ export const translateCircuit = () => {
         return all
       }, [])
 
-      return `qc_${name} = Operator(${JSON.stringify(matrix)})`
+      const formatted_mat = JSON.stringify(matrix).toLowerCase()
+        .replace(/"/g, '')
+        .replace(/i/g, '\uE100')
+        .replace(/e/g, '\uE101')
+        .replace(/[A-Za-z]/g, '')
+        .replace(/\uE100/g, 'j')
+        .replace(/\uE101/g, 'e')
+
+      return `qc_${name} = Operator(${formatted_mat})`
     }
 
     return ''

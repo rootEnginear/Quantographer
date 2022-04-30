@@ -383,6 +383,8 @@ let isNewGateDialogOpen = false
 const openNewGateDialog = () => {
   if (isNewGateDialogOpen) return
   isNewGateDialogOpen = true
+  // @ts-expect-error
+  initNewGateDialog()
   newGateDialogInstance = new window.WinBox({
     title: 'New Gate',
     border: 4,

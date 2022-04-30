@@ -1097,6 +1097,9 @@ const addCustomGate = (name: string, gate: CustomGateProperties) => {
 
   circuitData.customOperations[name] = gate
 
+  // @ts-expect-error
+  window.updateCodeOutput()
+
   addCustomGateUI(name)
 }
 
