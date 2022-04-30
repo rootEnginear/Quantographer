@@ -15,8 +15,8 @@
     - Cut, Copy, Paste
     - Make normal X gate X
     - Accept `i` and `e` in matrix
+    - Gate Parameter RX RY RZ [[GOLF]]
     - ## To do
-    - [ ] Gate Parameter RX RY RZ [[GOLF]]
     - ## Good To Have
     - [ ] Gate Parameter U1 U2 U3
     - [ ] Flip Horizontally, Duplicate to Right, Duplicate to Left

@@ -1119,7 +1119,7 @@
       <div class="col" style="align-self:flex-start">
         <button class="button is-fullwidth"
           style="justify-content:flex-start;text-align:left;margin-bottom:.5rem"
-          onclick="introductionDialogInstance.close(true)">
+          onclick="resetProgram(true); introductionDialogInstance.close(true)">
           <span class="icon is-small">
             <i class="fa-solid fa-file-medical"></i>
           </span>
@@ -1127,7 +1127,7 @@
         </button>
         <button class="button is-fullwidth"
           style="justify-content:flex-start;text-align:left"
-          onclick="chooseAndLoadFile()">
+          onclick="chooseAndLoadFile(); introductionDialogInstance.close(true)">
           <span class="icon is-small">
             <i class="fa-solid fa-folder-open"></i>
           </span>

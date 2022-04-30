@@ -1025,7 +1025,8 @@ const reallyResetProgram = () => {
   )
 }
 
-const resetProgram = () => {
+const resetProgram = (force = false) => {
+  if (force) return reallyResetProgram()
   // @ts-expect-error
   window.alertify.confirm(
     'Quantographer',
