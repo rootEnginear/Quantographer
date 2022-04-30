@@ -122,7 +122,13 @@ export const translateCircuit = () => {
 
     // parameterized gate
     if ('params' in gate && gate.params.length) {
-      const formatted_params = gate.params.join(', ')
+      const formatted_params = gate.params
+        .map((e) => typeof e === 'string' ? e
+          .replace(/pi/g, '\uE100')
+          .replace(/[A-Za-z]/g, '')
+          .replace(/\uE100/g, 'pi') :
+          e)
+        .join(', ')
 
       if (control_count === 0)
         return `qc.${gate.type}(${formatted_params}, ${gate.qubit})${condition_string}\n`
