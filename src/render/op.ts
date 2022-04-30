@@ -1311,6 +1311,60 @@ export const populateOperation = (op: Operation, opIndex: number) => {
       mainElement.append(boxElement, labelElement)
     }
 
+    if (['rx', 'ry', 'rz'].includes(type)) {
+      mainElement.addEventListener(
+        'dblclick',
+        async () => {
+          for (;;) {
+            const newNamePrompt = await new Promise<string | null>(
+              // @ts-expect-error
+              (res) => window.alertify.prompt(
+                'Quantographer',
+                'Enter new parameter',
+                // @ts-expect-error
+                op.params[0],
+                (_: any, val: string) => res(val),
+                () => res(null)
+              )
+            )
+            // press cancel
+            if (newNamePrompt === null) return
+            // validation
+            if (!newNamePrompt.trim()) continue
+
+            // update
+            // @ts-expect-error
+            op.params[0] = newNamePrompt
+
+            // @ts-expect-error
+            window.updateCodeOutput()
+
+            clearOps()
+            populateOps()
+
+            adjustWorkbenchSize()
+
+            break
+          }
+        }
+      )
+
+      const startX = centerX
+      const startY = centerY + halfGateSize + 16
+
+      const labelElement = document.createElementNS(svgNamespace, 'text')
+
+      labelElement.setAttribute('x', `${startX}`)
+      labelElement.setAttribute('y', `${startY}`)
+
+      labelElement.classList.add('gate-param')
+
+      // @ts-expect-error
+      labelElement.textContent = '(' + op.params.join(',') + ')'
+
+      mainElement.append(labelElement)
+    }
+
     mainElement.addEventListener(
       'mousedown',
       (e) => {
