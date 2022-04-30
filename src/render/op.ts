@@ -1360,7 +1360,7 @@ export const populateOperation = (op: Operation, opIndex: number) => {
       labelElement.classList.add('gate-param')
 
       // @ts-expect-error
-      labelElement.textContent = op.params[0]
+      labelElement.textContent = '(' + op.params.join(',') + ')'
 
       mainElement.append(labelElement)
     }
