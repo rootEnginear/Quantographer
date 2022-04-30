@@ -2,10 +2,10 @@
   <div class="field">
     <label class="label">Gate Name</label>
     <div class="control">
-      <input v-model="gate_name" class="input" type="text" placeholder="anAwesomeGate" />
+      <input v-model="gate_name" class="input" type="text" placeholder="mygate" />
     </div>
     <p class="help">
-      The name must be in lowercase or uppercase letters without any spaces.
+      The name must be only in lowercase letters without any spaces.
     </p>
   </div>
   <div class="field">
@@ -123,7 +123,7 @@ import { ref, reactive, watch } from 'vue'
 import Bloch from './Bloch.vue'
 
 const build_method = ref(0)
-const gate_name = ref(null)
+const gate_name = ref('')
 
 const rot_theta = ref(0)
 const rot_phi = ref(0)
@@ -145,9 +145,10 @@ watch(mat_qubits, () => {
 
 const addGate = () => {
   // TODO: validate gate name
-  if (!/[A-Za-z]/g.test(gate_name.value || "")) {
+  // check if gate_name contains only lowercase letters
+  if (!gate_name.value || !gate_name.value.match(/^[a-z]+$/)) {
     // @ts-expect-error
-    window.alertify.alert("Gate Name is Invalid!", "Gate name must be in lowercase or uppercase letters without any spaces.")
+    window.alertify.alert("Gate Name is Invalid!", "Gate name must be only in lowercase letters without any spaces.")
     return
   }
 
@@ -184,7 +185,7 @@ const addGate = () => {
 
 const initNewGateDialog = () => {
   build_method.value = 0
-  gate_name.value = null
+  gate_name.value = ''
 
   rot_theta.value = 0
   rot_phi.value = 0
