@@ -99,6 +99,10 @@
         v-model="mat_data.value[i]"
         class="input is-small" />
     </div>
+    <p style="font-size:0.8em">
+      You can use <code>i</code> as an imaginary part of a complex number. For example:
+      <code>3+2i</code>
+    </p>
   </section>
   <!-- CIRCUIT/GATES -->
   <section v-if="build_method === 2">
@@ -165,7 +169,7 @@ const addGate = () => {
         })
         break;
       case 1:
-        console.log(mat_qubits.value, mat_data.value)
+        // console.log(mat_qubits.value, mat_data.value)
         // @ts-expect-error
         window.addCustomGate(gate_name.value, {
           type: 'matrix',

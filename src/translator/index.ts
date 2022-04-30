@@ -82,10 +82,8 @@ export const translateCircuit = () => {
       const formatted_mat = JSON.stringify(matrix).toLowerCase()
         .replace(/"/g, '')
         .replace(/i/g, '\uE100')
-        .replace(/e/g, '\uE101')
         .replace(/[A-Za-z]/g, '')
         .replace(/\uE100/g, 'j')
-        .replace(/\uE101/g, 'e')
 
       return `qc_${name} = Operator(${formatted_mat})`
     }
@@ -160,7 +158,7 @@ export const translateCircuit = () => {
     )}Gate().control(${control_count}), [${registers.join(', ')}])${condition_string}\n`
   }).join('')
 
-  const full_string = `from numpy import pi, e as euler
+  const full_string = `from numpy import pi
 from qiskit import QuantumCircuit, QuantumRegister, ClassicalRegister
 from qiskit.circuit.library.standard_gates import SdgGate, TdgGate, SXGate, RXGate, RYGate, RZGate, U1Gate, U2Gate, U3Gate, SwapGate, XGate, YGate, ZGate, HGate, PhaseGate, SGate, TGate
 from qiskit.quantum_info.operators import Operator
