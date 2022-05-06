@@ -441,7 +441,7 @@ if (!localStorage.getItem('quantoHideIntroduction'))
     mount: document.getElementById('introduction-dialog') as Node,
     onclose: () => false,
     width: 750,
-    height: 340,
+    height: 500,
     x: 'center',
     y: 'center'
   })
