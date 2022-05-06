@@ -17,6 +17,8 @@
     - Accept `i` and `e` in matrix
     - Gate Parameter RX RY RZ [[GOLF]]
     - ## To do
+    - [ ] Code Selection
+    - [ ] Guide CTRL Mod
     - ## Good To Have
     - [ ] Gate Parameter U1 U2 U3
     - [ ] Flip Horizontally, Duplicate to Right, Duplicate to Left

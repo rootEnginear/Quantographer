@@ -280,6 +280,10 @@ let isExecuteDialogOpen = false
 const openExecuteDialog = () => {
   if (isExecuteDialogOpen) return
   isExecuteDialogOpen = true
+
+  // @ts-expect-error
+  initExecuteDialog()
+
   new window.WinBox({
     title: 'Execute',
     border: 4,
