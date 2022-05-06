@@ -459,24 +459,6 @@ export const adjustWorkbenchSize = () => {
 }
 
 workbenchElement.addEventListener(
-  'dragover',
-  (e) => {
-    e.preventDefault()
-
-    const {dataTransfer} = e
-    const transfer = dataTransfer as DataTransfer
-
-    const loc = getLocationInfo(e.offsetX, e.offsetY)
-
-    transfer.dropEffect =
-      loc.laneType === 'op' &&
-      loc.bitType === 'qubit' ?
-        'copy' :
-        'none'
-  }
-)
-
-workbenchElement.addEventListener(
   'drop',
   (e) => {
     const {dataTransfer} = e
@@ -758,6 +740,28 @@ selectElement.setAttribute('stroke-dasharray', '6 5')
 
 cellHoverElement.setAttribute('fill', 'blue')
 cellHoverElement.setAttribute('fill-opacity', '0.3')
+
+workbenchElement.addEventListener(
+  'dragover',
+  (e) => {
+    e.preventDefault()
+
+    const {dataTransfer} = e
+    const transfer = dataTransfer as DataTransfer
+
+    const loc = getLocationInfo(e.offsetX, e.offsetY)
+
+    transfer.dropEffect =
+      loc.laneType === 'op' &&
+      loc.bitType === 'qubit' ?
+        'copy' :
+        'none'
+
+    workbenchElement.dispatchEvent(
+      new MouseEvent('mousemove', e)
+    )
+  }
+)
 
 workbenchElement.addEventListener(
   'mousedown',
