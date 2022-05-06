@@ -459,6 +459,9 @@ const changeIbmKey = () => {
   })
 }
 
+// -----------------------------------------------------------------------------
+// Global Things
+// -----------------------------------------------------------------------------
 Object.assign(window, {
   openExportDialog,
   openExecuteDialog,
@@ -472,9 +475,6 @@ Object.assign(window, {
   // copyRecommendTranspile
 })
 
-// -----------------------------------------------------------------------------
-// Global Things
-// -----------------------------------------------------------------------------
 // If everything loaded correctly, show the content
 requestAnimationFrame(() => {
   document.documentElement.style.opacity = ''

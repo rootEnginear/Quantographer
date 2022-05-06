@@ -468,8 +468,7 @@ workbenchElement.addEventListener(
 
     const loc = getLocationInfo(e.offsetX, e.offsetY)
 
-    if (gateid === 'ctrl' || gateid === 'ctrlbit')
-        document.getElementById('guideline')!.style.display = 'none'
+    document.getElementById('guideline')!.style.display = 'none'
 
     switch (gateid) {
     case 'ctrl': {

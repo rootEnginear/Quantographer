@@ -1,6 +1,7 @@
 import {renderConfig} from './config'
 import {circuitData} from './data'
 import {adjustWorkbenchSize, clearOps, populateOps, trackLabelGroupElement} from '.'
+import {guidelineText} from '../guideline_text'
 
 export const addButtonDraglistener = (btn: HTMLElement) => {
   btn.addEventListener(
@@ -32,8 +33,10 @@ export const addButtonDraglistener = (btn: HTMLElement) => {
 
       transfer.effectAllowed = 'copy'
 
-      if (gateid === 'ctrl' || gateid === 'ctrlbit')
+      if (gateid in guidelineText) {
         document.getElementById('guideline')!.style.display = 'block'
+        document.getElementById('guideline-text')!.innerHTML = guidelineText[gateid]
+      }
     }
   )
   btn.addEventListener(
