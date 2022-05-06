@@ -275,10 +275,11 @@ createApp(Execute).mount('#execute-circuit-dialog')
 let isExecuteDialogOpen = false
 const openExecuteDialog = async () => {
   if (isExecuteDialogOpen) return
-  isExecuteDialogOpen = true
 
   // @ts-expect-error
   if (window.getApiKey() === '') return alertify.alert('No IBMQ API Key Present', 'You must enter your IBM Cloud API key before executing a circuit.')
+
+  isExecuteDialogOpen = true
 
   // @ts-expect-error
   initExecuteDialog()
