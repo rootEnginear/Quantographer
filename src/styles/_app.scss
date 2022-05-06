@@ -12,6 +12,8 @@
 @import 'alertify';
 @import 'spinner';
 
+@import 'guideline';
+
 * {
 	box-sizing: border-box;
 	outline: 0;
@@ -163,4 +165,9 @@ body {
 
 .col {
 	flex: 1 1 0%;
+}
+
+#output-qiskit-result,
+#output-qiskit-result > * {
+	user-select: text !important;
 }

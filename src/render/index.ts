@@ -467,6 +467,9 @@ workbenchElement.addEventListener(
     const gateid = transfer.getData('text/plain')
 
     const loc = getLocationInfo(e.offsetX, e.offsetY)
+
+    document.getElementById('guideline')!.style.display = 'none'
+
     switch (gateid) {
     case 'ctrl': {
       const stepOperations = circuitData.ops.filter(
@@ -1191,6 +1194,8 @@ const appendNewBit = () => {
   adjustWorkbenchSize()
 }
 
+const getQubitCount = () => circuitData.qubits.length
+
 // @ts-expect-error
 window.updateCodeOutput?.()
 
@@ -1219,6 +1224,7 @@ Object.assign(
     getApiKey,
     setApiKey,
     appendNewQubit,
-    appendNewBit
+    appendNewBit,
+    getQubitCount
   }
 )
