@@ -95,7 +95,7 @@ const handlingShortcuts = (e: KeyboardEvent) => {
 
   // e.stopPropagation()
   // e.preventDefault()
-  // return 0
+  return 0
 }
 
 window.addEventListener('keydown', handlingShortcuts)
