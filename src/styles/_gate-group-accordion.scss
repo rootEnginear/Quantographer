@@ -1,0 +1,60 @@
+.gate-group {
+	> summary {
+		padding: 0;
+		padding-left: 8px;
+		margin-bottom: 8px;
+
+		cursor: pointer;
+
+		list-style: none;
+
+		&::-webkit-details-marker {
+			display: none;
+		}
+
+		> span {
+			display: flex;
+			align-items: center;
+
+			width: 100%;
+
+			user-select: none;
+
+			> i.fa-solid.fa-angle-down {
+				margin-right: 0.5rem;
+				transform: rotate(-90deg);
+
+				transition: transform 0.3s;
+				will-change: transform;
+
+				.not-ready & {
+					transition: all 0s !important;
+				}
+			}
+		}
+	}
+
+	&[open] > summary > span > i.fa-solid.fa-angle-down {
+		transform: rotate(0deg);
+	}
+
+	> section {
+		box-sizing: border-box;
+
+		margin-bottom: 8px;
+		padding: 8px;
+
+		display: flex;
+		flex-wrap: wrap;
+		gap: 8px;
+
+		border: 2px solid #808080;
+		border-radius: 8px;
+
+		background: white;
+
+		> .toolbar-btn {
+			height: 30px;
+		}
+	}
+}
