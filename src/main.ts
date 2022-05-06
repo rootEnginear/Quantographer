@@ -397,6 +397,19 @@ const changeIbmKey = () => {
 }
 
 // -----------------------------------------------------------------------------
+// Etc.
+// -----------------------------------------------------------------------------
+const copyQiskitCode = () => {
+  const copyText = document.getElementById('qiskit-code-copy-btn')!
+  // @ts-expect-error
+  navigator.clipboard.writeText(window.translateCircuit())
+  copyText.textContent = 'Copied!'
+  setTimeout(() => {
+    copyText.textContent = 'Copy'
+  }, 1000)
+}
+
+// -----------------------------------------------------------------------------
 // Global Things
 // -----------------------------------------------------------------------------
 Object.assign(window, {
@@ -407,7 +420,8 @@ Object.assign(window, {
   toggleCode,
   renameFile,
   changeIbmKey,
-  newGateDialogInstance
+  newGateDialogInstance,
+  copyQiskitCode
   // updateTranspileResult,
   // copyRecommendTranspile
 })
