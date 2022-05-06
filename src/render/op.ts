@@ -1361,10 +1361,21 @@ export const populateOperation = (op: Operation, opIndex: number) => {
 
       labelElement.classList.add('gate-param')
 
+      const labelElementShadow = document.createElementNS(svgNamespace, 'text')
+
+      labelElementShadow.setAttribute('x', `${startX}`)
+      labelElementShadow.setAttribute('y', `${startY}`)
+
+      labelElementShadow.classList.add('gate-param')
+      labelElementShadow.classList.add('gate-param-shadow')
+
       // @ts-expect-error
       labelElement.textContent = '(' + op.params.join(',') + ')'
 
-      mainElement.append(labelElement)
+      // @ts-expect-error
+      labelElementShadow.textContent = '(' + op.params.join(',') + ')'
+
+      mainElement.append(labelElementShadow, labelElement)
     }
 
     mainElement.addEventListener(

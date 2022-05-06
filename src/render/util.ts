@@ -40,6 +40,18 @@ export const addButtonDraglistener = (btn: HTMLElement) => {
     }
   )
   btn.addEventListener(
+    'dragend',
+    () => {
+      const {
+        dataset: {
+          gateid = ''
+        }
+      } = btn
+      if (gateid in guidelineText)
+        document.getElementById('guideline')!.style.display = 'none'
+    }
+  )
+  btn.addEventListener(
     'mousedown',
     (e) => {
       if (e.buttons !== 4) return

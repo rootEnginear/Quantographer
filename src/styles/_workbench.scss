@@ -30,6 +30,11 @@
     user-select: none;
 }
 
+#workbench .gate-param-shadow {
+    stroke: #fff;
+    stroke-width: 4;
+}
+
 .gate-label.smaller {
     font-size: 24px !important;
 }
