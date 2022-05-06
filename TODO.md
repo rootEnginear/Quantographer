@@ -16,8 +16,8 @@
     - Make normal X gate X
     - Accept `i` and `e` in matrix
     - Gate Parameter RX RY RZ [[GOLF]]
+    - Code Selection
     - ## To do
-    - [ ] Code Selection
     - [ ] Guide CTRL Mod
     - ## Good To Have
     - [ ] Gate Parameter U1 U2 U3

@@ -12,7 +12,8 @@
               <option value="quito">ibmq_quito (5 qubits, 16 QV)</option>
               <option value="belem">ibmq_belem (5 qubits, 16 QV)</option>
               <option value="lima">ibmq_lima (5 qubits, 8 QV)</option>
-              <option value="armonk" disabled>ibmq_armonk (1 qubit, 1 QV)</option>
+              <option value="armonk" :disabled="qubit_count > 1">ibmq_armonk (1 qubit, 1
+                QV)</option>
               <option value="qasm_simulator">ibmq_qasm_simulator</option>
             </select>
           </div>
@@ -192,6 +193,8 @@ const rec_rtmt = ref("stochastic")
 const rec_lomt = ref("noise_adaptive")
 const rec_sdmt = ref("none")
 
+const qubit_count = ref(0)
+
 const simulateBackend = () => new Promise<void>((res) => {
   setTimeout(() => {
     res()
@@ -281,6 +284,8 @@ const closeRecommendation = () => {
 }
 
 const initExecuteDialog = () => {
+  // @ts-expect-error
+  qubit_count.value = window.getQubitCount()
   fetchAvailableBackends()
 }
 

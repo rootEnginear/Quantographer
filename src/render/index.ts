@@ -1191,6 +1191,8 @@ const appendNewBit = () => {
   adjustWorkbenchSize()
 }
 
+const getQubitCount = () => circuitData.qubits.length
+
 // @ts-expect-error
 window.updateCodeOutput?.()
 
@@ -1219,6 +1221,7 @@ Object.assign(
     getApiKey,
     setApiKey,
     appendNewQubit,
-    appendNewBit
+    appendNewBit,
+    getQubitCount
   }
 )
