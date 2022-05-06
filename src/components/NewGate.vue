@@ -93,8 +93,9 @@
     <div class="matrix-viz"
       :style="{ gridTemplateColumns: `repeat(${2 ** +mat_qubits},1fr)` }">
       <input
-        v-for="(_, i) in mat_data.value"
+        v-for="(a, i) in mat_data.value"
         :key="i"
+        :data-debug="a"
         type="text"
         v-model="mat_data.value[i]"
         class="input is-small" />
