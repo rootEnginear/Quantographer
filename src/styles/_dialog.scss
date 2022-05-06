@@ -2,6 +2,7 @@
 
 .common-dialog {
 	display: none;
+	position: relative;
 
 	.wb-body & {
 		display: flex;
