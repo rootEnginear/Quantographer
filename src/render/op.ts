@@ -1320,7 +1320,7 @@ export const populateOperation = (op: Operation, opIndex: number) => {
               // @ts-expect-error
               (res) => window.alertify.prompt(
                 'Quantographer',
-                'Enter new parameter',
+                'Enter gate parameter',
                 // @ts-expect-error
                 op.params[0],
                 (_: any, val: string) => res(val),
@@ -1331,6 +1331,8 @@ export const populateOperation = (op: Operation, opIndex: number) => {
             if (newNamePrompt === null) return
             // validation
             if (!newNamePrompt.trim()) continue
+            // check if `a` contains only numbers
+            if (!/^[0-9+\-*/\uE100]+$/.test(newNamePrompt.replace(/pi/g, '\uE100'))) continue
 
             // update
             // @ts-expect-error
