@@ -31,6 +31,9 @@ export const addButtonDraglistener = (btn: HTMLElement) => {
       transfer.setData('text/plain', gateid)
 
       transfer.effectAllowed = 'copy'
+
+      if (gateid === 'ctrl' || gateid === 'ctrlbit')
+        document.getElementById('guideline')!.style.display = 'block'
     }
   )
   btn.addEventListener(

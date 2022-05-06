@@ -1,0 +1,24 @@
+#guideline {
+  position: fixed;
+  bottom: 48px;
+  right: 1%;
+  width: 20%;
+
+  transition: right 0.3s, opacity 0.1s;
+  will-change: right;
+
+  > .box {
+    // box-shadow: none;
+    border: $primary 2px dashed;
+
+    > strong {
+      font-size: 1.2em;
+      display:block;
+      margin-bottom: 0.5rem;
+    }
+  }
+}
+
+.code-open > #guideline {
+  right: 21%;
+}
