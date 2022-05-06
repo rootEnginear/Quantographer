@@ -22,7 +22,6 @@ import {addButtonDraglistener} from './render/util'
 for (const gateButton of gateButtons)
   addButtonDraglistener(gateButton)
 
-
 import './translator/index'
 import './render'
 
@@ -267,14 +266,17 @@ const toggleCode = () => {
 // Dialogs
 // -----------------------------------------------------------------------------
 // convert snake case to capitalize each word
-const toTitleCase = (str: string) => str.split('_').map((w) => w[0].toUpperCase() + w.slice(1))
-  .join(' ')
+// const toTitleCase = (str: string) => str.split('_').map((w) => w[0].toUpperCase() + w.slice(1))
+//   .join(' ')
+
+import Execute from './components/Execute.vue'
+createApp(Execute).mount('#execute-circuit-dialog')
 
 let isExecuteDialogOpen = false
-let recommend_oplv = ''
-let recommend_rtmt = ''
-let recommend_lomt = ''
-let recommend_sdmt = ''
+// const recommend_oplv = ''
+// const recommend_rtmt = ''
+// const recommend_lomt = ''
+// const recommend_sdmt = ''
 const openExecuteDialog = () => {
   if (isExecuteDialogOpen) return
   isExecuteDialogOpen = true
@@ -284,8 +286,8 @@ const openExecuteDialog = () => {
     mount: document.getElementById('execute-circuit-dialog') as Node,
     onclose: () => {
       isExecuteDialogOpen = false
-      document.getElementById('waitForOptimal')!.style.display = ''
-      document.getElementById('gotOptimal')!.style.display = 'none'
+      // document.getElementById('waitForOptimal')!.style.display = ''
+      // document.getElementById('gotOptimal')!.style.display = 'none'
       return false
     },
     width: 750,
@@ -293,67 +295,70 @@ const openExecuteDialog = () => {
     x: 'center',
     y: 'center'
   })
-  updateTranspileResult()
-  fetch('https://quantum-backend-flask.herokuapp.com/recommend', {
-    method: 'POST',
-    headers: {
-      'Content-Type': 'application/json'
-    },
-    body: JSON.stringify({
-      // @ts-expect-error
-      code: window.translateCircuit(),
-      // TODO: Change this system to other systems
-      system: 'guadalupe'
-    })
-  }).then((r) => r.json())
-    .then((r) => {
-      // console.log(r[0])
-      document.getElementById('waitForOptimal')!.style.display = 'none'
-      document.getElementById('gotOptimal')!.style.display = ''
-      recommend_oplv = `${r[0].optlvl}`
-      recommend_rtmt = r[0].routing
-      recommend_lomt = r[0].layout
-      recommend_sdmt = r[0].scheduling
-      document.getElementById('oplv')!.textContent = r[0].optlvl
-      document.getElementById('rtmt')!.textContent = toTitleCase(r[0].routing)
-      document.getElementById('lomt')!.textContent = toTitleCase(r[0].layout)
-      document.getElementById('sdmt')!.textContent = toTitleCase(r[0].scheduling || 'None')
-    })
+  // updateTranspileResult()
+  // fetch('https://quantum-backend-flask.herokuapp.com/recommend', {
+  //   method: 'POST',
+  //   headers: {
+  //     'Content-Type': 'application/json'
+  //   },
+  //   body: JSON.stringify({
+  //     // @ts-expect-error
+  //     code: window.translateCircuit(),
+  //     // TODO: Change this system to other systems
+  //     system: 'guadalupe'
+  //   })
+  // }).then((r) => r.json())
+  //   .then((r) => {
+  //     // console.log(r[0])
+  //     document.getElementById('waitForOptimal')!.style.display = 'none'
+  //     document.getElementById('gotOptimal')!.style.display = ''
+  //     recommend_oplv = `${r[0].optlvl}`
+  //     recommend_rtmt = r[0].routing
+  //     recommend_lomt = r[0].layout
+  //     recommend_sdmt = r[0].scheduling
+  //     document.getElementById('oplv')!.textContent = r[0].optlvl
+  //     document.getElementById('rtmt')!.textContent = toTitleCase(r[0].routing)
+  //     document.getElementById('lomt')!.textContent = toTitleCase(r[0].layout)
+  //     document.getElementById('sdmt')!.textContent = toTitleCase(r[0].scheduling || 'None')
+  //   })
 }
 
-const copyRecommendTranspile = () => {
-  if (recommend_oplv) document.querySelector<HTMLInputElement>('#input-otlv')!.value = recommend_oplv
-  if (recommend_rtmt) document.querySelector<HTMLInputElement>('#input-rtmt')!.value = recommend_rtmt
-  if (recommend_lomt) document.querySelector<HTMLInputElement>('#input-lomt')!.value = recommend_lomt
-  if (recommend_sdmt) document.querySelector<HTMLInputElement>('#input-sdmt')!.value = recommend_sdmt
-}
+// const copyRecommendTranspile = () => {
+//   if (recommend_oplv) document.querySelector<HTMLInputElement>('#input-otlv')!.value = recommend_oplv
+//   if (recommend_rtmt) document.querySelector<HTMLInputElement>('#input-rtmt')!.value = recommend_rtmt
+//   if (recommend_lomt) document.querySelector<HTMLInputElement>('#input-lomt')!.value = recommend_lomt
+//   if (recommend_sdmt) document.querySelector<HTMLInputElement>('#input-sdmt')!.value = recommend_sdmt
+// }
 
-const updateTranspileResult = () => {
-  const otlv = document.querySelector<HTMLInputElement>('#input-otlv')!.value
-  const lomt = document.querySelector<HTMLInputElement>('#input-lomt')!.value
-  const rtmt = document.querySelector<HTMLInputElement>('#input-rtmt')!.value
-  const sdmt = document.querySelector<HTMLInputElement>('#input-sdmt')!.value
+// const updateTranspileResult = () => {
+//   const otlv = document.querySelector<HTMLInputElement>('#input-otlv')!.value
+//   const lomt = document.querySelector<HTMLInputElement>('#input-lomt')!.value
+//   const rtmt = document.querySelector<HTMLInputElement>('#input-rtmt')!.value
+//   const sdmt = document.querySelector<HTMLInputElement>('#input-sdmt')!.value
 
-  fetch('https://quantum-backend-flask.herokuapp.com/transpile', {
-    method: 'POST',
-    headers: {
-      'Content-Type': 'application/json'
-    },
-    body: JSON.stringify({
-      // @ts-expect-error
-      code: window.translateCircuit(),
-      // TODO: Change this system to other systems
-      system: 'guadalupe',
-      layout: lomt,
-      routing: rtmt,
-      scheduling: sdmt === 'none' ? null : sdmt,
-      optlvl: +otlv
-    })
-  }).then((r) => r.json())
-    .then((r) => {
-      (document.getElementById('transpiled_circuit_image') as HTMLImageElement).src = r.pic
-    })
-}
+//   fetch('https://quantum-backend-flask.herokuapp.com/transpile', {
+//     method: 'POST',
+//     headers: {
+//       'Content-Type': 'application/json'
+//     },
+//     body: JSON.stringify({
+//       // @ts-expect-error
+//       code: window.translateCircuit(),
+//       // TODO: Change this system to other systems
+//       system: 'guadalupe',
+//       layout: lomt,
+//       routing: rtmt,
+//       scheduling: sdmt === 'none' ? null : sdmt,
+//       optlvl: +otlv
+//     })
+//   }).then((r) => r.json())
+//     .then((r) => {
+//       (document.getElementById('transpiled_circuit_image') as HTMLImageElement).src = r.pic
+//     })
+// }
+
+import Export from './components/Export.vue'
+createApp(Export).mount('#export-circuit-dialog')
 
 let isExportDialogOpen = false
 const openExportDialog = () => {
@@ -377,6 +382,9 @@ const openExportDialog = () => {
     y: 'center'
   })
 }
+
+import NewGate from './components/NewGate.vue'
+createApp(NewGate).mount('#new-gate-dialog')
 
 let newGateDialogInstance: any = null
 let isNewGateDialogOpen = false
@@ -406,12 +414,9 @@ const openNewGateDialog = () => {
   })
 }
 
-import NewGate from './components/NewGate.vue'
-createApp(NewGate).mount('#new-gate-dialog')
-
-import Export from './components/Export.vue'
-createApp(Export).mount('#export-circuit-dialog')
-
+// -----------------------------------------------------------------------------
+// Alertify
+// -----------------------------------------------------------------------------
 // @ts-expect-error
 alertify.defaults = {
   // @ts-expect-error
@@ -458,11 +463,14 @@ Object.assign(window, {
   toggleCode,
   renameFile,
   changeIbmKey,
-  newGateDialogInstance,
-  updateTranspileResult,
-  copyRecommendTranspile
+  newGateDialogInstance
+  // updateTranspileResult,
+  // copyRecommendTranspile
 })
 
+// -----------------------------------------------------------------------------
+// Global Things
+// -----------------------------------------------------------------------------
 // If everything loaded correctly, show the content
 requestAnimationFrame(() => {
   document.documentElement.style.opacity = ''
