@@ -303,6 +303,7 @@ export const populateTrack = () => {
               opIndex -= 1
               const op = ops[opIndex]
               if (
+                'assignBit' in op && op.assignBit.index == i ||
                 'controlBits' in op && op.controlBits.some(
                   (b) => b.index == i
                 )
@@ -319,6 +320,7 @@ export const populateTrack = () => {
               opIndex -= 1
               const op = ops[opIndex]
               if (
+                'assignBit' in op && op.assignBit.index == i ||
                 'controlBits' in op && op.controlBits.some(
                   (b) => b.index == i
                 )
@@ -327,6 +329,8 @@ export const populateTrack = () => {
             }
             ops.forEach(
               (op) => {
+                if ('assignBit' in op && op.assignBit.index > i)
+                  op.assignBit.index -= 1
                 if ('controlBits' in op)
                   op.controlBits.forEach(
                     (e) => {
