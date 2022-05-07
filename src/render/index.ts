@@ -456,6 +456,9 @@ export const adjustWorkbenchSize = () => {
   workbenchElement.setAttribute('height', `${finalHeight}`)
 
   workbenchElement.setAttribute('viewBox', `0 0 ${svgWidth} ${opHeight}`)
+
+  // @ts-expect-error
+  window.scrollWorkbenchRight?.()
 }
 
 workbenchElement.addEventListener(

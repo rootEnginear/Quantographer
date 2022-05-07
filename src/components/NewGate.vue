@@ -5,7 +5,7 @@
       <input v-model="gate_name" class="input" type="text" placeholder="mygate" />
     </div>
     <p class="help">
-      The name must be only in lowercase letters without any spaces.
+      The name must be only in lowercase letters and/or underscore (_) without any spaces.
     </p>
   </div>
   <div class="field">
@@ -102,7 +102,9 @@
     </div>
     <p style="font-size:0.8em">
       You can use <code>i</code> as an imaginary part of a complex number. For example:
-      <code>3+2i</code>
+      <code>3+2i</code>.<br>
+      You must attach a number to <code>i</code>. For example:
+      <code>1i</code>, <code>0.5-1i</code>.
     </p>
   </section>
   <!-- CIRCUIT/GATES -->
@@ -144,14 +146,18 @@ watch(mat_qubits, () => {
     mat_data.value = new Array(((2 ** (+mat_qubits.value)) ** 2)).fill('0') as string[]
 })
 
-// watch(mat_data, () => {
-//   mat_data.value = mat_data.value.map(v => v.toLocaleLowerCase() || '0').map(v => /e|i/i.test(v) ? v : parseInt(v) + "")
-// })
+watch(mat_data, () => {
+  console.log(mat_data.value.map(e => {
+    if (e === 'i') return "1i"
+    if (e.match(/i/)) return e
+    let i = parseInt(e)
+    if (Number.isNaN(i)) return 0
+    return i
+  }))
+})
 
 const addGate = () => {
-  // TODO: validate gate name
-  // check if gate_name contains only lowercase letters
-  if (!gate_name.value || !gate_name.value.match(/^[a-z]+$/)) {
+  if (!gate_name.value || !gate_name.value.match(/^[a-z_]+$/)) {
     // @ts-expect-error
     window.alertify.alert("Gate Name is Invalid!", "Gate name must be only in lowercase letters without any spaces.")
     return
@@ -175,7 +181,13 @@ const addGate = () => {
         window.addCustomGate(gate_name.value, {
           type: 'matrix',
           qubitCount: mat_qubits.value,
-          matrix: mat_data.value
+          matrix: mat_data.value.map(e => {
+            if (e === 'i') return "1i"
+            if (e.match(/i/)) return e
+            let i = parseInt(e)
+            if (Number.isNaN(i)) return 0
+            return i
+          })
         })
         break;
     }
