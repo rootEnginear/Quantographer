@@ -95,7 +95,7 @@ const handlingShortcuts = (e: KeyboardEvent) => {
 
   // e.stopPropagation()
   // e.preventDefault()
-  // return 0
+  return 0
 }
 
 window.addEventListener('keydown', handlingShortcuts)
@@ -265,20 +265,16 @@ const toggleCode = () => {
 // -----------------------------------------------------------------------------
 // Dialogs
 // -----------------------------------------------------------------------------
-// convert snake case to capitalize each word
-// const toTitleCase = (str: string) => str.split('_').map((w) => w[0].toUpperCase() + w.slice(1))
-//   .join(' ')
-
 import Execute from './components/Execute.vue'
 createApp(Execute).mount('#execute-circuit-dialog')
 
 let isExecuteDialogOpen = false
-// const recommend_oplv = ''
-// const recommend_rtmt = ''
-// const recommend_lomt = ''
-// const recommend_sdmt = ''
-const openExecuteDialog = () => {
+const openExecuteDialog = async () => {
   if (isExecuteDialogOpen) return
+
+  // @ts-expect-error
+  if (window.getApiKey() === '') return alertify.alert('No IBMQ API Key Present', 'You must enter your IBM Cloud API key before executing a circuit.')
+
   isExecuteDialogOpen = true
 
   // @ts-expect-error
@@ -290,8 +286,6 @@ const openExecuteDialog = () => {
     mount: document.getElementById('execute-circuit-dialog') as Node,
     onclose: () => {
       isExecuteDialogOpen = false
-      // document.getElementById('waitForOptimal')!.style.display = ''
-      // document.getElementById('gotOptimal')!.style.display = 'none'
       return false
     },
     width: 750,
@@ -299,67 +293,7 @@ const openExecuteDialog = () => {
     x: 'center',
     y: 'center'
   })
-  // updateTranspileResult()
-  // fetch('https://quantum-backend-flask.herokuapp.com/recommend', {
-  //   method: 'POST',
-  //   headers: {
-  //     'Content-Type': 'application/json'
-  //   },
-  //   body: JSON.stringify({
-  //     // @ts-expect-error
-  //     code: window.translateCircuit(),
-  //     // TODO: Change this system to other systems
-  //     system: 'guadalupe'
-  //   })
-  // }).then((r) => r.json())
-  //   .then((r) => {
-  //     // console.log(r[0])
-  //     document.getElementById('waitForOptimal')!.style.display = 'none'
-  //     document.getElementById('gotOptimal')!.style.display = ''
-  //     recommend_oplv = `${r[0].optlvl}`
-  //     recommend_rtmt = r[0].routing
-  //     recommend_lomt = r[0].layout
-  //     recommend_sdmt = r[0].scheduling
-  //     document.getElementById('oplv')!.textContent = r[0].optlvl
-  //     document.getElementById('rtmt')!.textContent = toTitleCase(r[0].routing)
-  //     document.getElementById('lomt')!.textContent = toTitleCase(r[0].layout)
-  //     document.getElementById('sdmt')!.textContent = toTitleCase(r[0].scheduling || 'None')
-  //   })
 }
-
-// const copyRecommendTranspile = () => {
-//   if (recommend_oplv) document.querySelector<HTMLInputElement>('#input-otlv')!.value = recommend_oplv
-//   if (recommend_rtmt) document.querySelector<HTMLInputElement>('#input-rtmt')!.value = recommend_rtmt
-//   if (recommend_lomt) document.querySelector<HTMLInputElement>('#input-lomt')!.value = recommend_lomt
-//   if (recommend_sdmt) document.querySelector<HTMLInputElement>('#input-sdmt')!.value = recommend_sdmt
-// }
-
-// const updateTranspileResult = () => {
-//   const otlv = document.querySelector<HTMLInputElement>('#input-otlv')!.value
-//   const lomt = document.querySelector<HTMLInputElement>('#input-lomt')!.value
-//   const rtmt = document.querySelector<HTMLInputElement>('#input-rtmt')!.value
-//   const sdmt = document.querySelector<HTMLInputElement>('#input-sdmt')!.value
-
-//   fetch('https://quantum-backend-flask.herokuapp.com/transpile', {
-//     method: 'POST',
-//     headers: {
-//       'Content-Type': 'application/json'
-//     },
-//     body: JSON.stringify({
-//       // @ts-expect-error
-//       code: window.translateCircuit(),
-//       // TODO: Change this system to other systems
-//       system: 'guadalupe',
-//       layout: lomt,
-//       routing: rtmt,
-//       scheduling: sdmt === 'none' ? null : sdmt,
-//       optlvl: +otlv
-//     })
-//   }).then((r) => r.json())
-//     .then((r) => {
-//       (document.getElementById('transpiled_circuit_image') as HTMLImageElement).src = r.pic
-//     })
-// }
 
 import Export from './components/Export.vue'
 createApp(Export).mount('#export-circuit-dialog')
@@ -452,11 +386,24 @@ const changeIbmKey = () => {
   // @ts-expect-error
   alertify.prompt('Connect to IBMQ', 'Please enter the API Key of your IBMQ<br>Your key will only be used when executing the circuit on particular system. We *will not* store your key in any ways.', window.getApiKey(), (evt, value) => {
     // @ts-expect-error
-    window.setApiKey(value)
+    window.setApiKey(value.trim())
   }, () => {
     // alertify.error('Cancel')
     /* do nothing when cancel */
   })
+}
+
+// -----------------------------------------------------------------------------
+// Etc.
+// -----------------------------------------------------------------------------
+const copyQiskitCode = () => {
+  const copyText = document.getElementById('qiskit-code-copy-btn')!
+  // @ts-expect-error
+  navigator.clipboard.writeText(window.translateCircuit())
+  copyText.textContent = 'Copied!'
+  setTimeout(() => {
+    copyText.textContent = 'Copy'
+  }, 1000)
 }
 
 // -----------------------------------------------------------------------------
@@ -470,7 +417,8 @@ Object.assign(window, {
   toggleCode,
   renameFile,
   changeIbmKey,
-  newGateDialogInstance
+  newGateDialogInstance,
+  copyQiskitCode
   // updateTranspileResult,
   // copyRecommendTranspile
 })
@@ -490,13 +438,13 @@ if (!localStorage.getItem('quantoHideIntroduction'))
     mount: document.getElementById('introduction-dialog') as Node,
     onclose: () => false,
     width: 750,
-    height: 340,
+    height: 500,
     x: 'center',
     y: 'center'
   })
 
 const changeIntroductionDialogPref = (el: HTMLInputElement) => {
-  console.log(el.checked)
+  // console.log(el.checked)
   if (el.checked)
     localStorage.removeItem('quantoHideIntroduction')
   else

@@ -205,7 +205,7 @@ export const populateTrack = () => {
             return false
           }
 
-          console.log(qubitIndex, anyUsed())
+          // console.log(qubitIndex, anyUsed())
 
           if (!anyUsed())
             return doDel()

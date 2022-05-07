@@ -72,6 +72,9 @@ import { ref, watch, computed } from 'vue'
 const selectedType = ref<"qasm" | "png">("qasm")
 const copyText = ref("Copy")
 
+const fetching = ref<'IDLE' | 'FETCHING' | 'ERROR'>('FETCHING')
+const result = ref(``)
+
 const fileType = computed(() => {
   return {
     "qasm": { ext: "qasm", mime: "text/plain" },
@@ -84,9 +87,6 @@ const displayType = computed(() => {
     "png": "img"
   }[selectedType.value]
 })
-
-const fetching = ref<'IDLE' | 'FETCHING' | 'ERROR'>('FETCHING')
-const result = ref(``)
 
 const exportDialogCompile = async () => {
   fetching.value = 'FETCHING'
@@ -149,8 +149,10 @@ const copyCode = () => {
 
 const initExportDialog = () => {
   selectedType.value = "qasm"
+  copyText.value = 'Copy'
   fetching.value = 'FETCHING'
   result.value = ``
+
   exportDialogCompile()
 }
 
@@ -173,7 +175,7 @@ const saveData = () => {
     urlData = URL.createObjectURL(blobData)
   }
 
-  console.log("🚀 ~ file: Export.vue ~ line 174 ~ saveData ~ urlData", urlData)
+  // console.log("🚀 ~ file: Export.vue ~ line 174 ~ saveData ~ urlData", urlData)
   const linkElement = document.createElement('a')
 
   linkElement.href = urlData
