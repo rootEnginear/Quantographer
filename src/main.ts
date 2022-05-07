@@ -406,6 +406,11 @@ const copyQiskitCode = () => {
   }, 1000)
 }
 
+const scrollWorkbenchRight = () => {
+  const space = workspaceElement.getElementsByClassName('space')[0]
+  space.scrollLeft = space.scrollWidth
+}
+
 // -----------------------------------------------------------------------------
 // Global Things
 // -----------------------------------------------------------------------------
@@ -418,7 +423,8 @@ Object.assign(window, {
   renameFile,
   changeIbmKey,
   newGateDialogInstance,
-  copyQiskitCode
+  copyQiskitCode,
+  scrollWorkbenchRight
   // updateTranspileResult,
   // copyRecommendTranspile
 })
