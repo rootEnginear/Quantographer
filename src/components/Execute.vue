@@ -139,20 +139,24 @@
           <h2>Recommended Configuration:</h2>
           <ul style="padding-left:2ch">
             <li>
+              <strong style="margin:0;display:inline">IBMQ System:</strong>
+              &nbsp;<code>ibmq_{{ rec_sys }}</code>
+            </li>
+            <li>
               <strong style="margin:0;display:inline">Optimization Level:</strong>
-              {{ rec_otlv }}
+              &nbsp;<code>{{ toTitleCase(rec_otlv) }}</code>
             </li>
             <li>
               <strong style="margin:0;display:inline">Routing Method:</strong>
-              {{ rec_rtmt }}
+              &nbsp;<code>{{ toTitleCase(rec_rtmt) }}</code>
             </li>
             <li>
               <strong style="margin:0;display:inline">Layout Method:</strong>
-              {{ rec_lomt }}
+              &nbsp;<code>{{ toTitleCase(rec_lomt) }}</code>
             </li>
             <li>
               <strong style="margin:0;display:inline">Schedule Method:</strong>
-              {{ rec_sdmt }}
+              &nbsp;<code>{{ toTitleCase(rec_sdmt) }}</code>
             </li>
           </ul>
           <div class="row">
@@ -182,12 +186,16 @@ import { ref } from 'vue'
 const backend_status = ref<'IDLE' | 'FETCHING' | 'ERROR' | 'RESULT'>('FETCHING')
 const backend_status_text = ref("Connecting to Backends...")
 
+const transpile_result_status = ref<'IDLE' | 'FETCHING' | 'ERROR'>('FETCHING')
+const transpile_result = ref("")
+
 const sys = ref("manila")
 const otlv = ref("0")
 const rtmt = ref("basic")
 const lomt = ref("trivial")
 const sdmt = ref("none")
 
+const rec_sys = ref("manila")
 const rec_otlv = ref("2")
 const rec_rtmt = ref("stochastic")
 const rec_lomt = ref("noise_adaptive")
@@ -211,9 +219,6 @@ const fetchAvailableBackends = () => {
     backend_status.value = 'IDLE'
   })
 }
-
-const transpile_result_status = ref<'IDLE' | 'FETCHING' | 'ERROR'>('FETCHING')
-const transpile_result = ref("circuit.png")
 
 const updateTranspileResult = () => {
   transpile_result_status.value = 'FETCHING'
@@ -264,12 +269,14 @@ const getRecommendation = async () => {
 
 const simulateRecommend = () => {
   // random 0 - 3
+  rec_sys.value = ["manila", "bogota", "santiago", "quito", "belem", "lima"][Math.floor(Math.random() * 6)]
   rec_otlv.value = "" + Math.floor(Math.random() * 4)
   rec_rtmt.value = ["stochastic", "basic"][Math.floor(Math.random() * 2)]
   rec_lomt.value = ["noise_adaptive", "trivial"][Math.floor(Math.random() * 2)]
 }
 
 const useConfig = () => {
+  sys.value = rec_sys.value
   otlv.value = rec_otlv.value
   rtmt.value = rec_rtmt.value
   lomt.value = rec_lomt.value
@@ -283,9 +290,23 @@ const closeRecommendation = () => {
   backend_status.value = 'IDLE'
 }
 
+const toTitleCase = (str: string) => str.split('_').map((w) => w[0].toUpperCase() + w.slice(1))
+  .join(' ')
+
 const initExecuteDialog = () => {
+  backend_status.value = 'FETCHING'
+  backend_status_text.value = "Connecting to Backends..."
+  transpile_result_status.value = 'FETCHING'
+  transpile_result.value = ""
+  sys.value = "manila"
+  otlv.value = "0"
+  rtmt.value = "basic"
+  lomt.value = "trivial"
+  sdmt.value = "none"
+
   // @ts-expect-error
   qubit_count.value = window.getQubitCount()
+
   fetchAvailableBackends()
 }
 
