@@ -265,10 +265,6 @@ const toggleCode = () => {
 // -----------------------------------------------------------------------------
 // Dialogs
 // -----------------------------------------------------------------------------
-// convert snake case to capitalize each word
-// const toTitleCase = (str: string) => str.split('_').map((w) => w[0].toUpperCase() + w.slice(1))
-//   .join(' ')
-
 import Execute from './components/Execute.vue'
 createApp(Execute).mount('#execute-circuit-dialog')
 
@@ -448,7 +444,7 @@ if (!localStorage.getItem('quantoHideIntroduction'))
   })
 
 const changeIntroductionDialogPref = (el: HTMLInputElement) => {
-  console.log(el.checked)
+  // console.log(el.checked)
   if (el.checked)
     localStorage.removeItem('quantoHideIntroduction')
   else
