@@ -585,6 +585,17 @@ workbenchElement.addEventListener(
       window.updateCodeOutput()
     }
     adjustWorkbenchSize()
+    const maxStep =
+      circuitData.ops.length === 0 ?
+        0 :
+        Math.max(
+          ...circuitData.ops.map(
+            (op) => op.step
+          )
+        )
+    if (loc.step === maxStep)
+      // @ts-expect-error
+      window.scrollWorkbenchRight?.()
   }
 )
 
