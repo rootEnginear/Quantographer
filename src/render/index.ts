@@ -1210,6 +1210,7 @@ const appendNewBit = () => {
 }
 
 const getQubitCount = () => circuitData.qubits.length
+const isCircuitEmpty = () => circuitData.ops.length === 0
 
 // @ts-expect-error
 window.updateCodeOutput?.()
@@ -1240,6 +1241,7 @@ Object.assign(
     setApiKey,
     appendNewQubit,
     appendNewBit,
-    getQubitCount
+    getQubitCount,
+    isCircuitEmpty
   }
 )

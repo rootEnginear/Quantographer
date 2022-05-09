@@ -274,6 +274,8 @@ const openExecuteDialog = async () => {
 
   // @ts-expect-error
   if (window.getApiKey() === '') return alertify.alert('No IBMQ API Key Present', 'You must enter your IBM Cloud API key before executing a circuit.')
+  // @ts-expect-error
+  if (window.isCircuitEmpty()) return alertify.alert('Circuit is Empty!', 'Your circuit is empty. Try to add some gates.')
 
   isExecuteDialogOpen = true
 
@@ -465,4 +467,10 @@ Object.assign(window, {
 document.body.onmousedown = function (e) {
   if (e.button === 1) return false
   return true
+}
+
+try {
+  fetch('https://quantum-backend-flask.herokuapp.com')
+} catch (e: any) {
+  //
 }
