@@ -466,3 +466,9 @@ document.body.onmousedown = function (e) {
   if (e.button === 1) return false
   return true
 }
+
+try {
+  fetch('https://quantum-backend-flask.herokuapp.com')
+} catch (e: any) {
+  //
+}
