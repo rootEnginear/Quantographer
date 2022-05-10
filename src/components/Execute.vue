@@ -119,7 +119,13 @@
   <div class="separator"></div>
   <div class="row">
     <div class="col"></div>
-    <button class="button is-primary is-small">
+    <label style="display:flex;align-items:center">
+      <strong>Shots:</strong>&nbsp;
+      <input class="input is-small" type="number" min="1" v-model.number="shots"
+        style="width:10ch">
+    </label>
+    <button class="button is-primary is-small" @click="executeCircuit()"
+      :disabled="overlay_status !== 'IDLE'">
       <span class="icon is-small">
         <i class="fa-solid fa-play"></i>
       </span>
@@ -165,6 +171,73 @@
           </div>
         </div>
       </template>
+      <template v-else-if="overlay_status === 'EXEC_RESULT'">
+        <div class="box" style="margin: 0 16px">
+          <div class="row">
+            <h2 class="col">Results:</h2>
+            <button class="button is-ghost is-small"
+              @click="switchResult('EXEC_RESULT_CHART')">
+              <span>See Chart</span>
+            </button>
+          </div>
+          <div class="result-overflow-box">
+            <ul class="result-list">
+              <li v-for="el in JSON.parse(overlay_status_text)" :key="el[0]">
+                <code><strong style="margin:0;display:inline">{{ el[0] }}:</strong></code>
+                {{ el[1] }}
+              </li>
+            </ul>
+          </div>
+          <div class="row">
+            <button class="button is-primary" @click="closeOverlay()">
+              <span>Close</span>
+            </button>
+            <button class="button" @click="copyExecuteResult()">
+              <span>{{ copyText }}</span>
+            </button>
+          </div>
+        </div>
+      </template>
+      <template v-else-if="overlay_status === 'EXEC_RESULT_CHART'">
+        <div class="box" style="margin: 0 16px">
+          <div class="row">
+            <h2 class="col">Results:</h2>
+            <button class="button is-ghost is-small" @click="switchResult('EXEC_RESULT')">
+              <span>See Data</span>
+            </button>
+          </div>
+
+          <div class="result-overflow-box no-over">
+            <table
+              class="charts-css column hide-data show-labels show-primary-axis show-4-secondary-axes show-data-axes">
+              <caption>Execution Result</caption>
+              <thead>
+                <tr>
+                  <th scope="col">Result</th>
+                  <th scope="col">Count</th>
+                </tr>
+              </thead>
+              <tbody>
+                <tr v-for="el in JSON.parse(overlay_status_text)" :key="el[0]">
+                  <th>{{ bitStringToInt(el[0]) }}</th>
+                  <td :style="calcChart(el[1])">
+                    <span class="data">{{ el[1] }}</span>
+                    <span class="tooltip">{{ el[1] }}</span>
+                  </td>
+                </tr>
+              </tbody>
+            </table>
+          </div>
+          <div class="row">
+            <button class="button is-primary" @click="closeOverlay()">
+              <span>Close</span>
+            </button>
+            <button class="button" @click="copyExecuteResult()">
+              <span>{{ copyText }}</span>
+            </button>
+          </div>
+        </div>
+      </template>
       <template v-else-if="overlay_status === 'ERROR'">
         <article class="message is-danger">
           <div class="message-header">
@@ -200,9 +273,9 @@
 </template>
 
 <script setup lang="ts">
-import { ref } from 'vue'
+import { ref, StyleValue } from 'vue'
 
-const overlay_status = ref<'IDLE' | 'FETCHING' | 'ERROR' | 'RESULT'>('FETCHING')
+const overlay_status = ref<'IDLE' | 'FETCHING' | 'ERROR' | 'RESULT' | 'EXEC_RESULT' | 'EXEC_RESULT_CHART'>('FETCHING')
 const overlay_status_text = ref("Connecting to Backends...")
 
 const transpile_result_status = ref<'IDLE' | 'FETCHING' | 'ERROR'>('FETCHING')
@@ -217,6 +290,7 @@ const otlv = ref("0")
 const rtmt = ref("basic")
 const lomt = ref("trivial")
 const sdmt = ref("none")
+const shots = ref(1024)
 
 const rec_sys = ref("ibmq_qasm_simulator")
 const rec_otlv = ref("2")
@@ -226,6 +300,7 @@ const rec_lomt = ref("noise_adaptive")
 const qubit_count = ref(0)
 
 const retry_function = ref(() => {})
+const copyText = ref("Copy Result")
 
 const fetchAvailableBackends = async () => {
   overlay_status.value = 'FETCHING'
@@ -322,7 +397,7 @@ const getRecommendation = async () => {
     }
     // sort by least acc_error
     const least_acc_error = res.sort((a: any, b: any) => isFloatEqual(a.acc_err, b.acc_err) ? b.optlvl - a.optlvl : a.acc_err - b.acc_err)
-    console.log(least_acc_error)
+    // console.log(least_acc_error)
 
     rec_sys.value = least_acc_error[0].system
     rec_otlv.value = least_acc_error[0].optlvl + ""
@@ -354,6 +429,125 @@ const closeOverlay = () => {
 const toTitleCase = (str: string) => str.split('_').map((w) => w[0].toUpperCase() + w.slice(1))
   .join(' ')
 
+const pickRandom = (arr: any[]) => arr[Math.floor(Math.random() * arr.length)]
+
+const executeCircuit = async () => {
+  // @ts-expect-error
+  if (!window.isCircuitHasMeasure()) {
+    // @ts-expect-error
+    window.alertify.alert("No measurement found!", 'You need to have at least one measurement in your circuit.')
+    return;
+  }
+
+  document.getElementById("execute-circuit-dialog")?.parentElement?.scrollTo(0, 0)
+
+  overlay_status.value = 'FETCHING'
+  overlay_status_text.value = 'Sending circuit information...'
+
+  const ws = new WebSocket('wss://quantum-backend-flask.herokuapp.com/run')
+
+  try {
+    await new Promise((res, rej) => {
+      ws.addEventListener('open', res, { once: true })
+      ws.addEventListener('error', rej, { once: true })
+    })
+
+    ws.send(JSON.stringify({
+      // @ts-expect-error
+      code: window.translateCircuit(),
+      // @ts-expect-error
+      api_key: window.getApiKey(),
+      system: sys.value,
+      layout: lomt.value,
+      routing: rtmt.value,
+      scheduling: sdmt.value === 'none' ? null : sdmt.value,
+      optlvl: +otlv.value,
+      shots: +shots.value
+    }))
+
+    await new Promise<void>((res, rej) => {
+      ws.addEventListener('error', rej, { once: true })
+      ws.addEventListener('close', rej, { once: true })
+      ws.addEventListener('message', (e) => {
+        // console.log(e.data)
+        const r = JSON.parse(e.data)
+        switch (r.status) {
+          case 'INITIALIZING':
+            // console.log('INITIALIZING', r)
+            overlay_status_text.value = pickRandom([
+              `IBMQ is initializing.`,
+              `IBMQ is initializing..`,
+              `IBMQ is initializing...`,
+            ])
+            break;
+          case 'QUEUED':
+            console.log('QUEUED', r)
+            overlay_status_text.value = `Your circuit is queued, ${r.queue} left. (~${r.timeToStart.slice(2, 7)}s)`
+            break;
+          case 'VALIDATING':
+            // console.log('VALIDATING', r)
+            overlay_status_text.value = pickRandom([
+              `IBMQ is validating your circuit.`,
+              `IBMQ is validating your circuit..`,
+              `IBMQ is validating your circuit...`
+            ])
+            break;
+          case 'DONE':
+            // console.log('DONE', r)
+            overlay_status.value = 'EXEC_RESULT'
+            overlay_status_text.value = `${JSON.stringify(r.value)}`
+            res()
+            break;
+          case 'ERROR':
+          case 'CANCELLED':
+            // console.log('ERROR/CANCELLED', r)
+            overlay_status.value = 'ERROR'
+            overlay_status_text.value = `${r.error}`
+            retry_function.value = executeCircuit
+            rej()
+            break;
+          default:
+            // console.log('DEFAULT', r)
+            overlay_status_text.value = pickRandom([
+              `Your circuit is running right now.`,
+              `Your circuit is running right now..`,
+              `Your circuit is running right now...`,
+            ])
+        }
+      })
+    })
+  } catch (e: any) {
+    // console.log('CATCH!', e)
+    overlay_status.value = 'ERROR'
+    overlay_status_text.value = e?.message || JSON.stringify(e)
+    retry_function.value = executeCircuit
+  } finally {
+    // console.log('FINALLY!')
+    ws.close()
+  }
+}
+
+const copyExecuteResult = () => {
+  // console.log(overlay_status_text.value)
+  navigator.clipboard.writeText(overlay_status_text.value)
+  copyText.value = "Copied!"
+  setTimeout(() => {
+    copyText.value = "Copy Result"
+  }, 1000)
+}
+
+const calcChart = (value: number) => {
+  return {
+    '--size': value / shots.value,
+  } as StyleValue
+}
+
+const switchResult = (scene: 'EXEC_RESULT' | 'EXEC_RESULT_CHART') => {
+  overlay_status.value = scene
+}
+
+const bitStringToInt = (str: string) => parseInt(str, 2)
+
 const initExecuteDialog = () => {
   overlay_status.value = 'FETCHING'
   overlay_status_text.value = "Connecting to Backends..."
@@ -367,6 +561,8 @@ const initExecuteDialog = () => {
   rtmt.value = "basic"
   lomt.value = "trivial"
   sdmt.value = "none"
+  shots.value = 1024
+  copyText.value = "Copy Result"
   retry_function.value = () => {}
 
   // @ts-expect-error
@@ -399,5 +595,26 @@ Object.assign(
   z-index: 5;
 
   padding-top: 7rem;
+}
+
+.result-overflow-box {
+  height: 200px;
+  overflow-y: scroll;
+  border: #dbdbdb 1px solid;
+  padding: 16px;
+  border-radius: 8px;
+  margin: 8px 0;
+
+  &.no-over {
+    overflow: hidden;
+  }
+
+  &>.result-list {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 4px 16px;
+    list-style: none;
+    margin: 0;
+  }
 }
 </style>
