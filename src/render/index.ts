@@ -1211,6 +1211,9 @@ const appendNewBit = () => {
 
 const getQubitCount = () => circuitData.qubits.length
 const isCircuitEmpty = () => circuitData.ops.length === 0
+const isCircuitHasMeasure = () => circuitData.ops.some(
+  (op) => op.type === 'measure'
+)
 
 // @ts-expect-error
 window.updateCodeOutput?.()
@@ -1242,6 +1245,7 @@ Object.assign(
     appendNewQubit,
     appendNewBit,
     getQubitCount,
-    isCircuitEmpty
+    isCircuitEmpty,
+    isCircuitHasMeasure
   }
 )
