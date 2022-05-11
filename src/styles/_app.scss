@@ -21,7 +21,7 @@
 	user-select: none;
 }
 
-body {
+html, body {
 	overflow: hidden;
 
 	font-family: 'IBM Plex Sans', sans-serif;
@@ -30,6 +30,7 @@ body {
 
 	width: 100vw;
 	height: 100vh;
+	position: fixed;
 }
 
 #app {

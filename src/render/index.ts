@@ -1137,9 +1137,14 @@ const addCustomGatesUI = () => {
     addCustomGateUI(name)
 }
 
+const convertSpaceToUnderscore = (str: string) => str.toLocaleLowerCase().replace(
+  /\s/g,
+  '_'
+)
+
 const saveFile = () => {
   const data = JSON.stringify(circuitData)
-  saveFileDialog('circuit.json', data)
+  saveFileDialog(`${convertSpaceToUnderscore(getFileName())}.json`, data)
 }
 
 const generateQasm = (): string => `

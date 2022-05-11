@@ -481,7 +481,7 @@ const executeCircuit = async () => {
             ])
             break;
           case 'QUEUED':
-            console.log('QUEUED', r)
+            // console.log('QUEUED', r)
             overlay_status_text.value = `Your circuit is queued, ${r.queue} left. (~${r.timeToStart.slice(2, 7)}s)`
             break;
           case 'VALIDATING':

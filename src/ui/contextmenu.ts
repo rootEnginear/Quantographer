@@ -50,11 +50,13 @@ const gateCopySelected = () => {
     .sort(
       (a, b) => a.step - b.step
     )
+  hideCtx()
 }
 
 const gateCutSelected = () => {
   gateCopySelected()
   gateDeleteSelected()
+  hideCtx()
 }
 
 const gatePasteClipboard = () => {
@@ -87,6 +89,7 @@ const gatePasteClipboard = () => {
   clearOps()
   populateOps()
   adjustWorkbenchSize()
+  hideCtx()
 }
 
 pasteMenu.addEventListener(
@@ -143,6 +146,7 @@ pasteMenu.addEventListener(
     clearOps()
     populateOps()
     adjustWorkbenchSize()
+    hideCtx()
   }
 )
 

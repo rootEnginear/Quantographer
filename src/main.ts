@@ -283,7 +283,7 @@ const openExecuteDialog = async () => {
   initExecuteDialog()
 
   new window.WinBox({
-    title: 'Execute',
+    title: 'Transpile & Execute',
     border: 4,
     mount: document.getElementById('execute-circuit-dialog') as Node,
     onclose: () => {
@@ -301,12 +301,12 @@ import Export from './components/Export.vue'
 createApp(Export).mount('#export-circuit-dialog')
 
 let isExportDialogOpen = false
-const openExportDialog = () => {
+const openExportDialog = (choice: 'qasm' | 'png') => {
   if (isExportDialogOpen) return
   isExportDialogOpen = true
 
   // @ts-expect-error
-  initExportDialog()
+  initExportDialog(choice)
 
   new window.WinBox({
     title: 'Export',
@@ -413,6 +413,17 @@ const scrollWorkbenchRight = () => {
   space.scrollLeft = space.scrollWidth
 }
 
+const toggleFullscreen = () => {
+  const el = document.getElementById('fullscreen-btn')
+  if (document.fullscreenElement) {
+    document.exitFullscreen()
+    el!.innerHTML = '<i class="fa-solid fa-up-right-and-down-left-from-center"></i>'
+  } else {
+    document.documentElement.requestFullscreen()
+    el!.innerHTML = '<i class="fa-solid fa-down-left-and-up-right-to-center"></i>'
+  }
+}
+
 // -----------------------------------------------------------------------------
 // Global Things
 // -----------------------------------------------------------------------------
@@ -426,7 +437,8 @@ Object.assign(window, {
   changeIbmKey,
   newGateDialogInstance,
   copyQiskitCode,
-  scrollWorkbenchRight
+  scrollWorkbenchRight,
+  toggleFullscreen
   // updateTranspileResult,
   // copyRecommendTranspile
 })
