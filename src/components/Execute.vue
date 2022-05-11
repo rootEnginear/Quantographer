@@ -219,7 +219,7 @@
               </thead>
               <tbody>
                 <tr v-for="el in JSON.parse(overlay_status_text)" :key="el[0]">
-                  <th>{{ bitStringToInt(el[0]) }}</th>
+                  <th>{{ el[0] }}</th>
                   <td :style="calcChart(el[1])">
                     <span class="data">{{ el[1] }}</span>
                     <span class="tooltip">{{ el[1] }}</span>
@@ -482,7 +482,13 @@ const executeCircuit = async () => {
             break;
           case 'QUEUED':
             // console.log('QUEUED', r)
-            overlay_status_text.value = `Your circuit is queued, ${r.queue} left. (~${r.timeToStart.slice(2, 7)}s)`
+            const time_label = ['h','m','s']
+            const time_split = r.timeToStart.split(".")[0].split(":").map((t: string, i: number) => ([t,time_label[i]]));
+            let time_process;
+            if(time_split[0][0] === '0')
+              time_process = time_split.splice(0,1)
+            const time_string = time_split.map((t: string[]) => t.join('')).join(':')
+            overlay_status_text.value = `Your circuit is queued, ${r.queue} left. (~${time_string})`
             break;
           case 'VALIDATING':
             // console.log('VALIDATING', r)
@@ -501,10 +507,7 @@ const executeCircuit = async () => {
           case 'ERROR':
           case 'CANCELLED':
             // console.log('ERROR/CANCELLED', r)
-            overlay_status.value = 'ERROR'
-            overlay_status_text.value = `${r.error}`
-            retry_function.value = executeCircuit
-            rej()
+            rej(`${r.error}`)
             break;
           default:
             // console.log('DEFAULT', r)
@@ -545,8 +548,6 @@ const calcChart = (value: number) => {
 const switchResult = (scene: 'EXEC_RESULT' | 'EXEC_RESULT_CHART') => {
   overlay_status.value = scene
 }
-
-const bitStringToInt = (str: string) => parseInt(str, 2)
 
 const initExecuteDialog = () => {
   overlay_status.value = 'FETCHING'
