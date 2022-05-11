@@ -350,6 +350,12 @@
             fill="currentColor" />
         </svg>
       </button>
+      <button class="toolbar-btn gate fluid"
+        data-tooltip-title="Create New Gate"
+        data-tooltip="Create a new gate from a qubit rotation or a matrix."
+        onclick="openNewGateDialog()">
+        <i class="fa-solid fa-plus" style="margin-right:0.25rem"></i>New
+      </button>
       <div class="toolbar-separator"></div>
       <button class="toolbar-btn gate" data-tooltip="Add Qubit"
         onclick="appendNewQubit()">
@@ -358,14 +364,7 @@
       </button>
       <button class="toolbar-btn gate" data-tooltip="Add Bit" onclick="appendNewBit()">
         <!-- <i class="fa-solid fa-rotate-right"></i> -->
-        +B
-      </button>
-      <div class="toolbar-separator"></div>
-      <button class="toolbar-btn gate fluid"
-        data-tooltip-title="Create New Gate"
-        data-tooltip="Create a new gate from a qubit rotation or a matrix."
-        onclick="openNewGateDialog()">
-        <i class="fa-solid fa-plus" style="margin-right:0.25rem"></i>New
+        +C
       </button>
       <!-- Separator -->
       <div class="toolbar-flex"></div>
@@ -779,7 +778,7 @@
             <button class="toolbar-btn gate" data-tooltip="Add Bit"
               onclick="appendNewBit()">
               <!-- <i class="fa-solid fa-rotate-right"></i> -->
-              +B
+              +C
             </button>
           </section>
         </details>
