@@ -1,3 +1,20 @@
+@keyframes slide-in {
+  0% {
+    opacity: 0;
+    transform: translateX(100%);
+    box-shadow: 0 0 0 0 #0061ff;
+    border-radius: 4px;
+  }
+  50%{
+    opacity: 1;
+    transform: translateX(0);
+  }
+  to {
+    box-shadow: 0 0 0 64px #8A3FFC00;
+    border-radius: 4px;
+  }
+}
+
 #guideline {
   position: fixed;
   bottom: 48px;
@@ -5,11 +22,13 @@
   width: 20%;
 
   transition: right 0.3s, opacity 0.1s;
-  will-change: right;
+  will-change: right, opacity, transform, box-shadow;
+
+  animation: slide-in 0.6s forwards;
 
   > .box {
     // box-shadow: none;
-    border: $primary 2px dashed;
+    border: $primary 2px solid;
 
     > strong {
       font-size: 1.2em;

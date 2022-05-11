@@ -1320,7 +1320,7 @@ export const populateOperation = (op: Operation, opIndex: number) => {
               // @ts-expect-error
               (res) => window.alertify.prompt(
                 'Quantographer',
-                'Enter gate parameter, you can use the constant <code>pi</code>.',
+                'Enter gate parameter, you can use the constant <code>pi</code>',
                 // @ts-expect-error
                 op.params[0],
                 (_: any, val: string) => res(val),

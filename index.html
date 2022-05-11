@@ -68,6 +68,10 @@
     <div class="menubar">
       <div class="left">
         <img src="logo.png" alt="">
+        <button class="menubar-btn" onclick="toggleFullscreen()" id="fullscreen-btn"
+          data-tooltip="Toggle Fullscreen">
+          <i class="fa-solid fa-up-right-and-down-left-from-center"></i>
+        </button>
       </div>
       <!-- <div id="menu" class="left"></div> -->
       <div class="center">
@@ -161,22 +165,12 @@
             fill="currentColor" />
         </svg>
       </button> -->
-      <div class="toolbar-separator"></div>
-      <button class="toolbar-btn ghost" data-tooltip="Add Qubit"
-        onclick="appendNewQubit()">
-        <!-- <i class="fa-solid fa-rotate-left"></i> -->
-        +Q
-      </button>
-      <button class="toolbar-btn ghost" data-tooltip="Add Bit" onclick="appendNewBit()">
-        <!-- <i class="fa-solid fa-rotate-right"></i> -->
-        +B
-      </button>
       <!-- Separator -->
       <div class="toolbar-flex"></div>
       <!-- Right -->
       <button class="toolbar-btn fluid"
         onclick="openExecuteDialog()">
-        <i class="fa-solid fa-play" style="margin-right:0.25rem"></i>Execute
+        <i class="fa-solid fa-play" style="margin-right:0.25rem"></i>Transpile & Execute
       </button>
     </div>
     <!-- Secondary Toolbar -->
@@ -188,7 +182,9 @@
         data-tooltip="Toggle Palette">
         <i class="fa-solid fa-toolbox"></i>
       </button>
+      <!-- Separator -->
       <div class="toolbar-separator"></div>
+      <!-- <div class="toolbar-flex"></div> -->
       <button class="toolbar-btn gate" draggable="true"
         data-tooltip-title="Z Gate"
         data-tooltip="Transform |1⟩ to i|1⟩. But not affect |0⟩. Mathematically, this gate rotates a qubit around Z axis by 180°."
@@ -292,27 +288,16 @@
         data-tooltip-title="Gate Qubit Control Modifier"
         data-tooltip="Modify a gate by adding a control qubit onto it."
         data-gateid="ctrl">
-        <svg class="svg-icon" width="30" height="32" viewBox="0 0 30 32" fill="none"
+        <svg class="svg-icon" width="30" height="30" viewBox="0 0 30 30" fill="none"
           xmlns="http://www.w3.org/2000/svg">
-          <path
-            d="M4.612 31.332C4.06 31.332 3.56 31.244 3.112 31.068C2.672 30.884 2.292 30.612 1.972 30.252C1.66 29.892 1.42 29.448 1.252 28.92C1.084 28.384 1 27.764 1 27.06C1 26.356 1.084 25.732 1.252 25.188C1.42 24.636 1.66 24.176 1.972 23.808C2.292 23.432 2.672 23.148 3.112 22.956C3.56 22.764 4.06 22.668 4.612 22.668C5.364 22.668 5.988 22.828 6.484 23.148C6.98 23.468 7.376 23.952 7.672 24.6L6.316 25.32C6.196 24.944 6 24.644 5.728 24.42C5.456 24.188 5.084 24.072 4.612 24.072C4.02 24.072 3.548 24.272 3.196 24.672C2.852 25.072 2.68 25.632 2.68 26.352V27.672C2.68 28.4 2.852 28.96 3.196 29.352C3.548 29.736 4.02 29.928 4.612 29.928C5.084 29.928 5.468 29.8 5.764 29.544C6.068 29.288 6.288 28.972 6.424 28.596L7.708 29.352C7.404 29.976 7 30.464 6.496 30.816C5.992 31.16 5.364 31.332 4.612 31.332Z"
-            fill="currentColor" />
-          <path
-            d="M12.3472 24.216V31.188H10.7632V24.216H8.38722V22.812H14.7232V24.216H12.3472Z"
-            fill="currentColor" />
-          <path
-            d="M17.6042 31.188H16.0202V22.812H19.8002C20.1842 22.812 20.5282 22.872 20.8322 22.992C21.1362 23.112 21.3922 23.288 21.6002 23.52C21.8162 23.744 21.9802 24.016 22.0922 24.336C22.2122 24.656 22.2722 25.012 22.2722 25.404C22.2722 25.98 22.1402 26.476 21.8762 26.892C21.6202 27.308 21.2322 27.604 20.7122 27.78L22.4282 31.188H20.6642L19.1042 27.96H17.6042V31.188ZM19.6442 26.628C19.9482 26.628 20.1882 26.548 20.3642 26.388C20.5402 26.22 20.6282 25.984 20.6282 25.68V25.128C20.6282 24.824 20.5402 24.592 20.3642 24.432C20.1882 24.272 19.9482 24.192 19.6442 24.192H17.6042V26.628H19.6442Z"
-            fill="currentColor" />
-          <path d="M23.9889 31.188V22.812H25.5729V29.784H28.8729V31.188H23.9889Z"
-            fill="currentColor" />
-          <circle cx="15" cy="6.66797" r="6" fill="currentColor" />
-          <line x1="1" y1="6.66797" x2="29" y2="6.66797" stroke="currentColor"
-            stroke-width="2" stroke-linecap="round" />
-          <line x1="15" y1="6.66797" x2="15" y2="17.668" stroke="currentColor"
-            stroke-width="2" stroke-linecap="round" />
+          <circle cx="15" cy="15" r="6" fill="#0061FF" />
+          <line x1="1" y1="15" x2="29" y2="15" stroke="#0061FF" stroke-width="2"
+            stroke-linecap="round" />
+          <line x1="15" y1="1" x2="15" y2="29" stroke="#0061FF" stroke-width="2"
+            stroke-linecap="round" />
         </svg>
       </button>
-      <button class="toolbar-btn gate" draggable="true"
+      <!-- <button class="toolbar-btn gate" draggable="true"
         data-tooltip-title="Gate Bit Control Modifier"
         data-tooltip="Modify a gate by adding a control bit onto it."
         data-gateid="ctrlbit">
@@ -328,7 +313,7 @@
           <text x="15" y="32" fill="currentColor" font-size="12"
             text-anchor="middle">BIT</text>
         </svg>
-      </button>
+      </button> -->
       <div class="toolbar-separator"></div>
       <button class="toolbar-btn gate" draggable="true"
         data-tooltip-title="Measurement"
@@ -364,6 +349,16 @@
             d="M1 -4.37114e-08C1.55228 -1.95703e-08 2 0.447715 2 1L2 2.875C2 3.42728 1.55228 3.875 1 3.875C0.447715 3.875 -1.49811e-07 3.42728 -1.2567e-07 2.875L-4.37114e-08 1C-1.95703e-08 0.447715 0.447715 -6.78525e-08 1 -4.37114e-08ZM1 5.625C1.55228 5.625 2 6.07272 2 6.625L2 10.375C2 10.9273 1.55228 11.375 1 11.375C0.447715 11.375 -4.77647e-07 10.9273 -4.53506e-07 10.375L-2.89588e-07 6.625C-2.65447e-07 6.07272 0.447715 5.625 1 5.625ZM0.999999 13.125C1.55228 13.125 2 13.5727 2 14.125L2 17.875C2 18.4273 1.55228 18.875 0.999999 18.875C0.447714 18.875 -8.05482e-07 18.4273 -7.81341e-07 17.875L-6.17423e-07 14.125C-5.93282e-07 13.5727 0.447715 13.125 0.999999 13.125ZM0.999999 20.625C1.55228 20.625 2 21.0727 2 21.625L2 25.375C2 25.9273 1.55228 26.375 0.999999 26.375C0.447714 26.375 -1.13332e-06 25.9273 -1.10918e-06 25.375L-9.45259e-07 21.625C-9.21118e-07 21.0727 0.447714 20.625 0.999999 20.625ZM0.999999 28.125C1.55228 28.125 2 28.5727 2 29.125L2 31C2 31.5523 1.55228 32 0.999999 32C0.447714 32 -1.37919e-06 31.5523 -1.35505e-06 31L-1.27309e-06 29.125C-1.24895e-06 28.5727 0.447714 28.125 0.999999 28.125Z"
             fill="currentColor" />
         </svg>
+      </button>
+      <div class="toolbar-separator"></div>
+      <button class="toolbar-btn gate" data-tooltip="Add Qubit"
+        onclick="appendNewQubit()">
+        <!-- <i class="fa-solid fa-rotate-left"></i> -->
+        +Q
+      </button>
+      <button class="toolbar-btn gate" data-tooltip="Add Bit" onclick="appendNewBit()">
+        <!-- <i class="fa-solid fa-rotate-right"></i> -->
+        +B
       </button>
       <div class="toolbar-separator"></div>
       <button class="toolbar-btn gate fluid"
@@ -674,7 +669,15 @@
               data-tooltip-title="Gate Qubit Control Modifier"
               data-tooltip="Modify a gate by adding a control qubit onto it."
               data-gateid="ctrl">
-              <svg class="svg-icon" width="30" height="32" viewBox="0 0 30 32" fill="none"
+              <svg class="svg-icon" width="30" height="30" viewBox="0 0 30 30" fill="none"
+                xmlns="http://www.w3.org/2000/svg">
+                <circle cx="15" cy="15" r="6" fill="#0061FF" />
+                <line x1="1" y1="15" x2="29" y2="15" stroke="#0061FF" stroke-width="2"
+                  stroke-linecap="round" />
+                <line x1="15" y1="1" x2="15" y2="29" stroke="#0061FF" stroke-width="2"
+                  stroke-linecap="round" />
+              </svg>
+              <!-- <svg class="svg-icon" width="30" height="32" viewBox="0 0 30 32" fill="none"
                 xmlns="http://www.w3.org/2000/svg">
                 <path
                   d="M4.612 31.332C4.06 31.332 3.56 31.244 3.112 31.068C2.672 30.884 2.292 30.612 1.972 30.252C1.66 29.892 1.42 29.448 1.252 28.92C1.084 28.384 1 27.764 1 27.06C1 26.356 1.084 25.732 1.252 25.188C1.42 24.636 1.66 24.176 1.972 23.808C2.292 23.432 2.672 23.148 3.112 22.956C3.56 22.764 4.06 22.668 4.612 22.668C5.364 22.668 5.988 22.828 6.484 23.148C6.98 23.468 7.376 23.952 7.672 24.6L6.316 25.32C6.196 24.944 6 24.644 5.728 24.42C5.456 24.188 5.084 24.072 4.612 24.072C4.02 24.072 3.548 24.272 3.196 24.672C2.852 25.072 2.68 25.632 2.68 26.352V27.672C2.68 28.4 2.852 28.96 3.196 29.352C3.548 29.736 4.02 29.928 4.612 29.928C5.084 29.928 5.468 29.8 5.764 29.544C6.068 29.288 6.288 28.972 6.424 28.596L7.708 29.352C7.404 29.976 7 30.464 6.496 30.816C5.992 31.16 5.364 31.332 4.612 31.332Z"
@@ -692,13 +695,25 @@
                   stroke-width="2" stroke-linecap="round" />
                 <line x1="15" y1="6.66797" x2="15" y2="17.668" stroke="currentColor"
                   stroke-width="2" stroke-linecap="round" />
-              </svg>
+              </svg> -->
             </button>
             <button class="toolbar-btn gate" draggable="true"
               data-tooltip-title="Gate Bit Control Modifier"
               data-tooltip="Modify a gate by adding a control bit onto it."
               data-gateid="ctrlbit">
-              <svg class="svg-icon" width="30" height="32" viewBox="0 0 30 32" fill="none"
+              <svg class="svg-icon" width="30" height="30" viewBox="0 0 30 30" fill="none"
+                xmlns="http://www.w3.org/2000/svg">
+                <circle cx="15" cy="15" r="6" fill="#0061FF" />
+                <line x1="1" y1="17.5" x2="29" y2="17.5" stroke="#0061FF" stroke-width="2"
+                  stroke-linecap="round" />
+                <line x1="12.5" y1="1" x2="12.5" y2="29" stroke="#0061FF" stroke-width="2"
+                  stroke-linecap="round" />
+                <line x1="1" y1="12.5" x2="29" y2="12.5" stroke="#0061FF" stroke-width="2"
+                  stroke-linecap="round" />
+                <line x1="17.5" y1="1" x2="17.5" y2="29" stroke="#0061FF" stroke-width="2"
+                  stroke-linecap="round" />
+              </svg>
+              <!-- <svg class="svg-icon" width="30" height="32" viewBox="0 0 30 32" fill="none"
                 xmlns="http://www.w3.org/2000/svg">
                 <circle cx="15" cy="6.66797" r="6" fill="currentColor" />
                 <line x1="1" y1="4" x2="29" y2="4" stroke="currentColor"
@@ -709,7 +724,7 @@
                   stroke-width="2" stroke-linecap="round" />
                 <text x="15" y="32" fill="currentColor" font-size="12"
                   text-anchor="middle">BIT</text>
-              </svg>
+              </svg> -->
             </button>
             <button class="toolbar-btn gate" draggable="true"
               data-tooltip-title="Measurement"
@@ -745,6 +760,26 @@
                   d="M1 -4.37114e-08C1.55228 -1.95703e-08 2 0.447715 2 1L2 2.875C2 3.42728 1.55228 3.875 1 3.875C0.447715 3.875 -1.49811e-07 3.42728 -1.2567e-07 2.875L-4.37114e-08 1C-1.95703e-08 0.447715 0.447715 -6.78525e-08 1 -4.37114e-08ZM1 5.625C1.55228 5.625 2 6.07272 2 6.625L2 10.375C2 10.9273 1.55228 11.375 1 11.375C0.447715 11.375 -4.77647e-07 10.9273 -4.53506e-07 10.375L-2.89588e-07 6.625C-2.65447e-07 6.07272 0.447715 5.625 1 5.625ZM0.999999 13.125C1.55228 13.125 2 13.5727 2 14.125L2 17.875C2 18.4273 1.55228 18.875 0.999999 18.875C0.447714 18.875 -8.05482e-07 18.4273 -7.81341e-07 17.875L-6.17423e-07 14.125C-5.93282e-07 13.5727 0.447715 13.125 0.999999 13.125ZM0.999999 20.625C1.55228 20.625 2 21.0727 2 21.625L2 25.375C2 25.9273 1.55228 26.375 0.999999 26.375C0.447714 26.375 -1.13332e-06 25.9273 -1.10918e-06 25.375L-9.45259e-07 21.625C-9.21118e-07 21.0727 0.447714 20.625 0.999999 20.625ZM0.999999 28.125C1.55228 28.125 2 28.5727 2 29.125L2 31C2 31.5523 1.55228 32 0.999999 32C0.447714 32 -1.37919e-06 31.5523 -1.35505e-06 31L-1.27309e-06 29.125C-1.24895e-06 28.5727 0.447714 28.125 0.999999 28.125Z"
                   fill="currentColor" />
               </svg>
+            </button>
+          </section>
+        </details>
+        <!-- Qubit Modifier -->
+        <details open class="gate-group">
+          <summary>
+            <span>
+              <i class="fa-solid fa-angle-down"></i>Qubit Modifier
+            </span>
+          </summary>
+          <section>
+            <button class="toolbar-btn gate" data-tooltip="Add Qubit"
+              onclick="appendNewQubit()">
+              <!-- <i class="fa-solid fa-rotate-left"></i> -->
+              +Q
+            </button>
+            <button class="toolbar-btn gate" data-tooltip="Add Bit"
+              onclick="appendNewBit()">
+              <!-- <i class="fa-solid fa-rotate-right"></i> -->
+              +B
             </button>
           </section>
         </details>
@@ -964,8 +999,8 @@
             id="qiskit-code-copy-btn">
             Copy
           </button>
-          <button class="toolbar-btn fluid" onclick="openExportDialog()">
-            Export
+          <button class="toolbar-btn fluid" onclick="openExportDialog('qasm')">
+            QASM
           </button>
         </div>
         <pre class="line-numbers">
