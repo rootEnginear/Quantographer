@@ -1,0 +1,175 @@
+@import 'menubar';
+@import 'toolbar';
+@import 'tooltip';
+@import 'contextmenu';
+@import 'prismcss';
+@import 'gate-group-accordion';
+@import 'winbox';
+@import 'workbench';
+
+@import 'dialog';
+
+@import 'alertify';
+@import 'spinner';
+
+@import 'guideline';
+@import 'chartcss';
+
+* {
+	box-sizing: border-box;
+	outline: 0;
+	user-select: none;
+}
+
+html, body {
+	overflow: hidden;
+
+	font-family: 'IBM Plex Sans', sans-serif;
+	line-height: 1.17;
+	letter-spacing: 0.7px;
+
+	width: 100vw;
+	height: 100vh;
+	position: fixed;
+}
+
+#app {
+	display: flex;
+	flex-direction: column;
+
+	height: 100%;
+	width: 100%;
+}
+
+.u {
+	text-decoration: underline;
+}
+
+.workspace {
+	flex: 1 1 0;
+	min-height: 0;
+
+	position: relative;
+
+	display: flex;
+
+	&::before,
+	&::after {
+		content: '';
+		width: 0vw;
+
+		transition: width 0.3s;
+		will-change: width;
+
+		.not-ready & {
+			transition: all 0s !important;
+		}
+	}
+
+	&.palette-open::before,
+	&.code-open::after {
+		width: 20vw;
+	}
+}
+
+.palette,
+.code {
+	background: #f8f8f8;
+
+	width: 20vw;
+	height: 100%;
+	overflow: auto;
+
+	position: absolute;
+	box-sizing: border-box;
+
+	transition: transform 0.3s;
+	will-change: transform;
+
+	.not-ready & {
+		transition: all 0s !important;
+	}
+}
+
+.palette {
+	border-right: 2px solid #0061ff;
+	padding: 8px;
+
+	transform: translateX(-100%);
+}
+
+.workspace.palette-open .palette {
+	transform: translateX(0);
+}
+
+.code {
+	border-left: 2px solid #0061ff;
+
+	right: 0;
+	transform: translateX(100%);
+
+	display: flex;
+	flex-direction: column;
+
+	overflow-x: hidden;
+
+	> .toolbar {
+		white-space: nowrap;
+
+		> .code-title {
+			color: #0061ff;
+			font-weight: 700;
+
+			display: flex;
+			align-items: center;
+			justify-content: center;
+		}
+	}
+
+	> pre {
+		border-radius: 0;
+		padding: 0 1rem 0 3.8rem;
+		margin: 0;
+
+		height: 100%;
+	}
+}
+
+.workspace.code-open .code {
+	transform: translateX(0);
+}
+
+.space {
+	overflow: auto;
+	height: 100%;
+
+	flex: 1 1 0;
+}
+
+.status-bar {
+	background: #f2f7ff;
+	border-top: 2px solid #0061ff;
+
+	height: 32px;
+	padding: 4px 12px;
+
+	display: flex;
+	align-items: center;
+}
+
+.row {
+	display: flex;
+	align-items: center;
+	justify-content: center;
+
+	gap: 1rem;
+}
+
+.col {
+	flex: 1 1 0%;
+}
+
+#output-qiskit-result,
+#output-qiskit-result > * {
+	user-select: text !important;
+}

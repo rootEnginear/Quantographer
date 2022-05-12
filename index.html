@@ -1,0 +1,1104 @@
+<!DOCTYPE html>
+<html lang="en" class="not-ready" style="opacity: 0;">
+
+<head>
+  <meta charset="UTF-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="dns-prefetch" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link rel="dns-prefetch" href="https://fonts.gstatic.com">
+  <link
+    href="https://fonts.googleapis.com/css2?family=IBM+Plex+Sans:wght@300;400;700&display=swap"
+    rel="stylesheet">
+  <link rel="preconnect" href="https://cdn.jsdelivr.net">
+  <link rel="dns-prefetch" href="https://cdn.jsdelivr.net">
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/reseter.css" />
+  <link rel="preconnect" href="https://rawcdn.githack.com">
+  <link rel="dns-prefetch" href="https://rawcdn.githack.com">
+  <link rel="stylesheet"
+    href="https://rawcdn.githack.com/nextapps-de/winbox/0.2.0/dist/css/winbox.min.css">
+  <link rel="stylesheet"
+    href="https://cdn.jsdelivr.net/gh/rootEnginear/Qemmet/fonts/fonts.css">
+  <link rel="stylesheet"
+    href="https://cdn.jsdelivr.net/npm/charts.css/dist/charts.min.css">
+  <link rel="preconnect" href="https://kit.fontawesome.com">
+  <link rel="dns-prefetch" href="https://kit.fontawesome.com">
+
+  <meta name="robots" content="none" />
+
+  <link rel="apple-touch-icon" sizes="180x180" href="/apple-touch-icon.png">
+  <link rel="icon" type="image/png" sizes="32x32" href="/favicon-32x32.png">
+  <link rel="icon" type="image/png" sizes="16x16" href="/favicon-16x16.png">
+  <link rel="manifest" href="/site.webmanifest">
+  <link rel="mask-icon" href="/safari-pinned-tab.svg" color="#0061ff">
+  <meta name="msapplication-TileColor" content="#0061ff">
+  <meta name="theme-color" content="#ffffff">
+
+  <!-- HTML Meta Tags -->
+  <title>Quantographer</title>
+  <meta name="description"
+    content="Comprehend, analyze, optimize, and choose the best IBMQ architecture for your quantum circuit with our built-in recommendation system.">
+
+  <!-- Facebook Meta Tags -->
+  <meta property="og:url" content="https://quantographer.netlify.app/">
+  <meta property="og:type" content="website">
+  <meta property="og:title" content="Quantographer">
+  <meta property="og:description"
+    content="Comprehend, analyze, optimize, and choose the best IBMQ architecture for your quantum circuit with our built-in recommendation system.">
+  <meta property="og:image" content="https://quantographer.netlify.app/og.jpg">
+
+  <!-- Twitter Meta Tags -->
+  <meta name="twitter:card" content="summary_large_image">
+  <meta property="twitter:domain" content="quantographer.netlify.app">
+  <meta property="twitter:url" content="https://quantographer.netlify.app/">
+  <meta name="twitter:title" content="Quantographer">
+  <meta name="twitter:description"
+    content="Comprehend, analyze, optimize, and choose the best IBMQ architecture for your quantum circuit with our built-in recommendation system.">
+  <meta name="twitter:image" content="https://quantographer.netlify.app/og.jpg">
+
+  <!-- Meta Tags Generated via https://www.opengraph.xyz -->
+</head>
+
+<body>
+  <div id="app">
+    <!-- Menubar -->
+    <div class="menubar">
+      <div class="left">
+        <img src="logo.png" alt="">
+        <button class="menubar-btn" onclick="toggleFullscreen()" id="fullscreen-btn"
+          data-tooltip="Toggle Fullscreen">
+          <i class="fa-solid fa-up-right-and-down-left-from-center"></i>
+        </button>
+      </div>
+      <!-- <div id="menu" class="left"></div> -->
+      <div class="center">
+        <button class="menubar-btn" onclick="renameFile()" id="filename">
+          Untitled1 &mdash; Quantographer
+        </button>
+      </div>
+      <div class="right">
+        <button class="menubar-btn" onclick="changeIbmKey()">
+          <i class="fa-solid fa-link" style="margin-right:0.375rem"></i>
+          <span id="ibmkey">Connect to IBMQ</span>
+        </button>
+      </div>
+    </div>
+    <!-- Primary Toolbar -->
+    <div class="toolbar toolbar-primary">
+      <!-- Left -->
+      <button class="toolbar-btn ghost" data-tooltip="New file"
+        onclick="resetProgram()">
+        <i class="fa-solid fa-file-medical"></i>
+      </button>
+      <button class="toolbar-btn ghost" data-tooltip="Open file"
+        onclick="chooseAndLoadFile()">
+        <i class="fa-solid fa-folder-open"></i>
+      </button>
+      <button class="toolbar-btn ghost" data-tooltip="Save file"
+        onclick="saveFile()">
+        <i class="fa-solid fa-floppy-disk"></i>
+      </button>
+      <button class="toolbar-btn ghost" data-tooltip="Export file"
+        onclick="openExportDialog()">
+        <i class="fa-solid fa-file-export"></i>
+      </button>
+      <div class="toolbar-separator"></div>
+      <button class="toolbar-btn ghost" data-tooltip="Cut" onclick="gateCutSelected()">
+        <i class="fa-solid fa-scissors"></i>
+      </button>
+      <button class="toolbar-btn ghost" data-tooltip="Copy" onclick="gateCopySelected()">
+        <i class="fa-solid fa-copy"></i>
+      </button>
+      <button class="toolbar-btn ghost" data-tooltip="Paste"
+        onclick="gatePasteClipboard()">
+        <i class="fa-solid fa-paste"></i>
+      </button>
+      <button class="toolbar-btn ghost" data-tooltip="Delete"
+        onclick="gateDeleteSelected()">
+        <i class="fa-solid fa-trash-can"></i>
+      </button>
+      <!-- <div class="toolbar-separator"></div>
+      <button class="toolbar-btn ghost" data-tooltip="Undo">
+        <i class="fa-solid fa-rotate-left"></i>
+      </button>
+      <button class="toolbar-btn ghost" data-tooltip="Redo">
+        <i class="fa-solid fa-rotate-right"></i>
+      </button> -->
+      <div class="toolbar-separator"></div>
+      <div class="select is-small">
+        <select id="zoom-level">
+          <option value="0.25">25%</option>
+          <option value="0.5">50%</option>
+          <option value="0.75">75%</option>
+          <option value="1" selected>100%</option>
+          <option value="1.25">125%</option>
+          <option value="1.5">150%</option>
+          <option value="1.75">175%</option>
+          <option value="2">200%</option>
+        </select>
+      </div>
+      <button id="zoom-in-btn" class="toolbar-btn ghost" data-tooltip="Zoom In">
+        <i class="fa-solid fa-magnifying-glass-plus"></i>
+      </button>
+      <button id="zoom-out-btn" class="toolbar-btn ghost" data-tooltip="Zoom Out">
+        <i class="fa-solid fa-magnifying-glass-minus"></i>
+      </button>
+      <!-- <div class="toolbar-separator"></div>
+      <button class="toolbar-btn ghost" data-tooltip="Group Gates">
+        <i class="fa-solid fa-object-group"></i>
+      </button>
+      <button class="toolbar-btn ghost" data-tooltip="Ungroup Gates">
+        <i class="fa-solid fa-object-ungroup"></i>
+      </button>
+      <div class="toolbar-separator"></div>
+      <button class="toolbar-btn ghost" data-tooltip="Conjugate Transpose">
+        <svg class="svg-icon" width="30" height="32" viewBox="0 0 30 32"
+          fill="none"
+          xmlns="http://www.w3.org/2000/svg">
+          <path
+            d="M17.9984 31.25L15.954 24.8746H6.9L4.89206 31.25H0L8.54286 6.25H14.5302L23 31.25H17.9984ZM11.5 10.548H11.3175L8.06826 20.8274H14.7857L11.5 10.548Z"
+            fill="currentColor" />
+          <path d="M23 23.25V8.75H19V6.25H23V0.75H25.5V6.25H29.5V8.75H25.5V23.25H23Z"
+            fill="currentColor" />
+        </svg>
+      </button> -->
+      <!-- Separator -->
+      <div class="toolbar-flex"></div>
+      <!-- Right -->
+      <button class="toolbar-btn fluid"
+        onclick="openExecuteDialog()">
+        <i class="fa-solid fa-play" style="margin-right:0.25rem"></i>Transpile & Execute
+      </button>
+    </div>
+    <!-- Secondary Toolbar -->
+    <div class="toolbar toolbar-secondary">
+      <!-- Left -->
+      <button class="toolbar-btn active"
+        id="btn-toggle-palette"
+        onclick="togglePalette()"
+        data-tooltip="Toggle Palette">
+        <i class="fa-solid fa-toolbox"></i>
+      </button>
+      <!-- Separator -->
+      <div class="toolbar-separator"></div>
+      <!-- <div class="toolbar-flex"></div> -->
+      <button class="toolbar-btn gate" draggable="true"
+        data-tooltip-title="Z Gate"
+        data-tooltip="Transform |1⟩ to i|1⟩. But not affect |0⟩. Mathematically, this gate rotates a qubit around Z axis by 180°."
+        data-gateid="z">
+        Z
+      </button>
+      <button class="toolbar-btn gate" draggable="true"
+        data-tooltip-title="Y Gate"
+        data-tooltip="Transform |0⟩ into i|1⟩. And transform |1⟩ to -i|0⟩. Mathematically, this gate rotates a qubit around Y axis by 180°."
+        data-gateid="y">
+        Y
+      </button>
+      <button class="toolbar-btn gate" draggable="true"
+        data-tooltip-title="X Gate"
+        data-tooltip="Transform |0⟩ into |1⟩. And transform |1⟩ to |0⟩. Mathematically, this gate rotates a qubit around X axis by 180°."
+        data-gateid="x">
+        X
+      </button>
+      <button class="toolbar-btn gate" draggable="true"
+        data-tooltip-title="H Gate"
+        data-tooltip="Transform |0⟩ into √½|0⟩+√½|1⟩. And transform |1⟩ to √½|0⟩-√½|1⟩. Mathematically, this gate rotates a qubit around X and Z axis by 180°."
+        data-gateid="h">
+        H
+      </button>
+      <div class="toolbar-separator"></div>
+      <!-- <button class="toolbar-btn gate" draggable="true"
+        data-tooltip-title="U3 Gate"
+        data-tooltip="Rotate a qubit with parameterized angle of theta, phi, and lambda."
+        data-gateid="u3">
+        U<sub>3</sub>
+      </button> -->
+      <button class="toolbar-btn gate" draggable="true"
+        data-tooltip-title="RZ Gate"
+        data-tooltip="Rotate a qubit with parameterized angle around Z axis."
+        data-gateid="rz">
+        RZ
+      </button>
+      <button class="toolbar-btn gate" draggable="true"
+        data-tooltip-title="RY Gate"
+        data-tooltip="Rotate a qubit with parameterized angle around Y axis."
+        data-gateid="ry">
+        RY
+      </button>
+      <button class="toolbar-btn gate" draggable="true"
+        data-tooltip-title="RX Gate"
+        data-tooltip="Rotate a qubit with parameterized angle around X axis."
+        data-gateid="rx">
+        RX
+      </button>
+      <div class="toolbar-separator"></div>
+      <button class="toolbar-btn gate" draggable="true"
+        data-tooltip-title="Controlled-Not Gate"
+        data-tooltip="Create an X gate controlled by 1 qubit."
+        data-gateid="cnot">
+        <svg class="svg-icon" width="16" height="32" viewBox="0 0 16 32" fill="none"
+          xmlns="http://www.w3.org/2000/svg">
+          <circle cx="8" cy="24.8889" r="6.11111" fill="white" stroke="currentColor"
+            stroke-width="2" />
+          <line x1="7.88889" y1="30.2222" x2="7.88889" y2="1.77772" stroke="currentColor"
+            stroke-width="2" />
+          <line x1="0.888885" y1="24.7778" x2="15.1111" y2="24.7778" stroke="currentColor"
+            stroke-width="2" />
+          <circle cx="7.99998" cy="3.55556" r="3.55556" fill="currentColor" />
+        </svg>
+      </button>
+      <button class="toolbar-btn gate" draggable="true"
+        data-tooltip-title="Toffoli Gate"
+        data-tooltip="Create an X gate controlled by 2 qubits."
+        data-gateid="toff">
+        <svg class="svg-icon" width="16" height="32" viewBox="0 0 16 32" fill="none"
+          xmlns="http://www.w3.org/2000/svg">
+          <circle cx="8.00003" cy="24.8889" r="6.11111" fill="white" stroke="currentColor"
+            stroke-width="2" />
+          <line x1="7.88892" y1="30.2222" x2="7.88892" y2="1.77772" stroke="currentColor"
+            stroke-width="2" />
+          <line x1="0.888916" y1="24.7778" x2="15.1111" y2="24.7778" stroke="currentColor"
+            stroke-width="2" />
+          <circle cx="8.00001" cy="3.55556" r="3.55556" fill="currentColor" />
+          <circle cx="8.00001" cy="12.4445" r="3.55556" fill="currentColor" />
+        </svg>
+      </button>
+      <button class="toolbar-btn gate" draggable="true"
+        data-tooltip-title="Swap Gate"
+        data-tooltip="Create a swap gate that swap two qubits."
+        data-gateid="swap">
+        <svg class="svg-icon" width="11" height="32" viewBox="0 0 11 32" fill="none"
+          xmlns="http://www.w3.org/2000/svg">
+          <line x1="1.8439" y1="22.8594" x2="9.57026" y2="30.5857" stroke="currentColor"
+            stroke-width="2" stroke-linecap="round" />
+          <line x1="9.57025" y1="22.9678" x2="1.84389" y2="30.6942" stroke="currentColor"
+            stroke-width="2" stroke-linecap="round" />
+          <line x1="1.8439" y1="1.30579" x2="9.57026" y2="9.03215" stroke="currentColor"
+            stroke-width="2" stroke-linecap="round" />
+          <line x1="9.57025" y1="1.41421" x2="1.84389" y2="9.14058" stroke="currentColor"
+            stroke-width="2" stroke-linecap="round" />
+          <line x1="5.57587" y1="25.7767" x2="5.57587" y2="5.61663" stroke="currentColor"
+            stroke-width="2" stroke-linecap="round" />
+        </svg>
+      </button>
+      <button class="toolbar-btn gate" draggable="true"
+        data-tooltip-title="Gate Qubit Control Modifier"
+        data-tooltip="Modify a gate by adding a control qubit onto it."
+        data-gateid="ctrl">
+        <svg class="svg-icon" width="30" height="30" viewBox="0 0 30 30" fill="none"
+          xmlns="http://www.w3.org/2000/svg">
+          <circle cx="15" cy="15" r="6" fill="#0061FF" />
+          <line x1="1" y1="15" x2="29" y2="15" stroke="#0061FF" stroke-width="2"
+            stroke-linecap="round" />
+          <line x1="15" y1="1" x2="15" y2="29" stroke="#0061FF" stroke-width="2"
+            stroke-linecap="round" />
+        </svg>
+      </button>
+      <!-- <button class="toolbar-btn gate" draggable="true"
+        data-tooltip-title="Gate Bit Control Modifier"
+        data-tooltip="Modify a gate by adding a control bit onto it."
+        data-gateid="ctrlbit">
+        <svg class="svg-icon" width="30" height="32" viewBox="0 0 30 32" fill="none"
+          xmlns="http://www.w3.org/2000/svg">
+          <circle cx="15" cy="6.66797" r="6" fill="currentColor" />
+          <line x1="1" y1="4" x2="29" y2="4" stroke="currentColor"
+            stroke-width="2" stroke-linecap="round" />
+          <line x1="1" y1="7.5" x2="29" y2="7.5" stroke="currentColor"
+            stroke-width="2" stroke-linecap="round" />
+          <line x1="15" y1="6.66797" x2="15" y2="17.668" stroke="currentColor"
+            stroke-width="2" stroke-linecap="round" />
+          <text x="15" y="32" fill="currentColor" font-size="12"
+            text-anchor="middle">BIT</text>
+        </svg>
+      </button> -->
+      <div class="toolbar-separator"></div>
+      <button class="toolbar-btn gate" draggable="true"
+        data-tooltip-title="Measurement"
+        data-tooltip="Measure a particular qubit."
+        data-gateid="measure">
+        <svg class="svg-icon" width="34" height="30" viewBox="0 0 34 30" fill="none"
+          xmlns="http://www.w3.org/2000/svg">
+          <path fill-rule="evenodd" clip-rule="evenodd"
+            d="M29.2606 0.0513438C29.7846 -0.123304 30.3509 0.159856 30.5255 0.683799L33.3716 9.22195C33.5462 9.74589 33.2631 10.3122 32.7391 10.4869C32.2152 10.6615 31.6489 10.3783 31.4742 9.8544L29.3916 3.60658L23.1656 16.0585C27.6001 18.6645 30.5768 23.4846 30.5768 29C30.5768 29.5523 30.1291 30 29.5768 30C29.0246 30 28.5768 29.5523 28.5768 29C28.5768 24.2678 26.0484 20.1262 22.2687 17.8524L16.4713 29.4472C16.2243 29.9412 15.6236 30.1414 15.1296 29.8945C14.6357 29.6475 14.4354 29.0468 14.6824 28.5528L20.4805 16.9566C18.9673 16.3399 17.3118 16 15.5768 16C8.39714 16 2.57684 21.8203 2.57684 29C2.57684 29.5523 2.12913 30 1.57684 30C1.02456 30 0.576843 29.5523 0.576843 29C0.576843 20.7158 7.29257 14 15.5768 14C17.6333 14 19.5931 14.4138 21.3774 15.1628L27.6027 2.71215L21.3549 4.79476C20.831 4.96941 20.2647 4.68625 20.09 4.1623C19.9154 3.63836 20.1985 3.07204 20.7225 2.89739L29.2606 0.0513438Z"
+            fill="currentColor" />
+        </svg>
+      </button>
+      <button class="toolbar-btn gate" draggable="true"
+        data-tooltip-title="Reset"
+        data-tooltip="Reset a particular qubit to state |0⟩."
+        data-gateid="reset">
+        <svg class="svg-icon" width="20" height="22" viewBox="0 0 20 22" fill="none"
+          xmlns="http://www.w3.org/2000/svg">
+          <path d="M1.25 1V21" stroke="currentColor" />
+          <path d="M15.3409 1L19.4318 11L15.3409 21" stroke="currentColor" />
+          <path
+            d="M13.0318 10.9273C13.0318 8.98181 12.8318 7.79999 12.2318 6.63635C11.4318 5.03635 9.9591 4.63635 8.9591 4.63635C6.66819 4.63635 5.83182 6.34544 5.57728 6.85453C4.92273 8.18181 4.88637 9.98181 4.88637 10.9273C4.88637 12.1273 4.94091 13.9636 5.81364 15.4182C6.65 16.7636 7.99546 17.1091 8.9591 17.1091C9.83182 17.1091 11.3955 16.8364 12.3046 15.0364C12.9773 13.7273 13.0318 12.1091 13.0318 10.9273ZM11.4136 10.7091C11.4136 11.7818 11.4136 13.4182 11.1955 14.4364C10.8136 16.3454 9.55909 16.6 8.9591 16.6C8.34091 16.6 7.08637 16.3091 6.70455 14.4C6.50455 13.3636 6.50455 11.6545 6.50455 10.7091C6.50455 9.45453 6.50455 8.18181 6.70455 7.18181C7.08637 5.32726 8.50455 5.14544 8.9591 5.14544C9.57728 5.14544 10.8318 5.45453 11.1955 7.10908C11.4136 8.10908 11.4136 9.47272 11.4136 10.7091Z"
+            fill="currentColor" />
+        </svg>
+      </button>
+      <button class="toolbar-btn gate" draggable="true"
+        data-tooltip-title="Barrier"
+        data-tooltip="Separate the circuit into sections. This will also prevent the transpiler to merge or optimize the gates across that separation."
+        data-gateid="barrier">
+        <svg class="svg-icon" width="2" height="32" viewBox="0 0 2 32" fill="none"
+          xmlns="http://www.w3.org/2000/svg">
+          <path fill-rule="evenodd" clip-rule="evenodd"
+            d="M1 -4.37114e-08C1.55228 -1.95703e-08 2 0.447715 2 1L2 2.875C2 3.42728 1.55228 3.875 1 3.875C0.447715 3.875 -1.49811e-07 3.42728 -1.2567e-07 2.875L-4.37114e-08 1C-1.95703e-08 0.447715 0.447715 -6.78525e-08 1 -4.37114e-08ZM1 5.625C1.55228 5.625 2 6.07272 2 6.625L2 10.375C2 10.9273 1.55228 11.375 1 11.375C0.447715 11.375 -4.77647e-07 10.9273 -4.53506e-07 10.375L-2.89588e-07 6.625C-2.65447e-07 6.07272 0.447715 5.625 1 5.625ZM0.999999 13.125C1.55228 13.125 2 13.5727 2 14.125L2 17.875C2 18.4273 1.55228 18.875 0.999999 18.875C0.447714 18.875 -8.05482e-07 18.4273 -7.81341e-07 17.875L-6.17423e-07 14.125C-5.93282e-07 13.5727 0.447715 13.125 0.999999 13.125ZM0.999999 20.625C1.55228 20.625 2 21.0727 2 21.625L2 25.375C2 25.9273 1.55228 26.375 0.999999 26.375C0.447714 26.375 -1.13332e-06 25.9273 -1.10918e-06 25.375L-9.45259e-07 21.625C-9.21118e-07 21.0727 0.447714 20.625 0.999999 20.625ZM0.999999 28.125C1.55228 28.125 2 28.5727 2 29.125L2 31C2 31.5523 1.55228 32 0.999999 32C0.447714 32 -1.37919e-06 31.5523 -1.35505e-06 31L-1.27309e-06 29.125C-1.24895e-06 28.5727 0.447714 28.125 0.999999 28.125Z"
+            fill="currentColor" />
+        </svg>
+      </button>
+      <button class="toolbar-btn gate fluid"
+        data-tooltip-title="Create New Gate"
+        data-tooltip="Create a new gate from a qubit rotation or a matrix."
+        onclick="openNewGateDialog()">
+        <i class="fa-solid fa-plus" style="margin-right:0.25rem"></i>New
+      </button>
+      <div class="toolbar-separator"></div>
+      <button class="toolbar-btn gate" data-tooltip="Add Qubit"
+        onclick="appendNewQubit()">
+        <!-- <i class="fa-solid fa-rotate-left"></i> -->
+        +Q
+      </button>
+      <button class="toolbar-btn gate" data-tooltip="Add Bit" onclick="appendNewBit()">
+        <!-- <i class="fa-solid fa-rotate-right"></i> -->
+        +C
+      </button>
+      <!-- Separator -->
+      <div class="toolbar-flex"></div>
+      <!-- Right -->
+      <button class="toolbar-btn"
+        id="btn-toggle-code"
+        onclick="toggleCode()"
+        data-tooltip="Toggle Code Output">
+        <i class="fa-solid fa-code"></i>
+      </button>
+    </div>
+    <div class="workspace palette-open" id="workspace">
+      <!-- Gate Palette -->
+      <div class="palette" id="palette">
+        <!-- Common Gates -->
+        <details open class="gate-group">
+          <summary>
+            <span>
+              <i class="fa-solid fa-angle-down"></i>Common Gates
+            </span>
+          </summary>
+          <section>
+            <button class="toolbar-btn gate" draggable="true"
+              data-tooltip-title="Z Gate"
+              data-tooltip="Transform |1⟩ to i|1⟩. But not affect |0⟩. Mathematically, this gate rotates a qubit around Z axis by 180°."
+              data-gateid="z">
+              Z
+            </button>
+            <button class="toolbar-btn gate" draggable="true"
+              data-tooltip-title="Y Gate"
+              data-tooltip="Transform |0⟩ into i|1⟩. And transform |1⟩ to -i|0⟩. Mathematically, this gate rotates a qubit around Y axis by 180°."
+              data-gateid="y">
+              Y
+            </button>
+            <button class="toolbar-btn gate" draggable="true"
+              data-tooltip-title="X Gate"
+              data-tooltip="Transform |0⟩ into |1⟩. And transform |1⟩ to |0⟩. Mathematically, this gate rotates a qubit around X axis by 180°."
+              data-gateid="x">
+              X
+            </button>
+            <button class="toolbar-btn gate" draggable="true"
+              data-tooltip-title="H Gate"
+              data-tooltip="Transform |0⟩ into √½|0⟩+√½|1⟩. And transform |1⟩ to √½|0⟩-√½|1⟩. Mathematically, this gate rotates a qubit around X and Z axis by 180°."
+              data-gateid="h">
+              H
+            </button>
+          </section>
+        </details>
+        <!-- User Gates -->
+        <details open class="gate-group">
+          <summary>
+            <span>
+              <i class="fa-solid fa-angle-down"></i>User Gates
+            </span>
+          </summary>
+          <section id="new-gate-area">
+            <button class="toolbar-btn gate fluid"
+              data-tooltip-title="Create New Gate"
+              data-tooltip="Create a new gate from a qubit rotation or a matrix."
+              onclick="openNewGateDialog()">
+              <i class="fa-solid fa-plus" style="margin-right:0.25rem"></i>New
+            </button>
+          </section>
+        </details>
+        <!-- 90° Turn -->
+        <details open class="gate-group">
+          <summary>
+            <span>
+              <i class="fa-solid fa-angle-down"></i>90° Turn
+            </span>
+          </summary>
+          <section>
+            <button class="toolbar-btn gate" draggable="true"
+              data-tooltip-title="S Gate"
+              data-tooltip="Square root of Z gate, hence the name. This gate rotates a qubit around Z axis by 90°."
+              data-gateid="s">
+              S
+            </button>
+            <button class="toolbar-btn gate has-dag" draggable="true"
+              data-tooltip-title="S† Gate"
+              data-tooltip="Conjugate Transpose of a square root of Z gate. This gate rotates a qubit around Z axis by -90°."
+              data-gateid="sdg">
+              S<sup>†</sup>
+            </button>
+            <button class="toolbar-btn gate" draggable="true"
+              data-tooltip-title="√Y Gate"
+              data-tooltip="Rotate a qubit around Y axis by 90°."
+              data-gateid="sy">
+              √Y
+            </button>
+            <button class="toolbar-btn gate has-dag" draggable="true"
+              data-tooltip-title="√Y† Gate"
+              data-tooltip="Conjugate Transpose of a square root of Y gate. This gate rotates a qubit around Y axis by -90°."
+              data-gateid="sydg">
+              √Y<sup>†</sup>
+            </button>
+            <button class="toolbar-btn gate" draggable="true"
+              data-tooltip-title="√X Gate"
+              data-tooltip="Rotate a qubit around X axis by 90°."
+              data-gateid="sx">
+              √X
+            </button>
+            <button class="toolbar-btn gate has-dag" draggable="true"
+              data-tooltip-title="√X† Gate"
+              data-tooltip="Conjugate Transpose of a square root of X gate. This gate rotates a qubit around X axis by -90°."
+              data-gateid="sxdg">
+              √X<sup>†</sup>
+            </button>
+          </section>
+        </details>
+        <!-- 45° Turn -->
+        <details open class="gate-group">
+          <summary>
+            <span>
+              <i class="fa-solid fa-angle-down"></i>45° Turn
+            </span>
+          </summary>
+          <section>
+            <button class="toolbar-btn gate" draggable="true"
+              data-tooltip-title="T Gate"
+              data-tooltip="forTh root of Z gate, hence the name. This gate rotates a qubit around Z axis by 45°."
+              data-gateid="t">
+              T
+            </button>
+            <button class="toolbar-btn gate has-dag" draggable="true"
+              data-tooltip-title="T† Gate"
+              data-tooltip="Conjugate Transpose of a forth root of Z gate. This gate rotates a qubit around Z axis by -45°."
+              data-gateid="tdg">
+              T<sup>†</sup>
+            </button>
+            <button class="toolbar-btn gate" draggable="true"
+              data-tooltip-title="∜Y Gate"
+              data-tooltip="Rotate a qubit around Y axis by 45°."
+              data-gateid="4y">
+              ∜Y
+            </button>
+            <button class="toolbar-btn gate has-dag" draggable="true"
+              data-tooltip-title="∜Y† Gate"
+              data-tooltip="Conjugate Transpose of a forth root of Y gate. This gate rotates a qubit around Y axis by -45°."
+              data-gateid="4ydg">
+              ∜Y<sup>†</sup>
+            </button>
+            <button class="toolbar-btn gate" draggable="true"
+              data-tooltip-title="∜X Gate"
+              data-tooltip="Rotate a qubit around X axis by 45°."
+              data-gateid="4x">
+              ∜X
+            </button>
+            <button class="toolbar-btn gate has-dag" draggable="true"
+              data-tooltip-title="∜X† Gate"
+              data-tooltip="Conjugate Transpose of a forth root of X gate. This gate rotates a qubit around X axis by -45°."
+              data-gateid="4xdg">
+              ∜X<sup>†</sup>
+            </button>
+          </section>
+        </details>
+        <!-- Parameterized Gates -->
+        <details open class="gate-group">
+          <summary>
+            <span>
+              <i class="fa-solid fa-angle-down"></i>Parameterized Gates
+            </span>
+          </summary>
+          <section>
+            <button class="toolbar-btn gate" draggable="true"
+              data-tooltip-title="RZ Gate"
+              data-tooltip="Rotate a qubit with parameterized angle around Z axis."
+              data-gateid="rz">
+              RZ
+            </button>
+            <button class="toolbar-btn gate" draggable="true"
+              data-tooltip-title="RY Gate"
+              data-tooltip="Rotate a qubit with parameterized angle around Y axis."
+              data-gateid="ry">
+              RY
+            </button>
+            <button class="toolbar-btn gate" draggable="true"
+              data-tooltip-title="RX Gate"
+              data-tooltip="Rotate a qubit with parameterized angle around X axis."
+              data-gateid="rx">
+              RX
+            </button>
+          </section>
+        </details>
+        <!-- Universal Gates -->
+        <!-- <details open class="gate-group">
+          <summary>
+            <span>
+              <i class="fa-solid fa-angle-down"></i>Universal Gates
+            </span>
+          </summary>
+          <section>
+            <button class="toolbar-btn gate" draggable="true"
+              data-tooltip-title="U3 Gate"
+              data-tooltip="Rotate a qubit with parameterized angle of theta, phi, and lambda."
+              data-gateid="u3">
+              U<sub>3</sub>
+            </button>
+            <button class="toolbar-btn gate" draggable="true"
+              data-tooltip-title="U2 Gate"
+              data-tooltip="Rotate a qubit with parameterized angle of theta, and phi."
+              data-gateid="u2">
+              U<sub>2</sub>
+            </button>
+            <button class="toolbar-btn gate" draggable="true"
+              data-tooltip-title="U1 Gate"
+              data-tooltip="Rotate a qubit with parameterized angle of theta."
+              data-gateid="u1">
+              U<sub>1</sub>
+            </button>
+          </section>
+        </details> -->
+        <!-- 2-Qubit Gates -->
+        <details open class="gate-group">
+          <summary>
+            <span>
+              <i class="fa-solid fa-angle-down"></i>2-Qubit Gates
+            </span>
+          </summary>
+          <section>
+            <button class="toolbar-btn gate" draggable="true"
+              data-tooltip-title="Controlled-Not Gate"
+              data-tooltip="Create an X gate controlled by 1 qubit."
+              data-gateid="cnot">
+              <svg class="svg-icon" width="16" height="32" viewBox="0 0 16 32" fill="none"
+                xmlns="http://www.w3.org/2000/svg">
+                <circle cx="8" cy="24.8889" r="6.11111" fill="white" stroke="currentColor"
+                  stroke-width="2" />
+                <line x1="7.88889" y1="30.2222" x2="7.88889" y2="1.77772"
+                  stroke="currentColor"
+                  stroke-width="2" />
+                <line x1="0.888885" y1="24.7778" x2="15.1111" y2="24.7778"
+                  stroke="currentColor"
+                  stroke-width="2" />
+                <circle cx="7.99998" cy="3.55556" r="3.55556" fill="currentColor" />
+              </svg>
+            </button>
+            <button class="toolbar-btn gate" draggable="true"
+              data-tooltip-title="Swap Gate"
+              data-tooltip="Create a swap gate that swap two qubits."
+              data-gateid="swap">
+              <svg class="svg-icon" width="11" height="32" viewBox="0 0 11 32" fill="none"
+                xmlns="http://www.w3.org/2000/svg">
+                <line x1="1.8439" y1="22.8594" x2="9.57026" y2="30.5857"
+                  stroke="currentColor"
+                  stroke-width="2" stroke-linecap="round" />
+                <line x1="9.57025" y1="22.9678" x2="1.84389" y2="30.6942"
+                  stroke="currentColor"
+                  stroke-width="2" stroke-linecap="round" />
+                <line x1="1.8439" y1="1.30579" x2="9.57026" y2="9.03215"
+                  stroke="currentColor"
+                  stroke-width="2" stroke-linecap="round" />
+                <line x1="9.57025" y1="1.41421" x2="1.84389" y2="9.14058"
+                  stroke="currentColor"
+                  stroke-width="2" stroke-linecap="round" />
+                <line x1="5.57587" y1="25.7767" x2="5.57587" y2="5.61663"
+                  stroke="currentColor"
+                  stroke-width="2" stroke-linecap="round" />
+              </svg>
+            </button>
+          </section>
+        </details>
+        <!-- 3-Qubit Gates -->
+        <details open class="gate-group">
+          <summary>
+            <span>
+              <i class="fa-solid fa-angle-down"></i>3-Qubit Gates
+            </span>
+          </summary>
+          <section>
+            <button class="toolbar-btn gate" draggable="true"
+              data-tooltip-title="Toffoli Gate"
+              data-tooltip="Create an X gate controlled by 2 qubits."
+              data-gateid="toff">
+              <svg class="svg-icon" width="16" height="32" viewBox="0 0 16 32" fill="none"
+                xmlns="http://www.w3.org/2000/svg">
+                <circle cx="8.00003" cy="24.8889" r="6.11111" fill="white"
+                  stroke="currentColor"
+                  stroke-width="2" />
+                <line x1="7.88892" y1="30.2222" x2="7.88892" y2="1.77772"
+                  stroke="currentColor"
+                  stroke-width="2" />
+                <line x1="0.888916" y1="24.7778" x2="15.1111" y2="24.7778"
+                  stroke="currentColor"
+                  stroke-width="2" />
+                <circle cx="8.00001" cy="3.55556" r="3.55556" fill="currentColor" />
+                <circle cx="8.00001" cy="12.4445" r="3.55556" fill="currentColor" />
+              </svg>
+            </button>
+          </section>
+        </details>
+        <!-- Instructions and Modifier -->
+        <details open class="gate-group">
+          <summary>
+            <span>
+              <i class="fa-solid fa-angle-down"></i>Instructions and Modifier
+            </span>
+          </summary>
+          <section>
+            <button class="toolbar-btn gate" draggable="true"
+              data-tooltip-title="Gate Qubit Control Modifier"
+              data-tooltip="Modify a gate by adding a control qubit onto it."
+              data-gateid="ctrl">
+              <svg class="svg-icon" width="30" height="30" viewBox="0 0 30 30" fill="none"
+                xmlns="http://www.w3.org/2000/svg">
+                <circle cx="15" cy="15" r="6" fill="#0061FF" />
+                <line x1="1" y1="15" x2="29" y2="15" stroke="#0061FF" stroke-width="2"
+                  stroke-linecap="round" />
+                <line x1="15" y1="1" x2="15" y2="29" stroke="#0061FF" stroke-width="2"
+                  stroke-linecap="round" />
+              </svg>
+              <!-- <svg class="svg-icon" width="30" height="32" viewBox="0 0 30 32" fill="none"
+                xmlns="http://www.w3.org/2000/svg">
+                <path
+                  d="M4.612 31.332C4.06 31.332 3.56 31.244 3.112 31.068C2.672 30.884 2.292 30.612 1.972 30.252C1.66 29.892 1.42 29.448 1.252 28.92C1.084 28.384 1 27.764 1 27.06C1 26.356 1.084 25.732 1.252 25.188C1.42 24.636 1.66 24.176 1.972 23.808C2.292 23.432 2.672 23.148 3.112 22.956C3.56 22.764 4.06 22.668 4.612 22.668C5.364 22.668 5.988 22.828 6.484 23.148C6.98 23.468 7.376 23.952 7.672 24.6L6.316 25.32C6.196 24.944 6 24.644 5.728 24.42C5.456 24.188 5.084 24.072 4.612 24.072C4.02 24.072 3.548 24.272 3.196 24.672C2.852 25.072 2.68 25.632 2.68 26.352V27.672C2.68 28.4 2.852 28.96 3.196 29.352C3.548 29.736 4.02 29.928 4.612 29.928C5.084 29.928 5.468 29.8 5.764 29.544C6.068 29.288 6.288 28.972 6.424 28.596L7.708 29.352C7.404 29.976 7 30.464 6.496 30.816C5.992 31.16 5.364 31.332 4.612 31.332Z"
+                  fill="currentColor" />
+                <path
+                  d="M12.3472 24.216V31.188H10.7632V24.216H8.38722V22.812H14.7232V24.216H12.3472Z"
+                  fill="currentColor" />
+                <path
+                  d="M17.6042 31.188H16.0202V22.812H19.8002C20.1842 22.812 20.5282 22.872 20.8322 22.992C21.1362 23.112 21.3922 23.288 21.6002 23.52C21.8162 23.744 21.9802 24.016 22.0922 24.336C22.2122 24.656 22.2722 25.012 22.2722 25.404C22.2722 25.98 22.1402 26.476 21.8762 26.892C21.6202 27.308 21.2322 27.604 20.7122 27.78L22.4282 31.188H20.6642L19.1042 27.96H17.6042V31.188ZM19.6442 26.628C19.9482 26.628 20.1882 26.548 20.3642 26.388C20.5402 26.22 20.6282 25.984 20.6282 25.68V25.128C20.6282 24.824 20.5402 24.592 20.3642 24.432C20.1882 24.272 19.9482 24.192 19.6442 24.192H17.6042V26.628H19.6442Z"
+                  fill="currentColor" />
+                <path d="M23.9889 31.188V22.812H25.5729V29.784H28.8729V31.188H23.9889Z"
+                  fill="currentColor" />
+                <circle cx="15" cy="6.66797" r="6" fill="currentColor" />
+                <line x1="1" y1="6.66797" x2="29" y2="6.66797" stroke="currentColor"
+                  stroke-width="2" stroke-linecap="round" />
+                <line x1="15" y1="6.66797" x2="15" y2="17.668" stroke="currentColor"
+                  stroke-width="2" stroke-linecap="round" />
+              </svg> -->
+            </button>
+            <button class="toolbar-btn gate" draggable="true"
+              data-tooltip-title="Gate Bit Control Modifier"
+              data-tooltip="Modify a gate by adding a control bit onto it."
+              data-gateid="ctrlbit">
+              <svg class="svg-icon" width="30" height="30" viewBox="0 0 30 30" fill="none"
+                xmlns="http://www.w3.org/2000/svg">
+                <circle cx="15" cy="15" r="6" fill="#0061FF" />
+                <line x1="1" y1="17.5" x2="29" y2="17.5" stroke="#0061FF" stroke-width="2"
+                  stroke-linecap="round" />
+                <line x1="12.5" y1="1" x2="12.5" y2="29" stroke="#0061FF" stroke-width="2"
+                  stroke-linecap="round" />
+                <line x1="1" y1="12.5" x2="29" y2="12.5" stroke="#0061FF" stroke-width="2"
+                  stroke-linecap="round" />
+                <line x1="17.5" y1="1" x2="17.5" y2="29" stroke="#0061FF" stroke-width="2"
+                  stroke-linecap="round" />
+              </svg>
+              <!-- <svg class="svg-icon" width="30" height="32" viewBox="0 0 30 32" fill="none"
+                xmlns="http://www.w3.org/2000/svg">
+                <circle cx="15" cy="6.66797" r="6" fill="currentColor" />
+                <line x1="1" y1="4" x2="29" y2="4" stroke="currentColor"
+                  stroke-width="2" stroke-linecap="round" />
+                <line x1="1" y1="7.5" x2="29" y2="7.5" stroke="currentColor"
+                  stroke-width="2" stroke-linecap="round" />
+                <line x1="15" y1="6.66797" x2="15" y2="17.668" stroke="currentColor"
+                  stroke-width="2" stroke-linecap="round" />
+                <text x="15" y="32" fill="currentColor" font-size="12"
+                  text-anchor="middle">BIT</text>
+              </svg> -->
+            </button>
+            <button class="toolbar-btn gate" draggable="true"
+              data-tooltip-title="Measurement"
+              data-tooltip="Measure a particular qubit."
+              data-gateid="measure">
+              <svg class="svg-icon" width="34" height="30" viewBox="0 0 34 30" fill="none"
+                xmlns="http://www.w3.org/2000/svg">
+                <path fill-rule="evenodd" clip-rule="evenodd"
+                  d="M29.2606 0.0513438C29.7846 -0.123304 30.3509 0.159856 30.5255 0.683799L33.3716 9.22195C33.5462 9.74589 33.2631 10.3122 32.7391 10.4869C32.2152 10.6615 31.6489 10.3783 31.4742 9.8544L29.3916 3.60658L23.1656 16.0585C27.6001 18.6645 30.5768 23.4846 30.5768 29C30.5768 29.5523 30.1291 30 29.5768 30C29.0246 30 28.5768 29.5523 28.5768 29C28.5768 24.2678 26.0484 20.1262 22.2687 17.8524L16.4713 29.4472C16.2243 29.9412 15.6236 30.1414 15.1296 29.8945C14.6357 29.6475 14.4354 29.0468 14.6824 28.5528L20.4805 16.9566C18.9673 16.3399 17.3118 16 15.5768 16C8.39714 16 2.57684 21.8203 2.57684 29C2.57684 29.5523 2.12913 30 1.57684 30C1.02456 30 0.576843 29.5523 0.576843 29C0.576843 20.7158 7.29257 14 15.5768 14C17.6333 14 19.5931 14.4138 21.3774 15.1628L27.6027 2.71215L21.3549 4.79476C20.831 4.96941 20.2647 4.68625 20.09 4.1623C19.9154 3.63836 20.1985 3.07204 20.7225 2.89739L29.2606 0.0513438Z"
+                  fill="currentColor" />
+              </svg>
+            </button>
+            <button class="toolbar-btn gate" draggable="true"
+              data-tooltip-title="Reset"
+              data-tooltip="Reset a particular qubit to state |0⟩."
+              data-gateid="reset">
+              <svg class="svg-icon" width="20" height="22" viewBox="0 0 20 22" fill="none"
+                xmlns="http://www.w3.org/2000/svg">
+                <path d="M1.25 1V21" stroke="currentColor" />
+                <path d="M15.3409 1L19.4318 11L15.3409 21" stroke="currentColor" />
+                <path
+                  d="M13.0318 10.9273C13.0318 8.98181 12.8318 7.79999 12.2318 6.63635C11.4318 5.03635 9.9591 4.63635 8.9591 4.63635C6.66819 4.63635 5.83182 6.34544 5.57728 6.85453C4.92273 8.18181 4.88637 9.98181 4.88637 10.9273C4.88637 12.1273 4.94091 13.9636 5.81364 15.4182C6.65 16.7636 7.99546 17.1091 8.9591 17.1091C9.83182 17.1091 11.3955 16.8364 12.3046 15.0364C12.9773 13.7273 13.0318 12.1091 13.0318 10.9273ZM11.4136 10.7091C11.4136 11.7818 11.4136 13.4182 11.1955 14.4364C10.8136 16.3454 9.55909 16.6 8.9591 16.6C8.34091 16.6 7.08637 16.3091 6.70455 14.4C6.50455 13.3636 6.50455 11.6545 6.50455 10.7091C6.50455 9.45453 6.50455 8.18181 6.70455 7.18181C7.08637 5.32726 8.50455 5.14544 8.9591 5.14544C9.57728 5.14544 10.8318 5.45453 11.1955 7.10908C11.4136 8.10908 11.4136 9.47272 11.4136 10.7091Z"
+                  fill="currentColor" />
+              </svg>
+            </button>
+            <button class="toolbar-btn gate" draggable="true"
+              data-tooltip-title="Barrier"
+              data-tooltip="Separate the circuit into sections. This will also prevent the transpiler to merge or optimize the gates across that separation."
+              data-gateid="barrier">
+              <svg class="svg-icon" width="2" height="32" viewBox="0 0 2 32" fill="none"
+                xmlns="http://www.w3.org/2000/svg">
+                <path fill-rule="evenodd" clip-rule="evenodd"
+                  d="M1 -4.37114e-08C1.55228 -1.95703e-08 2 0.447715 2 1L2 2.875C2 3.42728 1.55228 3.875 1 3.875C0.447715 3.875 -1.49811e-07 3.42728 -1.2567e-07 2.875L-4.37114e-08 1C-1.95703e-08 0.447715 0.447715 -6.78525e-08 1 -4.37114e-08ZM1 5.625C1.55228 5.625 2 6.07272 2 6.625L2 10.375C2 10.9273 1.55228 11.375 1 11.375C0.447715 11.375 -4.77647e-07 10.9273 -4.53506e-07 10.375L-2.89588e-07 6.625C-2.65447e-07 6.07272 0.447715 5.625 1 5.625ZM0.999999 13.125C1.55228 13.125 2 13.5727 2 14.125L2 17.875C2 18.4273 1.55228 18.875 0.999999 18.875C0.447714 18.875 -8.05482e-07 18.4273 -7.81341e-07 17.875L-6.17423e-07 14.125C-5.93282e-07 13.5727 0.447715 13.125 0.999999 13.125ZM0.999999 20.625C1.55228 20.625 2 21.0727 2 21.625L2 25.375C2 25.9273 1.55228 26.375 0.999999 26.375C0.447714 26.375 -1.13332e-06 25.9273 -1.10918e-06 25.375L-9.45259e-07 21.625C-9.21118e-07 21.0727 0.447714 20.625 0.999999 20.625ZM0.999999 28.125C1.55228 28.125 2 28.5727 2 29.125L2 31C2 31.5523 1.55228 32 0.999999 32C0.447714 32 -1.37919e-06 31.5523 -1.35505e-06 31L-1.27309e-06 29.125C-1.24895e-06 28.5727 0.447714 28.125 0.999999 28.125Z"
+                  fill="currentColor" />
+              </svg>
+            </button>
+          </section>
+        </details>
+        <!-- Qubit Modifier -->
+        <details open class="gate-group">
+          <summary>
+            <span>
+              <i class="fa-solid fa-angle-down"></i>Qubit Modifier
+            </span>
+          </summary>
+          <section>
+            <button class="toolbar-btn gate" data-tooltip="Add Qubit"
+              onclick="appendNewQubit()">
+              <!-- <i class="fa-solid fa-rotate-left"></i> -->
+              +Q
+            </button>
+            <button class="toolbar-btn gate" data-tooltip="Add Bit"
+              onclick="appendNewBit()">
+              <!-- <i class="fa-solid fa-rotate-right"></i> -->
+              +C
+            </button>
+          </section>
+        </details>
+      </div>
+      <!-- Editing Area -->
+      <div class="space">
+        <svg id="workbench">
+          <symbol id="symmetric-triangle" viewBox="0 0 10 8">
+            <path d="M0 0L5 8L10 0H0Z" fill="black" />
+          </symbol>
+
+          <symbol id="operation-container" viewBox="0 0 50 50" overflow="visible">
+            <rect x="0" y="0" width="50" height="50" fill="white" stroke="black"
+              stroke-width="2" />
+          </symbol>
+
+          <symbol id="measure-operation" viewBox="0 0 50 50" overflow="visible">
+            <use href="#operation-container" x="0" y="0" width="50" height="50" />
+            <use href="#meter-symbol" x="8" y="8" width="34" height="34" />
+          </symbol>
+          <symbol id="reset-operation" viewBox="0 0 50 50" overflow="visible">
+            <use href="#operation-container" x="0" y="0" width="50" height="50" />
+            <use href="#reset-symbol" x="8" y="8" width="34" height="34" />
+          </symbol>
+
+          <symbol id="x-gate" viewBox="-5 -5 32 32">
+            <circle cx="11" cy="11" r="10.5" fill="white" stroke="black"
+              stroke-width="1.2" />
+            <path d="M11 0L11 22M22 11L0 11" stroke="black" stroke-width="1.2" />
+          </symbol>
+          <symbol id="swap-gate" viewBox="-5 -5 32 32" fill="none">
+            <rect x="0" y="0" width="21" height="21" fill="none" />
+            <path d="M1 1L21 21M21 1L1 21" stroke="black" />
+          </symbol>
+          <symbol id="sdg-gate" viewBox="0 0 50 50" overflow="visible">
+            <use href="#operation-container" x="0" y="0" width="50" height="50" />
+            <use href="#sdg-symbol" x="11" y="11" width="28" height="28" />
+          </symbol>
+          <symbol id="tdg-gate" viewBox="0 0 50 50" overflow="visible">
+            <use href="#operation-container" x="0" y="0" width="50" height="50" />
+            <use href="#tdg-symbol" x="10" y="10" width="30" height="30" />
+          </symbol>
+          <symbol id="sx-gate" viewBox="0 0 50 50" overflow="visible">
+            <use href="#operation-container" x="0" y="0" width="50" height="50" />
+            <use href="#sx-symbol" x="8" y="8" width="34" height="34" />
+          </symbol>
+          <symbol id="sxdg-gate" viewBox="0 0 50 50" overflow="visible">
+            <use href="#operation-container" x="0" y="0" width="50" height="50" />
+            <use href="#sxdg-symbol" x="8" y="8" width="34" height="34" />
+          </symbol>
+          <symbol id="4x-gate" viewBox="0 0 50 50" overflow="visible">
+            <use href="#operation-container" x="0" y="0" width="50" height="50" />
+            <use href="#4x-symbol" x="8" y="8" width="34" height="34" />
+          </symbol>
+          <symbol id="4xdg-gate" viewBox="0 0 50 50" overflow="visible">
+            <use href="#operation-container" x="0" y="0" width="50" height="50" />
+            <use href="#4xdg-symbol" x="8" y="8" width="34" height="34" />
+          </symbol>
+          <symbol id="sy-gate" viewBox="0 0 50 50" overflow="visible">
+            <use href="#operation-container" x="0" y="0" width="50" height="50" />
+            <use href="#sy-symbol" x="8" y="8" width="34" height="34" />
+          </symbol>
+          <symbol id="sydg-gate" viewBox="0 0 50 50" overflow="visible">
+            <use href="#operation-container" x="0" y="0" width="50" height="50" />
+            <use href="#sydg-symbol" x="8" y="8" width="34" height="34" />
+          </symbol>
+          <symbol id="4y-gate" viewBox="0 0 50 50" overflow="visible">
+            <use href="#operation-container" x="0" y="0" width="50" height="50" />
+            <use href="#4y-symbol" x="8" y="8" width="34" height="34" />
+          </symbol>
+          <symbol id="4ydg-gate" viewBox="0 0 50 50" overflow="visible">
+            <use href="#operation-container" x="0" y="0" width="50" height="50" />
+            <use href="#4ydg-symbol" x="8" y="8" width="34" height="34" />
+          </symbol>
+
+          <symbol id="meter-symbol" viewBox="0 0 22 22" fill="none">
+            <path d="M 21 21A1 1 0 0 0 .5 21" stroke="currentColor" />
+            <path d="M11 21L20 1" stroke="currentColor" />
+          </symbol>
+          <symbol id="reset-symbol" viewBox="0 0 20 22" fill="none">
+            <path d="M1.25 1V21" stroke="currentColor" />
+            <path d="M15.3409 1L19.4318 11L15.3409 21" stroke="currentColor" />
+            <path
+              d="M13.0318 10.9273C13.0318 8.98181 12.8318 7.79999 12.2318 6.63635C11.4318 5.03635 9.9591 4.63635 8.9591 4.63635C6.66819 4.63635 5.83182 6.34544 5.57728 6.85453C4.92273 8.18181 4.88637 9.98181 4.88637 10.9273C4.88637 12.1273 4.94091 13.9636 5.81364 15.4182C6.65 16.7636 7.99546 17.1091 8.9591 17.1091C9.83182 17.1091 11.3955 16.8364 12.3046 15.0364C12.9773 13.7273 13.0318 12.1091 13.0318 10.9273ZM11.4136 10.7091C11.4136 11.7818 11.4136 13.4182 11.1955 14.4364C10.8136 16.3454 9.55909 16.6 8.9591 16.6C8.34091 16.6 7.08637 16.3091 6.70455 14.4C6.50455 13.3636 6.50455 11.6545 6.50455 10.7091C6.50455 9.45453 6.50455 8.18181 6.70455 7.18181C7.08637 5.32726 8.50455 5.14544 8.9591 5.14544C9.57728 5.14544 10.8318 5.45453 11.1955 7.10908C11.4136 8.10908 11.4136 9.47272 11.4136 10.7091Z"
+              fill="currentColor" />
+          </symbol>
+
+          <symbol id="sdg-symbol" viewBox="0 0 14 15" fill="none">
+            <path
+              d="M13.883 3.014C13.883 2.926 13.839 2.596 13.432 2.596C13.267 2.596 13.003 2.64 12.739 2.728C12.453 2.805 12.255 2.849 12.079 2.871C12.09 2.684 12.09 2.431 12.211 1.771C12.255 1.507 12.354 0.869 12.354 0.495C12.354 0.407 12.354 0 11.947 0C11.529 0 11.529 0.396 11.529 0.495C11.529 0.858 11.617 1.408 11.672 1.749C11.793 2.475 11.793 2.629 11.804 2.871C11.606 2.849 11.441 2.805 11.177 2.728C10.935 2.662 10.649 2.596 10.451 2.596C10 2.596 10 3.003 10 3.003C10 3.091 10.044 3.421 10.451 3.421C10.616 3.421 10.88 3.377 11.144 3.289C11.43 3.212 11.628 3.168 11.804 3.146C11.793 3.322 11.782 3.509 11.694 3.905C11.529 4.675 11.529 4.752 11.529 5.335C11.529 6.655 11.617 8.448 11.76 9.867C11.771 10.032 11.782 10.109 11.936 10.109C12.013 10.109 12.09 10.098 12.112 9.966C12.134 9.812 12.354 7.513 12.354 5.335C12.354 4.796 12.354 4.675 12.211 3.993C12.101 3.498 12.101 3.388 12.079 3.146C12.277 3.168 12.442 3.212 12.706 3.289C12.948 3.355 13.234 3.421 13.432 3.421C13.883 3.421 13.883 3.014 13.883 3.014Z"
+              fill="currentColor" />
+            <path
+              d="M8.05159 11.304C8.27559 9.912 7.60359 8.488 6.03559 8.104L3.92359 7.592C2.93159 7.352 2.32359 6.536 2.48359 5.56C2.65959 4.488 3.74759 3.48 5.13959 3.48C7.90759 3.48 7.84359 6.072 7.82759 6.68C7.82759 6.856 7.82759 6.968 8.03559 6.968C8.29159 6.968 8.30759 6.856 8.35559 6.552L8.88359 3.416C8.93159 3.16 8.94759 3 8.73959 3C8.61159 3 8.57959 3.048 8.43559 3.224L7.73159 4.12C7.07559 3.24 6.08359 3 5.20359 3C3.29959 3 1.65159 4.44 1.37959 6.072C1.18759 7.288 1.76359 7.96 2.01959 8.264C2.49959 8.84 2.99559 8.968 4.65959 9.368C5.98759 9.688 6.21159 9.736 6.64359 10.296C6.78759 10.472 7.09159 11.016 6.96359 11.8C6.77159 12.904 5.73159 14.072 4.22759 14.072C2.46759 14.072 0.787587 13.224 1.05959 11C1.09159 10.744 1.10759 10.632 0.883587 10.632C0.627587 10.632 0.611587 10.76 0.547587 11.064L0.0355869 14.184C-0.0124131 14.44 -0.0444131 14.6 0.163587 14.6C0.291587 14.6 0.323587 14.568 0.451587 14.408C0.531587 14.312 0.627587 14.168 1.18759 13.496C2.05159 14.392 3.18759 14.6 4.14759 14.6C6.14759 14.6 7.76359 13.016 8.05159 11.304Z"
+              fill="currentColor" />
+          </symbol>
+          <symbol id="tdg-symbol" viewBox="0 0 16 15" fill="none">
+            <path
+              d="M15.883 3.014C15.883 2.926 15.839 2.596 15.432 2.596C15.267 2.596 15.003 2.64 14.739 2.728C14.453 2.805 14.255 2.849 14.079 2.871C14.09 2.684 14.09 2.431 14.211 1.771C14.255 1.507 14.354 0.869 14.354 0.495C14.354 0.407 14.354 0 13.947 0C13.529 0 13.529 0.396 13.529 0.495C13.529 0.858 13.617 1.408 13.672 1.749C13.793 2.475 13.793 2.629 13.804 2.871C13.606 2.849 13.441 2.805 13.177 2.728C12.935 2.662 12.649 2.596 12.451 2.596C12 2.596 12 3.003 12 3.003C12 3.091 12.044 3.421 12.451 3.421C12.616 3.421 12.88 3.377 13.144 3.289C13.43 3.212 13.628 3.168 13.804 3.146C13.793 3.322 13.782 3.509 13.694 3.905C13.529 4.675 13.529 4.752 13.529 5.335C13.529 6.655 13.617 8.448 13.76 9.867C13.771 10.032 13.782 10.109 13.936 10.109C14.013 10.109 14.09 10.098 14.112 9.966C14.134 9.812 14.354 7.513 14.354 5.335C14.354 4.796 14.354 4.675 14.211 3.993C14.101 3.498 14.101 3.388 14.079 3.146C14.277 3.168 14.442 3.212 14.706 3.289C14.948 3.355 15.234 3.421 15.432 3.421C15.883 3.421 15.883 3.014 15.883 3.014Z"
+              fill="currentColor" />
+            <path
+              d="M11.04 7.632L11.328 4H0.928L0 7.632H0.496C1.168 4.928 1.6 4.528 4.048 4.528C4.352 4.528 4.848 4.528 4.976 4.56C5.264 4.624 5.264 4.784 5.184 5.184L3.808 13.504C3.712 14.064 3.68 14.288 2.016 14.288H1.408L1.312 14.816C1.92 14.768 3.648 14.768 4.336 14.768C5.024 14.768 6.752 14.768 7.328 14.816L7.424 14.288H6.816C5.152 14.288 5.184 14.064 5.28 13.504L6.656 5.184C6.72 4.816 6.752 4.624 7.104 4.56C7.248 4.528 7.712 4.528 8.016 4.528C10.464 4.528 10.768 4.928 10.544 7.632H11.04Z"
+              fill="currentColor" />
+          </symbol>
+
+          <symbol id="sx-symbol" viewBox="0 0 20 13" fill="none">
+            <path
+              d="M3.82662 10.838L1.69534 6.12743C1.61057 5.93368 1.55002 5.93368 1.51369 5.93368C1.50158 5.93368 1.44104 5.93368 1.30783 6.03055L0.157424 6.90244C3.01872e-08 7.02354 0 7.05986 0 7.09619C0 7.15674 0.0363291 7.2294 0.121096 7.2294C0.193753 7.2294 0.399615 7.05986 0.532821 6.96299C0.605478 6.90244 0.78712 6.76923 0.920326 6.67236L3.30591 11.9158C3.39067 12.1095 3.45122 12.1095 3.56021 12.1095C3.74185 12.1095 3.77818 12.0369 3.86295 11.8674L9.36068 0.484382C9.44544 0.314849 9.44544 0.26641 9.44544 0.242192C9.44544 0.121096 9.34857 0 9.20325 0C9.10638 0 9.02161 0.0605479 8.92473 0.254301L3.82662 10.838Z"
+              fill="currentColor" />
+            <path d="M20 3.05176e-05H9.20731V0.484393H20V3.05176e-05Z"
+              fill="currentColor" />
+            <path
+              d="M17.868 11.196L17.94 10.8H17.736C17.004 10.8 16.848 10.692 16.668 10.368L14.556 6.588L16.74 4.176C17.424 3.408 18.348 3.396 18.624 3.396L18.696 3C18.264 3.036 17.616 3.036 17.34 3.036C16.692 3.036 16.584 3.036 15.864 3L15.792 3.396C16.32 3.42 16.404 3.744 16.368 3.912C16.356 4.032 16.296 4.128 16.2 4.236L14.376 6.252L13.068 3.936C13.044 3.888 13.008 3.816 13.008 3.756C13.032 3.612 13.296 3.396 13.776 3.396L13.848 3L12.12 3.036C11.388 3.036 11.232 3.036 10.548 3L10.476 3.396H10.68C11.4 3.396 11.568 3.504 11.748 3.816L13.596 7.116L10.956 10.032C10.272 10.8 9.324 10.8 9.072 10.8L9 11.196C9.432 11.16 10.116 11.16 10.368 11.16C10.968 11.16 11.124 11.16 11.844 11.196L11.916 10.8C11.34 10.776 11.304 10.404 11.328 10.284C11.328 10.248 11.352 10.128 11.532 9.936L13.776 7.452L15.324 10.248C15.408 10.38 15.408 10.404 15.408 10.44C15.372 10.596 15.12 10.788 14.64 10.8L14.568 11.196L16.296 11.16C16.896 11.16 17.232 11.16 17.868 11.196Z"
+              fill="currentColor" />
+          </symbol>
+          <symbol id="sxdg-symbol" viewBox="0 0 23 15" fill="none">
+            <path
+              d="M3.77312 13.7354L1.67164 9.05028C1.58805 8.85758 1.52835 8.85758 1.49253 8.85758C1.48059 8.85758 1.42089 8.85758 1.28955 8.95393L0.155223 9.82109C2.97651e-08 9.94153 0 9.97767 0 10.0138C0 10.074 0.0358213 10.1463 0.119403 10.1463C0.191044 10.1463 0.394029 9.97767 0.525372 9.88131C0.597013 9.82109 0.776117 9.68861 0.90746 9.59226L3.25969 14.8073C3.34327 15 3.40297 15 3.51044 15C3.68954 15 3.72536 14.9277 3.80894 14.7591L9.22982 3.43781C9.3134 3.2692 9.3134 3.22102 9.3134 3.19693C9.3134 3.07649 9.21788 2.95605 9.07459 2.95605C8.97907 2.95605 8.89549 3.01627 8.79997 3.20898L3.77312 13.7354Z"
+              fill="black" />
+            <path d="M19.7204 2.95609H9.0786V3.43782H19.7204V2.95609Z" fill="black" />
+            <path
+              d="M21.6945 2.30441C21.8856 2.32849 21.9015 2.32849 22.2517 2.42484C22.3711 2.45696 22.5463 2.49711 22.6736 2.49711C22.9841 2.49711 23 2.23214 23 2.20002C23 2.1117 22.9602 1.89491 22.6736 1.89491C22.4906 1.89491 22.2517 1.95915 22.1085 2.00732C21.9015 2.06353 21.8537 2.07156 21.6945 2.08761C21.7105 1.85477 21.7343 1.61389 21.8139 1.10804C21.8617 0.859134 21.8935 0.610226 21.8935 0.361318C21.8935 0.240878 21.8617 0 21.599 0C21.2965 0 21.2965 0.289054 21.2965 0.361318C21.2965 0.385405 21.2965 0.66643 21.3761 1.10804C21.4398 1.52556 21.4796 1.79856 21.4955 2.08761C21.3045 2.06353 21.2886 2.06353 20.9383 1.96718C20.8189 1.93506 20.6438 1.89491 20.5164 1.89491C20.206 1.89491 20.1901 2.15988 20.1901 2.192C20.1901 2.28032 20.2299 2.49711 20.5164 2.49711C20.6995 2.49711 20.9383 2.43287 21.0816 2.3847C21.2886 2.32849 21.3363 2.32046 21.4955 2.30441C21.4796 2.5212 21.4478 2.68178 21.4 2.89054C21.2965 3.40442 21.2965 3.48471 21.2965 3.8942C21.2965 5.39568 21.4398 6.98548 21.4637 7.2103C21.4796 7.32271 21.4796 7.37891 21.5911 7.37891C21.7025 7.37891 21.7105 7.32271 21.7264 7.22636C21.7662 6.88913 21.798 6.37525 21.8219 6.02197C21.8458 5.68473 21.8935 4.67304 21.8935 3.8942C21.8935 3.53289 21.8935 3.39639 21.798 2.96281C21.798 2.93872 21.7105 2.53726 21.6945 2.30441Z"
+              fill="black" />
+            <path
+              d="M17.868 14.196L17.94 13.8H17.736C17.004 13.8 16.848 13.692 16.668 13.368L14.556 9.588L16.74 7.176C17.424 6.408 18.348 6.396 18.624 6.396L18.696 6C18.264 6.036 17.616 6.036 17.34 6.036C16.692 6.036 16.584 6.036 15.864 6L15.792 6.396C16.32 6.42 16.404 6.744 16.368 6.912C16.356 7.032 16.296 7.128 16.2 7.236L14.376 9.252L13.068 6.936C13.044 6.888 13.008 6.816 13.008 6.756C13.032 6.612 13.296 6.396 13.776 6.396L13.848 6L12.12 6.036C11.388 6.036 11.232 6.036 10.548 6L10.476 6.396H10.68C11.4 6.396 11.568 6.504 11.748 6.816L13.596 10.116L10.956 13.032C10.272 13.8 9.324 13.8 9.072 13.8L9 14.196C9.432 14.16 10.116 14.16 10.368 14.16C10.968 14.16 11.124 14.16 11.844 14.196L11.916 13.8C11.34 13.776 11.304 13.404 11.328 13.284C11.328 13.248 11.352 13.128 11.532 12.936L13.776 10.452L15.324 13.248C15.408 13.38 15.408 13.404 15.408 13.44C15.372 13.596 15.12 13.788 14.64 13.8L14.568 14.196L16.296 14.16C16.896 14.16 17.232 14.16 17.868 14.196Z"
+              fill="black" />
+          </symbol>
+
+          <symbol id="4x-symbol" viewBox="0 0 20 12" fill="none">
+            <path
+              d="M17.868 11.196L17.94 10.8H17.736C17.004 10.8 16.848 10.692 16.668 10.368L14.556 6.588L16.74 4.176C17.424 3.408 18.348 3.396 18.624 3.396L18.696 3C18.264 3.036 17.616 3.036 17.34 3.036C16.692 3.036 16.584 3.036 15.864 3L15.792 3.396C16.32 3.42 16.404 3.744 16.368 3.912C16.356 4.032 16.296 4.128 16.2 4.236L14.376 6.252L13.068 3.936C13.044 3.888 13.008 3.816 13.008 3.756C13.032 3.612 13.296 3.396 13.776 3.396L13.848 3L12.12 3.036C11.388 3.036 11.232 3.036 10.548 3L10.476 3.396H10.68C11.4 3.396 11.568 3.504 11.748 3.816L13.596 7.116L10.956 10.032C10.272 10.8 9.324 10.8 9.072 10.8L9 11.196C9.432 11.16 10.116 11.16 10.368 11.16C10.968 11.16 11.124 11.16 11.844 11.196L11.916 10.8C11.34 10.776 11.304 10.404 11.328 10.284C11.328 10.248 11.352 10.128 11.532 9.936L13.776 7.452L15.324 10.248C15.408 10.38 15.408 10.404 15.408 10.44C15.372 10.596 15.12 10.788 14.64 10.8L14.568 11.196L16.296 11.16C16.896 11.16 17.232 11.16 17.868 11.196Z"
+              fill="black" />
+            <path
+              d="M5.55823 3.68279V3.44879H4.84982V0.79679C4.84982 0.658791 4.84982 0.616791 4.69845 0.616791C4.58947 0.616791 4.57736 0.634791 4.52287 0.706791L2.42186 3.44879V3.68279H4.30489V4.16279C4.30489 4.36079 4.30489 4.43279 3.79629 4.43279H3.6207V4.66679C3.7418 4.66079 4.31095 4.64279 4.57736 4.64279C4.84377 4.64279 5.41292 4.66079 5.53401 4.66679V4.43279H5.35842C4.84982 4.43279 4.84982 4.36079 4.84982 4.16279V3.68279H5.55823ZM4.34728 1.27079V3.44879H2.68221L4.34728 1.27079Z"
+              fill="black" />
+            <path
+              d="M3.82661 10.74L1.69534 6.072C1.61057 5.88 1.55002 5.88 1.51369 5.88C1.50158 5.88 1.44104 5.88 1.30783 5.976L0.157424 6.84C3.01871e-08 6.96 0 6.996 0 7.032C0 7.092 0.0363291 7.164 0.121096 7.164C0.193753 7.164 0.399615 6.996 0.53282 6.9C0.605478 6.84 0.78712 6.708 0.920325 6.612L3.3059 11.808C3.39067 12 3.45122 12 3.56021 12C3.74185 12 3.77818 11.928 3.86294 11.76L9.36067 0.48C9.44544 0.312001 9.44544 0.264 9.44544 0.240001C9.44544 0.12 9.34856 0 9.20325 0C9.10637 0 9.02161 0.0600002 8.92473 0.252L3.82661 10.74Z"
+              fill="black" />
+            <path d="M20 3.05176e-05H9.20732V0.480011H20V3.05176e-05Z" fill="black" />
+          </symbol>
+          <symbol id="4xdg-symbol" viewBox="0 0 23 15" fill="none">
+            <path
+              d="M5.48053 6.65236V6.4175H4.78202V3.75579C4.78202 3.61729 4.78202 3.57513 4.63277 3.57513C4.52531 3.57513 4.51337 3.5932 4.45964 3.66546L2.388 6.4175V6.65236H4.24471V7.13412C4.24471 7.33284 4.24471 7.4051 3.74322 7.4051H3.57009V7.63996C3.68949 7.63394 4.25068 7.61587 4.51337 7.61587C4.77605 7.61587 5.33724 7.63394 5.45665 7.63996V7.4051H5.28351C4.78202 7.4051 4.78202 7.33284 4.78202 7.13412V6.65236H5.48053ZM4.2865 4.23153V6.4175H2.64472L4.2865 4.23153Z"
+              fill="black" />
+            <path
+              d="M3.77312 13.7354L1.67164 9.05028C1.58805 8.85758 1.52835 8.85758 1.49253 8.85758C1.48059 8.85758 1.42089 8.85758 1.28955 8.95393L0.155223 9.82109C2.97651e-08 9.94153 0 9.97767 0 10.0138C0 10.074 0.0358213 10.1463 0.119403 10.1463C0.191044 10.1463 0.394029 9.97767 0.525372 9.88131C0.597013 9.82109 0.776117 9.68861 0.90746 9.59226L3.25969 14.8073C3.34327 15 3.40297 15 3.51044 15C3.68954 15 3.72536 14.9277 3.80894 14.7591L9.22982 3.43781C9.3134 3.2692 9.3134 3.22102 9.3134 3.19693C9.3134 3.07649 9.21788 2.95605 9.07459 2.95605C8.97907 2.95605 8.89549 3.01627 8.79997 3.20898L3.77312 13.7354Z"
+              fill="black" />
+            <path d="M19.7204 2.95609H9.07861V3.43782H19.7204V2.95609Z" fill="black" />
+            <path
+              d="M21.6945 2.30441C21.8856 2.32849 21.9015 2.32849 22.2517 2.42484C22.3711 2.45696 22.5463 2.49711 22.6736 2.49711C22.9841 2.49711 23 2.23214 23 2.20002C23 2.1117 22.9602 1.89491 22.6736 1.89491C22.4906 1.89491 22.2517 1.95915 22.1085 2.00732C21.9015 2.06353 21.8537 2.07156 21.6945 2.08761C21.7105 1.85477 21.7343 1.61389 21.8139 1.10804C21.8617 0.859134 21.8935 0.610226 21.8935 0.361318C21.8935 0.240878 21.8617 0 21.599 0C21.2965 0 21.2965 0.289054 21.2965 0.361318C21.2965 0.385405 21.2965 0.66643 21.3761 1.10804C21.4398 1.52556 21.4796 1.79856 21.4955 2.08761C21.3045 2.06353 21.2886 2.06353 20.9383 1.96718C20.8189 1.93506 20.6438 1.89491 20.5164 1.89491C20.206 1.89491 20.1901 2.15988 20.1901 2.192C20.1901 2.28032 20.2299 2.49711 20.5164 2.49711C20.6995 2.49711 20.9383 2.43287 21.0816 2.3847C21.2886 2.32849 21.3363 2.32046 21.4955 2.30441C21.4796 2.5212 21.4478 2.68178 21.4 2.89054C21.2965 3.40442 21.2965 3.48471 21.2965 3.8942C21.2965 5.39568 21.4398 6.98548 21.4637 7.2103C21.4796 7.32271 21.4796 7.37891 21.5911 7.37891C21.7025 7.37891 21.7105 7.32271 21.7264 7.22636C21.7662 6.88913 21.798 6.37525 21.8219 6.02197C21.8458 5.68473 21.8935 4.67304 21.8935 3.8942C21.8935 3.53289 21.8935 3.39639 21.798 2.96281C21.798 2.93872 21.7105 2.53726 21.6945 2.30441Z"
+              fill="black" />
+            <path
+              d="M17.868 14.196L17.94 13.8H17.736C17.004 13.8 16.848 13.692 16.668 13.368L14.556 9.588L16.74 7.176C17.424 6.408 18.348 6.396 18.624 6.396L18.696 6C18.264 6.036 17.616 6.036 17.34 6.036C16.692 6.036 16.584 6.036 15.864 6L15.792 6.396C16.32 6.42 16.404 6.744 16.368 6.912C16.356 7.032 16.296 7.128 16.2 7.236L14.376 9.252L13.068 6.936C13.044 6.888 13.008 6.816 13.008 6.756C13.032 6.612 13.296 6.396 13.776 6.396L13.848 6L12.12 6.036C11.388 6.036 11.232 6.036 10.548 6L10.476 6.396H10.68C11.4 6.396 11.568 6.504 11.748 6.816L13.596 10.116L10.956 13.032C10.272 13.8 9.324 13.8 9.072 13.8L9 14.196C9.432 14.16 10.116 14.16 10.368 14.16C10.968 14.16 11.124 14.16 11.844 14.196L11.916 13.8C11.34 13.776 11.304 13.404 11.328 13.284C11.328 13.248 11.352 13.128 11.532 12.936L13.776 10.452L15.324 13.248C15.408 13.38 15.408 13.404 15.408 13.44C15.372 13.596 15.12 13.788 14.64 13.8L14.568 14.196L16.296 14.16C16.896 14.16 17.232 14.16 17.868 14.196Z"
+              fill="black" />
+          </symbol>
+
+          <symbol id="sy-symbol" viewBox="0 0 20 13" fill="none">
+            <path
+              d="M19.18 3.396L19.252 3C18.88 3.036 18.268 3.036 18.04 3.036C17.668 3.036 17.308 3.036 16.732 3L16.66 3.396C17.092 3.408 17.236 3.612 17.2 3.84C17.176 3.996 17.068 4.116 16.984 4.224L14.332 7.404L12.568 3.912C12.52 3.828 12.484 3.756 12.508 3.672C12.544 3.396 13.06 3.396 13.324 3.396L13.396 3L11.656 3.036C10.996 3.036 10.708 3.036 10.072 3L10 3.396H10.204C10.84 3.396 11.068 3.468 11.248 3.828L13.312 7.92L12.928 10.224C12.844 10.668 12.808 10.8 11.884 10.8H11.62L11.548 11.196L13.3 11.16L15.028 11.196L15.1 10.8H14.836C13.9 10.8 13.924 10.656 13.984 10.26L14.38 7.908L17.488 4.2C17.716 3.936 18.16 3.408 19.18 3.396Z"
+              fill="black" />
+            <path
+              d="M3.82662 10.838L1.69534 6.12743C1.61057 5.93368 1.55002 5.93368 1.51369 5.93368C1.50158 5.93368 1.44104 5.93368 1.30783 6.03055L0.157424 6.90244C3.01872e-08 7.02354 0 7.05986 0 7.09619C0 7.15674 0.0363291 7.2294 0.121096 7.2294C0.193753 7.2294 0.399615 7.05986 0.532821 6.96299C0.605478 6.90244 0.78712 6.76923 0.920326 6.67236L3.30591 11.9158C3.39067 12.1095 3.45122 12.1095 3.56021 12.1095C3.74185 12.1095 3.77818 12.0369 3.86295 11.8674L9.36068 0.484382C9.44544 0.314849 9.44544 0.26641 9.44544 0.242192C9.44544 0.121096 9.34857 0 9.20325 0C9.10638 0 9.02161 0.0605479 8.92473 0.254301L3.82662 10.838Z"
+              fill="black" />
+            <path d="M20 3.05176e-05H9.20731V0.484393H20V3.05176e-05Z" fill="black" />
+          </symbol>
+          <symbol id="sydg-symbol" viewBox="0 0 23 15" fill="none">
+            <path
+              d="M19.18 6.396L19.252 6C18.88 6.036 18.268 6.036 18.04 6.036C17.668 6.036 17.308 6.036 16.732 6L16.66 6.396C17.092 6.408 17.236 6.612 17.2 6.84C17.176 6.996 17.068 7.116 16.984 7.224L14.332 10.404L12.568 6.912C12.52 6.828 12.484 6.756 12.508 6.672C12.544 6.396 13.06 6.396 13.324 6.396L13.396 6L11.656 6.036C10.996 6.036 10.708 6.036 10.072 6L10 6.396H10.204C10.84 6.396 11.068 6.468 11.248 6.828L13.312 10.92L12.928 13.224C12.844 13.668 12.808 13.8 11.884 13.8H11.62L11.548 14.196L13.3 14.16L15.028 14.196L15.1 13.8H14.836C13.9 13.8 13.924 13.656 13.984 13.26L14.38 10.908L17.488 7.2C17.716 6.936 18.16 6.408 19.18 6.396Z"
+              fill="black" />
+            <path
+              d="M3.77312 13.7354L1.67164 9.05028C1.58805 8.85758 1.52835 8.85758 1.49253 8.85758C1.48059 8.85758 1.42089 8.85758 1.28955 8.95393L0.155223 9.82109C2.97651e-08 9.94153 0 9.97767 0 10.0138C0 10.074 0.0358213 10.1463 0.119403 10.1463C0.191044 10.1463 0.394029 9.97767 0.525372 9.88131C0.597013 9.82109 0.776117 9.68861 0.90746 9.59226L3.25969 14.8073C3.34327 15 3.40297 15 3.51044 15C3.68954 15 3.72536 14.9277 3.80894 14.7591L9.22982 3.43781C9.3134 3.2692 9.3134 3.22102 9.3134 3.19693C9.3134 3.07649 9.21788 2.95605 9.07459 2.95605C8.97907 2.95605 8.89549 3.01627 8.79997 3.20898L3.77312 13.7354Z"
+              fill="black" />
+            <path d="M19.7204 2.95609H9.0786V3.43782H19.7204V2.95609Z" fill="black" />
+            <path
+              d="M21.6945 2.30441C21.8856 2.32849 21.9015 2.32849 22.2517 2.42484C22.3711 2.45696 22.5463 2.49711 22.6736 2.49711C22.9841 2.49711 23 2.23214 23 2.20002C23 2.1117 22.9602 1.89491 22.6736 1.89491C22.4906 1.89491 22.2517 1.95915 22.1085 2.00732C21.9015 2.06353 21.8537 2.07156 21.6945 2.08761C21.7105 1.85477 21.7343 1.61389 21.8139 1.10804C21.8617 0.859134 21.8935 0.610226 21.8935 0.361318C21.8935 0.240878 21.8617 0 21.599 0C21.2965 0 21.2965 0.289054 21.2965 0.361318C21.2965 0.385405 21.2965 0.66643 21.3761 1.10804C21.4398 1.52556 21.4796 1.79856 21.4955 2.08761C21.3045 2.06353 21.2886 2.06353 20.9383 1.96718C20.8189 1.93506 20.6438 1.89491 20.5164 1.89491C20.206 1.89491 20.1901 2.15988 20.1901 2.192C20.1901 2.28032 20.2299 2.49711 20.5164 2.49711C20.6995 2.49711 20.9383 2.43287 21.0816 2.3847C21.2886 2.32849 21.3363 2.32046 21.4955 2.30441C21.4796 2.5212 21.4478 2.68178 21.4 2.89054C21.2965 3.40442 21.2965 3.48471 21.2965 3.8942C21.2965 5.39568 21.4398 6.98548 21.4637 7.2103C21.4796 7.32271 21.4796 7.37891 21.5911 7.37891C21.7025 7.37891 21.7105 7.32271 21.7264 7.22636C21.7662 6.88913 21.798 6.37525 21.8219 6.02197C21.8458 5.68473 21.8935 4.67304 21.8935 3.8942C21.8935 3.53289 21.8935 3.39639 21.798 2.96281C21.798 2.93872 21.7105 2.53726 21.6945 2.30441Z"
+              fill="black" />
+          </symbol>
+          <symbol id="4y-symbol" viewBox="0 0 20 12" fill="none">
+            <path
+              d="M19.18 3.396L19.252 3C18.88 3.036 18.268 3.036 18.04 3.036C17.668 3.036 17.308 3.036 16.732 3L16.66 3.396C17.092 3.408 17.236 3.612 17.2 3.84C17.176 3.996 17.068 4.116 16.984 4.224L14.332 7.404L12.568 3.912C12.52 3.828 12.484 3.756 12.508 3.672C12.544 3.396 13.06 3.396 13.324 3.396L13.396 3L11.656 3.036C10.996 3.036 10.708 3.036 10.072 3L10 3.396H10.204C10.84 3.396 11.068 3.468 11.248 3.828L13.312 7.92L12.928 10.224C12.844 10.668 12.808 10.8 11.884 10.8H11.62L11.548 11.196L13.3 11.16L15.028 11.196L15.1 10.8H14.836C13.9 10.8 13.924 10.656 13.984 10.26L14.38 7.908L17.488 4.2C17.716 3.936 18.16 3.408 19.18 3.396Z"
+              fill="black" />
+            <path
+              d="M5.55823 3.68279V3.44879H4.84982V0.79679C4.84982 0.658791 4.84982 0.616791 4.69845 0.616791C4.58947 0.616791 4.57736 0.634791 4.52287 0.706791L2.42186 3.44879V3.68279H4.30489V4.16279C4.30489 4.36079 4.30489 4.43279 3.79629 4.43279H3.6207V4.66679C3.7418 4.66079 4.31095 4.64279 4.57736 4.64279C4.84377 4.64279 5.41292 4.66079 5.53401 4.66679V4.43279H5.35842C4.84982 4.43279 4.84982 4.36079 4.84982 4.16279V3.68279H5.55823ZM4.34728 1.27079V3.44879H2.68221L4.34728 1.27079Z"
+              fill="black" />
+            <path
+              d="M3.82661 10.74L1.69534 6.072C1.61057 5.88 1.55002 5.88 1.51369 5.88C1.50158 5.88 1.44104 5.88 1.30783 5.976L0.157424 6.84C3.01871e-08 6.96 0 6.996 0 7.032C0 7.092 0.0363291 7.164 0.121096 7.164C0.193753 7.164 0.399615 6.996 0.53282 6.9C0.605478 6.84 0.78712 6.708 0.920325 6.612L3.3059 11.808C3.39067 12 3.45122 12 3.56021 12C3.74185 12 3.77818 11.928 3.86294 11.76L9.36067 0.48C9.44544 0.312001 9.44544 0.264 9.44544 0.240001C9.44544 0.12 9.34856 0 9.20325 0C9.10637 0 9.02161 0.0600002 8.92473 0.252L3.82661 10.74Z"
+              fill="black" />
+            <path d="M20 3.05176e-05H9.20732V0.480011H20V3.05176e-05Z" fill="black" />
+          </symbol>
+          <symbol id="4ydg-symbol" viewBox="0 0 23 15" fill="none">
+            <path
+              d="M19.18 6.396L19.252 6C18.88 6.036 18.268 6.036 18.04 6.036C17.668 6.036 17.308 6.036 16.732 6L16.66 6.396C17.092 6.408 17.236 6.612 17.2 6.84C17.176 6.996 17.068 7.116 16.984 7.224L14.332 10.404L12.568 6.912C12.52 6.828 12.484 6.756 12.508 6.672C12.544 6.396 13.06 6.396 13.324 6.396L13.396 6L11.656 6.036C10.996 6.036 10.708 6.036 10.072 6L10 6.396H10.204C10.84 6.396 11.068 6.468 11.248 6.828L13.312 10.92L12.928 13.224C12.844 13.668 12.808 13.8 11.884 13.8H11.62L11.548 14.196L13.3 14.16L15.028 14.196L15.1 13.8H14.836C13.9 13.8 13.924 13.656 13.984 13.26L14.38 10.908L17.488 7.2C17.716 6.936 18.16 6.408 19.18 6.396Z"
+              fill="black" />
+            <path
+              d="M5.48053 6.65236V6.4175H4.78202V3.75579C4.78202 3.61729 4.78202 3.57513 4.63277 3.57513C4.52531 3.57513 4.51337 3.5932 4.45964 3.66546L2.388 6.4175V6.65236H4.24471V7.13412C4.24471 7.33284 4.24471 7.4051 3.74322 7.4051H3.57009V7.63996C3.68949 7.63394 4.25068 7.61587 4.51337 7.61587C4.77605 7.61587 5.33724 7.63394 5.45665 7.63996V7.4051H5.28351C4.78202 7.4051 4.78202 7.33284 4.78202 7.13412V6.65236H5.48053ZM4.2865 4.23153V6.4175H2.64472L4.2865 4.23153Z"
+              fill="black" />
+            <path
+              d="M3.77312 13.7354L1.67164 9.05028C1.58805 8.85758 1.52835 8.85758 1.49253 8.85758C1.48059 8.85758 1.42089 8.85758 1.28955 8.95393L0.155223 9.82109C2.97651e-08 9.94153 0 9.97767 0 10.0138C0 10.074 0.0358213 10.1463 0.119403 10.1463C0.191044 10.1463 0.394029 9.97767 0.525372 9.88131C0.597013 9.82109 0.776117 9.68861 0.90746 9.59226L3.25969 14.8073C3.34327 15 3.40297 15 3.51044 15C3.68954 15 3.72536 14.9277 3.80894 14.7591L9.22982 3.43781C9.3134 3.2692 9.3134 3.22102 9.3134 3.19693C9.3134 3.07649 9.21788 2.95605 9.07459 2.95605C8.97907 2.95605 8.89549 3.01627 8.79997 3.20898L3.77312 13.7354Z"
+              fill="black" />
+            <path d="M19.7204 2.95609H9.07861V3.43782H19.7204V2.95609Z" fill="black" />
+            <path
+              d="M21.6945 2.30441C21.8856 2.32849 21.9015 2.32849 22.2517 2.42484C22.3711 2.45696 22.5463 2.49711 22.6736 2.49711C22.9841 2.49711 23 2.23214 23 2.20002C23 2.1117 22.9602 1.89491 22.6736 1.89491C22.4906 1.89491 22.2517 1.95915 22.1085 2.00732C21.9015 2.06353 21.8537 2.07156 21.6945 2.08761C21.7105 1.85477 21.7343 1.61389 21.8139 1.10804C21.8617 0.859134 21.8935 0.610226 21.8935 0.361318C21.8935 0.240878 21.8617 0 21.599 0C21.2965 0 21.2965 0.289054 21.2965 0.361318C21.2965 0.385405 21.2965 0.66643 21.3761 1.10804C21.4398 1.52556 21.4796 1.79856 21.4955 2.08761C21.3045 2.06353 21.2886 2.06353 20.9383 1.96718C20.8189 1.93506 20.6438 1.89491 20.5164 1.89491C20.206 1.89491 20.1901 2.15988 20.1901 2.192C20.1901 2.28032 20.2299 2.49711 20.5164 2.49711C20.6995 2.49711 20.9383 2.43287 21.0816 2.3847C21.2886 2.32849 21.3363 2.32046 21.4955 2.30441C21.4796 2.5212 21.4478 2.68178 21.4 2.89054C21.2965 3.40442 21.2965 3.48471 21.2965 3.8942C21.2965 5.39568 21.4398 6.98548 21.4637 7.2103C21.4796 7.32271 21.4796 7.37891 21.5911 7.37891C21.7025 7.37891 21.7105 7.32271 21.7264 7.22636C21.7662 6.88913 21.798 6.37525 21.8219 6.02197C21.8458 5.68473 21.8935 4.67304 21.8935 3.8942C21.8935 3.53289 21.8935 3.39639 21.798 2.96281C21.798 2.93872 21.7105 2.53726 21.6945 2.30441Z"
+              fill="black" />
+          </symbol>
+        </svg>
+      </div>
+      <!-- Code Output -->
+      <div class="code" id="code">
+        <div class="toolbar">
+          <!-- Left -->
+          <div class="code-title">
+            Qiskit Output
+          </div>
+          <!-- Separator -->
+          <div class="toolbar-flex"></div>
+          <!-- Right -->
+          <button class="toolbar-btn fluid" onclick="copyQiskitCode()"
+            id="qiskit-code-copy-btn">
+            Copy
+          </button>
+          <button class="toolbar-btn fluid" onclick="openExportDialog('qasm')">
+            QASM
+          </button>
+        </div>
+        <pre class="line-numbers">
+          <code class="language-py" id="output-qiskit-result"></code>
+        </pre>
+      </div>
+      <!-- GUIDELINE -->
+      <div id="guideline"
+        onmouseover="this.style.opacity = 0.3"
+        ondragover="this.style.opacity = 0.3"
+        onmouseout="this.style.opacity = 1"
+        ondragleave="this.style.opacity = 1"
+        style="display:none">
+        <div class="box">
+          <strong>Protip!</strong>
+          <p id="guideline-text"></p>
+        </div>
+      </div>
+    </div>
+    <div class="status-bar">
+      Ready
+    </div>
+  </div>
+
+
+
+  <div id="tooltip"></div>
+  <div id="contextmenu">
+    <ul>
+      <li class="cut">Cut</li>
+      <li class="copy">Copy</li>
+      <li class="paste">Paste</li>
+      <li class="delete newcategory">Delete</li>
+      <li class="select-all">Select All</li>
+    </ul>
+  </div>
+
+  <div id="execute-circuit-dialog" class="common-dialog"></div>
+
+  <div id="export-circuit-dialog" class="common-dialog"></div>
+
+  <div id="new-gate-dialog" class="common-dialog"></div>
+
+  <div id="introduction-dialog" class="common-dialog">
+    <div style="
+      height: 250px;
+      margin: -1rem;
+      margin-bottom: 0;
+      background: url(og.jpg);
+      background-size: cover;
+      background-position: 50%;
+      box-shadow: 0 -64px 64px -64px rgb(0 80 255 / 50%) inset, 0 -32px 32px -32px rgb(138 63 252 / 75%) inset;
+    "></div>
+    <div class="row" style="margin:1rem 0">
+      <div class="col" style="align-self:flex-start">
+        <button class="button is-fullwidth"
+          style="justify-content:flex-start;text-align:left;margin-bottom:.5rem"
+          onclick="resetProgram(true); introductionDialogInstance.close(true)">
+          <span class="icon is-small">
+            <i class="fa-solid fa-file-medical"></i>
+          </span>
+          <span>Create a blank quantum circuit</span>
+        </button>
+        <button class="button is-fullwidth"
+          style="justify-content:flex-start;text-align:left"
+          onclick="chooseAndLoadFile(); introductionDialogInstance.close(true)">
+          <span class="icon is-small">
+            <i class="fa-solid fa-folder-open"></i>
+          </span>
+          <span>Open a quantum circuit</span>
+        </button>
+      </div>
+      <div class="col">
+        <div class="box" style="border:#dbdbdb 1px solid">
+          <h2 style="margin-bottom:1rem">Tip of the day</h2>
+          <p>
+            You can quickly delete <em>anything</em> you want using
+            <strong style="display:inline">the middle mouse</strong>.
+          </p>
+        </div>
+      </div>
+    </div>
+    <hr>
+    <label style="margin-top:1rem;display:block">
+      <input type="checkbox" checked onchange="changeIntroductionDialogPref(this)">
+      Show this on startup.
+    </label>
+  </div>
+
+  <script
+    src="https://rawcdn.githack.com/nextapps-de/winbox/0.2.0/dist/js/winbox.min.js"></script>
+
+  <script src="https://kit.fontawesome.com/6b621a350d.js"
+    crossorigin="anonymous"></script>
+
+  <script src="//cdn.jsdelivr.net/npm/alertifyjs@1.13.1/build/alertify.min.js"></script>
+
+  <script src="prism.js"></script>
+  <script type="module" src="/src/main.ts"></script>
+</body>
+
+</html>
