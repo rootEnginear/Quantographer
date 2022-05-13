@@ -102,7 +102,7 @@ type RotationCustomGateProperty = CustomGateProperty<'rotation'> & {
 
 type MatrixCustomGateProperty = CustomGateProperty<'matrix'> & {
   qubitCount: number
-  matrix: number[]
+  matrix: Array<number|string>
 }
 
 type OperationsCustomGateProperty = CustomGateProperty<'operation'> & {
