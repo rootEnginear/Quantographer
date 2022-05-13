@@ -495,7 +495,7 @@ const executeCircuit = async () => {
           case 'DONE':
             // console.log('DONE', r)
             overlay_status.value = 'EXEC_RESULT'
-            overlay_status_text.value = `${JSON.stringify(r.value)}`
+            overlay_status_text.value = JSON.stringify(r.value)
             res()
             break;
           case 'ERROR':

@@ -1,4 +1,4 @@
-![Quantographer Banner](https://raw.githubusercontent.com/rootEnginear/Quantographer/dev/public/og.jpg?token=GHSAT0AAAAAABKDPNR2SNPSK63IFX7BJAVOYT5UF7A)
+![Quantographer Banner](https://cdn.jsdelivr.net/gh/rootenginear/quantographer/public/og.jpg)
 
 # Quantographer
 
@@ -11,6 +11,8 @@ incorporated the results to assist us prioritize the settings in our recommendat
 Furthermore, we conducted a user usability test comparing our solution to similar products.
 As a result, we are able to adjust and enhance the user experience to be comparable
 with other products.
+
+> **Note:** This repository only contains the front-end part of the application. For the back-end implementation, please see: <https://github.com/shalulian/quantographer-backend>.
 
 ## Developing
 
