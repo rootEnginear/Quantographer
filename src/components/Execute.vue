@@ -274,6 +274,9 @@
 
 <script setup lang="ts">
 import { ref, StyleValue } from 'vue'
+import { getApiKey, isCircuitHasMeasure, getQubitCount } from '../render'
+import { Store } from '../store';
+import { translateCircuit } from '../translator';
 
 const overlay_status = ref<'IDLE' | 'FETCHING' | 'ERROR' | 'RESULT' | 'EXEC_RESULT' | 'EXEC_RESULT_CHART'>('FETCHING')
 const overlay_status_text = ref("Connecting to Backends...")
@@ -313,8 +316,7 @@ const fetchAvailableBackends = async () => {
         'Content-Type': 'application/json'
       },
       body: JSON.stringify({
-        // @ts-expect-error
-        api_key: window.getApiKey()
+        api_key: getApiKey()
       })
     })
     const r = await resp.json()
@@ -347,10 +349,8 @@ const updateTranspileResult = async () => {
         'Content-Type': 'application/json'
       },
       body: JSON.stringify({
-        // @ts-expect-error
-        code: window.translateCircuit(),
-        // @ts-expect-error
-        api_key: window.getApiKey(),
+        code: translateCircuit(),
+        api_key: getApiKey(),
         system: sys.value,
         layout: lomt.value,
         routing: rtmt.value,
@@ -380,10 +380,8 @@ const getRecommendation = async () => {
         'Content-Type': 'application/json'
       },
       body: JSON.stringify({
-        // @ts-expect-error
-        code: window.translateCircuit(),
-        // @ts-expect-error
-        api_key: window.getApiKey()
+        code: translateCircuit(),
+        api_key: getApiKey()
       })
     })
 
@@ -432,10 +430,8 @@ const toTitleCase = (str: string) => str.split('_').map((w) => w[0].toUpperCase(
 const pickRandom = (arr: any[]) => arr[Math.floor(Math.random() * arr.length)]
 
 const executeCircuit = async () => {
-  // @ts-expect-error
-  if (!window.isCircuitHasMeasure()) {
-    // @ts-expect-error
-    window.alertify.alert("No measurement found!", 'You need to have at least one measurement in your circuit.')
+  if (!isCircuitHasMeasure()) {
+    alertify.alert("No measurement found!", 'You need to have at least one measurement in your circuit.')
     return;
   }
 
@@ -453,10 +449,8 @@ const executeCircuit = async () => {
     })
 
     ws.send(JSON.stringify({
-      // @ts-expect-error
-      code: window.translateCircuit(),
-      // @ts-expect-error
-      api_key: window.getApiKey(),
+      code: translateCircuit(),
+      api_key: getApiKey(),
       system: sys.value,
       layout: lomt.value,
       routing: rtmt.value,
@@ -482,12 +476,12 @@ const executeCircuit = async () => {
             break;
           case 'QUEUED':
             // console.log('QUEUED', r)
-            const time_label = ['h','m','s']
-            const time_split = r.timeToStart.split(".")[0].split(":").map((t: string, i: number) => ([t,time_label[i]]));
-            let time_process;
-            if(time_split[0][0] === '0')
-              time_process = time_split.splice(0,1)
-            const time_string = time_split.map((t: string[]) => t.join('')).join(':')
+            const time_label = ['h', 'm', 's']
+            const time_split = r.timeToStart.split(".")[0].split(":").map((t: string, i: number) => ([t, time_label[i]]));
+            let time_process = time_split;
+            if (time_split[0][0] === '0')
+              time_process = time_split.splice(0, 1)
+            const time_string = time_process.map((t: string[]) => t.join('')).join(':')
             overlay_status_text.value = `Your circuit is queued, ${r.queue} left. (~${time_string})`
             break;
           case 'VALIDATING':
@@ -566,16 +560,12 @@ const initExecuteDialog = () => {
   copyText.value = "Copy Result"
   retry_function.value = () => {}
 
-  // @ts-expect-error
-  qubit_count.value = window.getQubitCount()
+  qubit_count.value = getQubitCount()
 
   fetchAvailableBackends()
 }
 
-Object.assign(
-  window,
-  { initExecuteDialog }
-)
+Store.initExecuteDialog = initExecuteDialog
 </script>
 
 <style scoped lang="scss">

@@ -69,6 +69,9 @@
 
 <script setup lang="ts">
 import { ref, watch, computed } from 'vue'
+import { getFileName } from '../render'
+import { Store } from '../store';
+import { translateCircuit } from '../translator';
 
 type EXPORT_ABLE_TYPE = "qasm" | "qiskit" | "png"
 const selectedType = ref<EXPORT_ABLE_TYPE>("qasm")
@@ -103,8 +106,7 @@ const exportDialogCompile = async () => {
             "Content-Type": "application/json"
           },
           body: JSON.stringify({
-            // @ts-expect-error
-            "code": window.translateCircuit()
+            "code": translateCircuit()
           }),
         })
         const data = await resp.json()
@@ -124,8 +126,7 @@ const exportDialogCompile = async () => {
             "Content-Type": "application/json"
           },
           body: JSON.stringify({
-            // @ts-expect-error
-            "code": window.translateCircuit()
+            "code": translateCircuit()
           }),
         })
         const data = await resp.json()
@@ -137,8 +138,7 @@ const exportDialogCompile = async () => {
       }
       break
     case "qiskit":
-      // @ts-expect-error
-      result.value = window.translateCircuit()
+      result.value = translateCircuit()
       fetching.value = 'IDLE'
       break;
   }
@@ -165,10 +165,7 @@ const initExportDialog = (choice: EXPORT_ABLE_TYPE) => {
   exportDialogCompile()
 }
 
-Object.assign(
-  window,
-  { initExportDialog }
-)
+Store.initExportDialog = initExportDialog
 
 const saveData = () => {
   let urlData = null
@@ -188,8 +185,7 @@ const saveData = () => {
   const linkElement = document.createElement('a')
 
   linkElement.href = urlData
-  // @ts-expect-error
-  linkElement.download = `${window.getFileName()}.${fileType.value.ext}`
+  linkElement.download = `${getFileName()}.${fileType.value.ext}`
 
   linkElement.click()
 
