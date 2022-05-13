@@ -100,7 +100,7 @@ const exportDialogCompile = async () => {
   switch (selectedType.value) {
     case "qasm":
       try {
-        const resp = await fetch("https://quantum-backend-flask.herokuapp.com/qasm", {
+        const resp = await fetch("https://quantum-backend-flask.herokuapp.com/convert_qasm", {
           method: "POST",
           headers: {
             "Content-Type": "application/json"
@@ -111,7 +111,7 @@ const exportDialogCompile = async () => {
         })
         const data = await resp.json()
         if (data.error) throw new Error(data.error)
-        result.value = data.code
+        result.value = data.result
         fetching.value = 'IDLE'
       } catch (e) {
         result.value = (e as Error)?.message ?? "Some error happened"
@@ -120,7 +120,7 @@ const exportDialogCompile = async () => {
       break
     case "png":
       try {
-        const resp = await fetch("https://quantum-backend-flask.herokuapp.com/qiskit_draw", {
+        const resp = await fetch("https://quantum-backend-flask.herokuapp.com/convert_image", {
           method: "POST",
           headers: {
             "Content-Type": "application/json"
@@ -130,7 +130,7 @@ const exportDialogCompile = async () => {
           }),
         })
         const data = await resp.json()
-        result.value = data.pic
+        result.value = data.result
         fetching.value = 'IDLE'
       } catch (e) {
         result.value = (e as Error)?.message ?? "Some error happened"

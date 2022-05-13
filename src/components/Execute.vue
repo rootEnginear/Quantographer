@@ -310,18 +310,18 @@ const fetchAvailableBackends = async () => {
   overlay_status_text.value = 'Connecting to Backends...'
 
   try {
-    const resp = await fetch('https://quantum-backend-flask.herokuapp.com/get_backend', {
+    const resp = await fetch('https://quantum-backend-flask.herokuapp.com/available_backend', {
       method: 'POST',
       headers: {
         'Content-Type': 'application/json'
       },
       body: JSON.stringify({
-        api_key: getApiKey()
+        key: getApiKey()
       })
     })
     const r = await resp.json()
     if ('error' in r) throw new Error(r.error)
-    const backends = r.sort((b: any, a: any) => a.qb === b.qb ? (a.qv === b.qv ? b.name.localeCompare(a.name) : a.qv - b.qv) : a.qb - b.qb)
+    const backends = r.result.sort((b: any, a: any) => a.qb === b.qb ? (a.qv === b.qv ? b.name.localeCompare(a.name) : a.qv - b.qv) : a.qb - b.qb)
     all_sys.value = backends
 
     const available_backend = backends.find((backend: any) => backend.qb >= qubit_count.value)
@@ -350,17 +350,17 @@ const updateTranspileResult = async () => {
       },
       body: JSON.stringify({
         code: translateCircuit(),
-        api_key: getApiKey(),
+        key: getApiKey(),
         system: sys.value,
         layout: lomt.value,
         routing: rtmt.value,
         scheduling: sdmt.value === 'none' ? null : sdmt.value,
-        optlvl: +otlv.value
+        level: +otlv.value
       })
     })
     const r = await resp.json()
     if ('error' in r) throw new Error(r.error)
-    transpile_result.value = r.pic
+    transpile_result.value = r.result
     transpile_result_status.value = 'IDLE'
   } catch (e: any) {
     transpile_result.value = e?.message || JSON.stringify(e)
@@ -381,7 +381,7 @@ const getRecommendation = async () => {
       },
       body: JSON.stringify({
         code: translateCircuit(),
-        api_key: getApiKey()
+        key: getApiKey()
       })
     })
 
@@ -394,11 +394,12 @@ const getRecommendation = async () => {
       return diff < 0.00001
     }
     // sort by least acc_error
-    const least_acc_error = res.sort((a: any, b: any) => isFloatEqual(a.acc_err, b.acc_err) ? b.optlvl - a.optlvl : a.acc_err - b.acc_err)
+    const least_acc_error = res.result.sort((a: any, b: any) => isFloatEqual(a.acc_err, b.acc_err) ? b.level - a.level : a.acc_err - b.acc_err)
     // console.log(least_acc_error)
+    if (least_acc_error.length === 0) throw new Error('no result')
 
     rec_sys.value = least_acc_error[0].system
-    rec_otlv.value = least_acc_error[0].optlvl + ""
+    rec_otlv.value = least_acc_error[0].level + ""
     rec_rtmt.value = least_acc_error[0].routing
     rec_lomt.value = least_acc_error[0].layout
 
@@ -450,12 +451,12 @@ const executeCircuit = async () => {
 
     ws.send(JSON.stringify({
       code: translateCircuit(),
-      api_key: getApiKey(),
+      key: getApiKey(),
       system: sys.value,
       layout: lomt.value,
       routing: rtmt.value,
       scheduling: sdmt.value === 'none' ? null : sdmt.value,
-      optlvl: +otlv.value,
+      level: +otlv.value,
       shots: +shots.value
     }))
 
@@ -477,7 +478,7 @@ const executeCircuit = async () => {
           case 'QUEUED':
             // console.log('QUEUED', r)
             const time_label = ['h', 'm', 's']
-            const time_split = r.timeToStart.split(".")[0].split(":").map((t: string, i: number) => ([t, time_label[i]]));
+            const time_split = r.est_time.split(".")[0].split(":").map((t: string, i: number) => ([t, time_label[i]]));
             let time_process = time_split;
             if (time_split[0][0] === '0')
               time_process = time_split.splice(0, 1)
