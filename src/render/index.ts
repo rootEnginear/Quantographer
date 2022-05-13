@@ -4,6 +4,8 @@ import {circuitData} from './data'
 import {populateOperation} from './op'
 import {addButtonDraglistener, deepClone, getLocationInfo, getOpSpan, opOverlaps} from './util'
 
+import {updateCodeOutput} from '../translator'
+
 export const svgNamespace = 'http://www.w3.org/2000/svg'
 
 export const workbenchElement = document.querySelector<SVGElement>('#workbench')!
@@ -102,8 +104,7 @@ export const populateTrack = () => {
           let newName: string
           for (;;) {
             const newNamePrompt = await new Promise<string | null>(
-              // @ts-expect-error
-              (res) => window.alertify.prompt(
+              (res) => alertify.prompt(
                 'Quantographer',
                 'Rename qubit',
                 name,
@@ -175,8 +176,7 @@ export const populateTrack = () => {
 
             qubits.splice(qubitIndex, 1)
 
-            // @ts-expect-error
-            window.updateCodeOutput?.()
+            updateCodeOutput()
 
             clearOps()
             clearTrack()
@@ -210,11 +210,9 @@ export const populateTrack = () => {
           if (!anyUsed())
             return doDel()
 
-          // @ts-expect-error
-          window.alertify.confirm(
+          alertify.confirm(
             'Quantographer',
             'Are you sure to delete this qubit?',
-
             doDel,
             () => {}
           )
@@ -264,8 +262,7 @@ export const populateTrack = () => {
           let newName: string
           for (;;) {
             const newNamePrompt = await new Promise<string | null>(
-              // @ts-expect-error
-              (res) => window.alertify.prompt(
+              (res) => alertify.prompt(
                 'Quantographer',
                 'Rename bit',
                 name,
@@ -343,8 +340,7 @@ export const populateTrack = () => {
 
             bits.splice(i, 1)
 
-            // @ts-expect-error
-            window.updateCodeOutput?.()
+            updateCodeOutput()
 
             clearOps()
             clearTrack()
@@ -358,11 +354,9 @@ export const populateTrack = () => {
           if (!anyUsed())
             return doDel()
 
-          // @ts-expect-error
-          window.alertify.confirm(
+          alertify.confirm(
             'Quantographer',
             'Are you sure to delete this bit?',
-
             doDel,
             () => {}
           )
@@ -511,8 +505,7 @@ workbenchElement.addEventListener(
           clearOps()
           populateOps()
 
-          // @ts-expect-error
-          window.updateCodeOutput?.()
+          updateCodeOutput()
           break
         }
       }
@@ -556,8 +549,7 @@ workbenchElement.addEventListener(
           opToAdd.controlBits.push(addedControl)
           clearOps()
           populateOps()
-          // @ts-expect-error
-          window.updateCodeOutput?.()
+          updateCodeOutput()
           break
         }
       }
@@ -581,8 +573,7 @@ workbenchElement.addEventListener(
       ) return
       const i = circuitData.ops.push(op) - 1
       populateOperation(op, i)
-      // @ts-expect-error
-      window.updateCodeOutput()
+      updateCodeOutput()
     }
     adjustWorkbenchSize()
     const maxStep =
@@ -593,9 +584,11 @@ workbenchElement.addEventListener(
             (op) => op.step
           )
         )
-    if (loc.step === maxStep)
-      // @ts-expect-error
-      window.scrollWorkbenchRight?.()
+    if (loc.step === maxStep) {
+      const workspaceElement = document.querySelector<HTMLElement>('#workspace')!
+      const space = workspaceElement.getElementsByClassName('space')[0]
+      space.scrollLeft = space.scrollWidth
+    }
   }
 )
 
@@ -912,7 +905,7 @@ workbenchElement.addEventListener(
 )
 
 
-const getFileName = () => circuitData.metadata.name
+export const getFileName = () => circuitData.metadata.name
 
 const updateNameInDom = () => {
   const name = `${circuitData.metadata.name} — Quantographer`
@@ -920,18 +913,18 @@ const updateNameInDom = () => {
   document.getElementById('filename')!.textContent = name
 }
 
-const setFileName = (name: string) => {
+export const setFileName = (name: string) => {
   circuitData.metadata.name = name
   updateNameInDom()
 }
 
-const getApiKey = () => circuitData.metadata.key
+export const getApiKey = () => circuitData.metadata.key
 
 const updateApiInDom = () => {
   document.getElementById('ibmkey')!.textContent = getApiKey() ? 'Change your key' : 'Connect to IBMQ'
 }
 
-const setApiKey = (key: string) => {
+export const setApiKey = (key: string) => {
   circuitData.metadata.key = key
   updateApiInDom()
 }
@@ -975,7 +968,7 @@ zoomLevelSelector.dispatchEvent(
   new Event('change')
 )
 
-const chooseAndLoadFile = () => {
+export const chooseAndLoadFile = () => {
   const f = document.createElement('input')
   f.type = 'file'
   f.addEventListener(
@@ -1027,8 +1020,7 @@ const reallyResetProgram = () => {
     }
   )
 
-  // @ts-expect-error
-  window.updateCodeOutput()
+  updateCodeOutput()
 
   updateNameInDom()
   updateApiInDom()
@@ -1047,10 +1039,9 @@ const reallyResetProgram = () => {
   )
 }
 
-const resetProgram = (force = false) => {
+export const resetProgram = (force = false) => {
   if (force) return reallyResetProgram()
-  // @ts-expect-error
-  window.alertify.confirm(
+  alertify.confirm(
     'Quantographer',
     'Are you sure?',
     reallyResetProgram,
@@ -1065,8 +1056,7 @@ const loadCircuit = (data: string) => {
     loadedCircuitData
   )
 
-  // @ts-expect-error
-  window.updateCodeOutput()
+  updateCodeOutput()
 
   updateNameInDom()
   updateApiInDom()
@@ -1120,14 +1110,13 @@ const addCustomGateUI = (name: string) => {
   newGateArea.prepend(userGateBtn)
 }
 
-const addCustomGate = (name: string, gate: CustomGateProperties) => {
+export const addCustomGate = (name: string, gate: CustomGateProperties) => {
   if (name in circuitData.customOperations)
     throw new Error('duplicate name')
 
   circuitData.customOperations[name] = gate
 
-  // @ts-expect-error
-  window.updateCodeOutput()
+  updateCodeOutput()
 
   addCustomGateUI(name)
 }
@@ -1137,26 +1126,17 @@ const addCustomGatesUI = () => {
     addCustomGateUI(name)
 }
 
-const saveFile = () => {
+const convertSpaceToUnderscore = (str: string) => str.toLocaleLowerCase().replace(
+  /\s/g,
+  '_'
+)
+
+export const saveFile = () => {
   const data = JSON.stringify(circuitData)
-  saveFileDialog('circuit.json', data)
+  saveFileDialog(`${convertSpaceToUnderscore(getFileName())}.json`, data)
 }
 
-const generateQasm = (): string => `
-OPENQASM 2.0;
-include "qelib1.inc";
-qreg q[${circuitData.qubits.length}];
-creg c[${circuitData.bits.length}];
-${
-  circuitData.ops
-    .map(
-      (op) => op.toString()
-    )
-    .join('\n')
-}
-`
-
-const appendNewQubit = () => {
+export const appendNewQubit = () => {
   const {qubits} = circuitData
   let i = 0
   while (
@@ -1176,13 +1156,12 @@ const appendNewQubit = () => {
 
   populateTrack()
   populateOps()
-  // @ts-expect-error
-  window.updateCodeOutput?.()
+  updateCodeOutput()
 
   adjustWorkbenchSize()
 }
 
-const appendNewBit = () => {
+export const appendNewBit = () => {
   const {bits} = circuitData
   let i = 0
   while (
@@ -1203,16 +1182,18 @@ const appendNewBit = () => {
 
   populateTrack()
   populateOps()
-  // @ts-expect-error
-  window.updateCodeOutput?.()
+  updateCodeOutput()
 
   adjustWorkbenchSize()
 }
 
-const getQubitCount = () => circuitData.qubits.length
+export const getQubitCount = () => circuitData.qubits.length
+export const isCircuitEmpty = () => circuitData.ops.length === 0
+export const isCircuitHasMeasure = () => circuitData.ops.some(
+  (op) => op.type === 'measure'
+)
 
-// @ts-expect-error
-window.updateCodeOutput?.()
+updateCodeOutput()
 
 updateNameInDom()
 updateApiInDom()
@@ -1223,23 +1204,3 @@ populateOps()
 adjustWorkbenchSize()
 
 addCustomGatesUI()
-
-Object.assign(
-  window,
-  {
-    resetProgram,
-    chooseAndLoadFile,
-    saveFile,
-    addCustomGate,
-    generateQasm,
-    setZoomLevel,
-    changeZoomLevel,
-    getFileName,
-    setFileName,
-    getApiKey,
-    setApiKey,
-    appendNewQubit,
-    appendNewBit,
-    getQubitCount
-  }
-)

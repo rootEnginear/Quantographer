@@ -4,7 +4,8 @@
     <div class="control">
       <div class="select is-fullwidth">
         <select v-model="selectedType">
-          <option value="qasm">QASM2</option>
+          <option value="qasm">QASM 2.0</option>
+          <option value="qiskit">Qiskit (Python)</option>
           <option value="png">PNG</option>
         </select>
       </div>
@@ -68,8 +69,12 @@
 
 <script setup lang="ts">
 import { ref, watch, computed } from 'vue'
+import { getFileName } from '../render'
+import { Store } from '../store';
+import { translateCircuit } from '../translator';
 
-const selectedType = ref<"qasm" | "png">("qasm")
+type EXPORT_ABLE_TYPE = "qasm" | "qiskit" | "png"
+const selectedType = ref<EXPORT_ABLE_TYPE>("qasm")
 const copyText = ref("Copy")
 
 const fetching = ref<'IDLE' | 'FETCHING' | 'ERROR'>('FETCHING')
@@ -78,12 +83,14 @@ const result = ref(``)
 const fileType = computed(() => {
   return {
     "qasm": { ext: "qasm", mime: "text/plain" },
+    "qiskit": { ext: "qiskit", mime: "text/plain" },
     "png": { ext: "png", mime: "image/png" }
   }[selectedType.value]
 })
 const displayType = computed(() => {
   return {
     "qasm": "text",
+    "qiskit": "text",
     "png": "img"
   }[selectedType.value]
 })
@@ -99,8 +106,7 @@ const exportDialogCompile = async () => {
             "Content-Type": "application/json"
           },
           body: JSON.stringify({
-            // @ts-expect-error
-            "code": window.translateCircuit()
+            "code": translateCircuit()
           }),
         })
         const data = await resp.json()
@@ -120,8 +126,7 @@ const exportDialogCompile = async () => {
             "Content-Type": "application/json"
           },
           body: JSON.stringify({
-            // @ts-expect-error
-            "code": window.translateCircuit()
+            "code": translateCircuit()
           }),
         })
         const data = await resp.json()
@@ -132,6 +137,10 @@ const exportDialogCompile = async () => {
         fetching.value = 'ERROR'
       }
       break
+    case "qiskit":
+      result.value = translateCircuit()
+      fetching.value = 'IDLE'
+      break;
   }
 }
 
@@ -147,8 +156,8 @@ const copyCode = () => {
   }, 1000)
 }
 
-const initExportDialog = () => {
-  selectedType.value = "qasm"
+const initExportDialog = (choice: EXPORT_ABLE_TYPE) => {
+  selectedType.value = choice || "qasm"
   copyText.value = 'Copy'
   fetching.value = 'FETCHING'
   result.value = ``
@@ -156,10 +165,7 @@ const initExportDialog = () => {
   exportDialogCompile()
 }
 
-Object.assign(
-  window,
-  { initExportDialog }
-)
+Store.initExportDialog = initExportDialog
 
 const saveData = () => {
   let urlData = null
@@ -179,8 +185,7 @@ const saveData = () => {
   const linkElement = document.createElement('a')
 
   linkElement.href = urlData
-  // @ts-expect-error
-  linkElement.download = `${window.getFileName()}.${fileType.value.ext}`
+  linkElement.download = `${getFileName()}.${fileType.value.ext}`
 
   linkElement.click()
 

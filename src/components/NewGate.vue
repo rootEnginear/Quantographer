@@ -128,6 +128,8 @@
 <script setup lang="ts">
 import { ref, reactive, watch } from 'vue'
 import Bloch from './Bloch.vue'
+import { addCustomGate } from '../render'
+import { Store } from '../store'
 
 const build_method = ref(0)
 const gate_name = ref('')
@@ -158,8 +160,7 @@ watch(mat_data, () => {
 
 const addGate = () => {
   if (!gate_name.value || !gate_name.value.match(/^[a-z_]+$/)) {
-    // @ts-expect-error
-    window.alertify.alert("Gate Name is Invalid!", "Gate name must be only in lowercase letters without any spaces.")
+    alertify.alert("Gate Name is Invalid!", "Gate name must be only in lowercase letters without any spaces.")
     return
   }
 
@@ -167,8 +168,7 @@ const addGate = () => {
 
     switch (build_method.value) {
       case 0:
-        // @ts-expect-error
-        window.addCustomGate(gate_name.value, {
+        addCustomGate(gate_name.value, {
           type: 'rotation',
           theta: rot_theta.value * Math.PI / 180,
           phi: rot_phi.value * Math.PI / 180,
@@ -177,8 +177,7 @@ const addGate = () => {
         break;
       case 1:
         // console.log(mat_qubits.value, mat_data.value)
-        // @ts-expect-error
-        window.addCustomGate(gate_name.value, {
+        addCustomGate(gate_name.value, {
           type: 'matrix',
           qubitCount: mat_qubits.value,
           matrix: mat_data.value.map(e => {
@@ -191,13 +190,11 @@ const addGate = () => {
         })
         break;
     }
-  } catch (e) {
-    // @ts-expect-error
-    window.alertify.alert("Gate Creation Failed!", e.message)
+  } catch (e: any) {
+    alertify.alert("Gate Creation Failed!", e.message)
     return
   }
-  // @ts-expect-error
-  window.newGateDialogInstance.close()
+  Store.newGateDialogInstance.close()
 }
 
 const initNewGateDialog = () => {
@@ -212,10 +209,7 @@ const initNewGateDialog = () => {
   mat_data.value = ['0', '0', '0', '0']
 }
 
-Object.assign(
-  window,
-  { initNewGateDialog }
-)
+Store.initNewGateDialog = initNewGateDialog
 </script>
 
 <style scoped lang="scss">

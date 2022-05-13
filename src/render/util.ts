@@ -3,6 +3,8 @@ import {circuitData} from './data'
 import {adjustWorkbenchSize, clearOps, populateOps, trackLabelGroupElement} from '.'
 import {guidelineText} from '../guideline_text'
 
+import {updateCodeOutput} from '../translator'
+
 export const addButtonDraglistener = (btn: HTMLElement) => {
   btn.addEventListener(
     'dragstart',
@@ -66,8 +68,7 @@ export const addButtonDraglistener = (btn: HTMLElement) => {
 
       if (!gateid.startsWith('custom:')) return
 
-      // @ts-expect-error
-      window.alertify.confirm(
+      alertify.confirm(
         'Quantographer',
         'Are you sure?',
         () => {
@@ -87,8 +88,7 @@ export const addButtonDraglistener = (btn: HTMLElement) => {
           delete circuitData.customOperations[customId]
           elem.remove()
 
-          // @ts-expect-error
-          window.updateCodeOutput?.()
+          updateCodeOutput()
         },
         () => {}
       )

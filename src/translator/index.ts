@@ -74,10 +74,9 @@ export const translateCircuit = () => {
       const perChunk = 2 ** op.qubitCount
       const matrix = op.matrix.reduce((all, one, i) => {
         const ch = Math.floor(i / perChunk)
-        // @ts-expect-error
-        all[ch] = [].concat(all[ch] || [], one)
+        all[ch] = [...all[ch] || [], one]
         return all
-      }, [])
+      }, new Array())
 
       const formatted_mat = JSON.stringify(matrix).toLowerCase()
         .replace(/"/g, '')
@@ -181,13 +180,7 @@ ${qiskit_string}`
 
 export const updateCodeOutput = () => {
   document.getElementById('output-qiskit-result')!.innerHTML = translateCircuit()
-  // @ts-expect-error
   Prism.highlightElement(document.getElementById('output-qiskit-result'))
 }
 
 updateCodeOutput()
-
-Object.assign(window, {
-  translateCircuit,
-  updateCodeOutput
-})
