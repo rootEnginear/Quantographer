@@ -274,6 +274,9 @@
 
 <script setup lang="ts">
 import { ref, StyleValue } from 'vue'
+import { getApiKey, isCircuitHasMeasure, getQubitCount } from '../render'
+import { Store } from '../store';
+import { translateCircuit } from '../translator';
 
 const overlay_status = ref<'IDLE' | 'FETCHING' | 'ERROR' | 'RESULT' | 'EXEC_RESULT' | 'EXEC_RESULT_CHART'>('FETCHING')
 const overlay_status_text = ref("Connecting to Backends...")
@@ -307,19 +310,18 @@ const fetchAvailableBackends = async () => {
   overlay_status_text.value = 'Connecting to Backends...'
 
   try {
-    const resp = await fetch('https://quantum-backend-flask.herokuapp.com/get_backend', {
+    const resp = await fetch('https://quantum-backend-flask.herokuapp.com/available_backend', {
       method: 'POST',
       headers: {
         'Content-Type': 'application/json'
       },
       body: JSON.stringify({
-        // @ts-expect-error
-        api_key: window.getApiKey()
+        key: getApiKey()
       })
     })
     const r = await resp.json()
     if ('error' in r) throw new Error(r.error)
-    const backends = r.sort((b: any, a: any) => a.qb === b.qb ? (a.qv === b.qv ? b.name.localeCompare(a.name) : a.qv - b.qv) : a.qb - b.qb)
+    const backends = r.result.sort((b: any, a: any) => a.qb === b.qb ? (a.qv === b.qv ? b.name.localeCompare(a.name) : a.qv - b.qv) : a.qb - b.qb)
     all_sys.value = backends
 
     const available_backend = backends.find((backend: any) => backend.qb >= qubit_count.value)
@@ -347,20 +349,18 @@ const updateTranspileResult = async () => {
         'Content-Type': 'application/json'
       },
       body: JSON.stringify({
-        // @ts-expect-error
-        code: window.translateCircuit(),
-        // @ts-expect-error
-        api_key: window.getApiKey(),
+        code: translateCircuit(),
+        key: getApiKey(),
         system: sys.value,
         layout: lomt.value,
         routing: rtmt.value,
         scheduling: sdmt.value === 'none' ? null : sdmt.value,
-        optlvl: +otlv.value
+        level: +otlv.value
       })
     })
     const r = await resp.json()
     if ('error' in r) throw new Error(r.error)
-    transpile_result.value = r.pic
+    transpile_result.value = r.result
     transpile_result_status.value = 'IDLE'
   } catch (e: any) {
     transpile_result.value = e?.message || JSON.stringify(e)
@@ -380,10 +380,8 @@ const getRecommendation = async () => {
         'Content-Type': 'application/json'
       },
       body: JSON.stringify({
-        // @ts-expect-error
-        code: window.translateCircuit(),
-        // @ts-expect-error
-        api_key: window.getApiKey()
+        code: translateCircuit(),
+        key: getApiKey()
       })
     })
 
@@ -396,11 +394,12 @@ const getRecommendation = async () => {
       return diff < 0.00001
     }
     // sort by least acc_error
-    const least_acc_error = res.sort((a: any, b: any) => isFloatEqual(a.acc_err, b.acc_err) ? b.optlvl - a.optlvl : a.acc_err - b.acc_err)
+    const least_acc_error = res.result.sort((a: any, b: any) => isFloatEqual(a.acc_err, b.acc_err) ? b.level - a.level : a.acc_err - b.acc_err)
     // console.log(least_acc_error)
+    if (least_acc_error.length === 0) throw new Error('no result')
 
     rec_sys.value = least_acc_error[0].system
-    rec_otlv.value = least_acc_error[0].optlvl + ""
+    rec_otlv.value = least_acc_error[0].level + ""
     rec_rtmt.value = least_acc_error[0].routing
     rec_lomt.value = least_acc_error[0].layout
 
@@ -432,10 +431,8 @@ const toTitleCase = (str: string) => str.split('_').map((w) => w[0].toUpperCase(
 const pickRandom = (arr: any[]) => arr[Math.floor(Math.random() * arr.length)]
 
 const executeCircuit = async () => {
-  // @ts-expect-error
-  if (!window.isCircuitHasMeasure()) {
-    // @ts-expect-error
-    window.alertify.alert("No measurement found!", 'You need to have at least one measurement in your circuit.')
+  if (!isCircuitHasMeasure()) {
+    alertify.alert("No measurement found!", 'You need to have at least one measurement in your circuit.')
     return;
   }
 
@@ -453,15 +450,13 @@ const executeCircuit = async () => {
     })
 
     ws.send(JSON.stringify({
-      // @ts-expect-error
-      code: window.translateCircuit(),
-      // @ts-expect-error
-      api_key: window.getApiKey(),
+      code: translateCircuit(),
+      key: getApiKey(),
       system: sys.value,
       layout: lomt.value,
       routing: rtmt.value,
       scheduling: sdmt.value === 'none' ? null : sdmt.value,
-      optlvl: +otlv.value,
+      level: +otlv.value,
       shots: +shots.value
     }))
 
@@ -482,12 +477,12 @@ const executeCircuit = async () => {
             break;
           case 'QUEUED':
             // console.log('QUEUED', r)
-            const time_label = ['h','m','s']
-            const time_split = r.timeToStart.split(".")[0].split(":").map((t: string, i: number) => ([t,time_label[i]]));
-            let time_process;
-            if(time_split[0][0] === '0')
-              time_process = time_split.splice(0,1)
-            const time_string = time_split.map((t: string[]) => t.join('')).join(':')
+            const time_label = ['h', 'm', 's']
+            const time_split = r.est_time.split(".")[0].split(":").map((t: string, i: number) => ([t, time_label[i]]));
+            let time_process = time_split;
+            if (time_split[0][0] === '0')
+              time_process = time_split.splice(0, 1)
+            const time_string = time_process.map((t: string[]) => t.join('')).join(':')
             overlay_status_text.value = `Your circuit is queued, ${r.queue} left. (~${time_string})`
             break;
           case 'VALIDATING':
@@ -501,7 +496,7 @@ const executeCircuit = async () => {
           case 'DONE':
             // console.log('DONE', r)
             overlay_status.value = 'EXEC_RESULT'
-            overlay_status_text.value = `${JSON.stringify(r.value)}`
+            overlay_status_text.value = JSON.stringify(r.value)
             res()
             break;
           case 'ERROR':
@@ -566,16 +561,12 @@ const initExecuteDialog = () => {
   copyText.value = "Copy Result"
   retry_function.value = () => {}
 
-  // @ts-expect-error
-  qubit_count.value = window.getQubitCount()
+  qubit_count.value = getQubitCount()
 
   fetchAvailableBackends()
 }
 
-Object.assign(
-  window,
-  { initExecuteDialog }
-)
+Store.initExecuteDialog = initExecuteDialog
 </script>
 
 <style scoped lang="scss">

@@ -19,6 +19,8 @@ import {
   opOverlaps
 } from './util'
 
+import {updateCodeOutput} from '../translator'
+
 const opSymbolMapping: Partial<OperationRegistry<string>> = {
   reset: 'reset-operation',
   measure: 'measure-operation',
@@ -176,8 +178,7 @@ export const populateOperation = (op: Operation, opIndex: number) => {
                 // create updated varsion
                 populateOperation(op, opIndex)
 
-                // @ts-expect-error
-                window.updateCodeOutput?.()
+                updateCodeOutput()
 
                 return
               }
@@ -242,8 +243,7 @@ export const populateOperation = (op: Operation, opIndex: number) => {
                 // create updated varsion
                 populateOperation(op, opIndex)
 
-                // @ts-expect-error
-                window.updateCodeOutput?.()
+                updateCodeOutput()
               }
 
               workbenchElement.addEventListener('mousemove', moveHandler)
@@ -263,8 +263,7 @@ export const populateOperation = (op: Operation, opIndex: number) => {
 
               // create updated varsion
               populateOperation(op, opIndex)
-              // @ts-expect-error
-              window.updateCodeOutput?.()
+              updateCodeOutput()
             }
           )
 
@@ -339,8 +338,7 @@ export const populateOperation = (op: Operation, opIndex: number) => {
                 // create updated varsion
                 populateOperation(op, opIndex)
 
-                // @ts-expect-error
-                window.updateCodeOutput?.()
+                updateCodeOutput()
 
                 return
               }
@@ -424,8 +422,7 @@ export const populateOperation = (op: Operation, opIndex: number) => {
                 // create updated varsion
                 populateOperation(op, opIndex)
 
-                // @ts-expect-error
-                window.updateCodeOutput?.()
+                updateCodeOutput()
               }
 
               workbenchElement.addEventListener('mousemove', moveHandler)
@@ -544,8 +541,7 @@ export const populateOperation = (op: Operation, opIndex: number) => {
 
           // create updated varsion
           populateOperation(op, opIndex)
-          // @ts-expect-error
-          window.updateCodeOutput?.()
+          updateCodeOutput()
         }
 
         workbenchElement.addEventListener('mousemove', moveHandler)
@@ -641,8 +637,7 @@ export const populateOperation = (op: Operation, opIndex: number) => {
         if (e.buttons === 4) {
           // delete
           ops.splice(opIndex, 1)
-          // @ts-expect-error
-          window.updateCodeOutput()
+          updateCodeOutput()
 
           clearOps()
           populateOps()
@@ -726,8 +721,7 @@ export const populateOperation = (op: Operation, opIndex: number) => {
 
           // create updated varsion
           populateOperation(op, opIndex)
-          // @ts-expect-error
-          window.updateCodeOutput?.()
+          updateCodeOutput()
         }
 
         workbenchElement.addEventListener('mousemove', moveHandler)
@@ -825,8 +819,7 @@ export const populateOperation = (op: Operation, opIndex: number) => {
 
           // create updated varsion
           populateOperation(op, opIndex)
-          // @ts-expect-error
-          window.updateCodeOutput?.()
+          updateCodeOutput()
         }
 
         workbenchElement.addEventListener('mousemove', moveHandler)
@@ -910,8 +903,7 @@ export const populateOperation = (op: Operation, opIndex: number) => {
         if (e.buttons === 4) {
           // delete
           ops.splice(opIndex, 1)
-          // @ts-expect-error
-          window.updateCodeOutput()
+          updateCodeOutput()
 
           clearOps()
           populateOps()
@@ -995,8 +987,7 @@ export const populateOperation = (op: Operation, opIndex: number) => {
 
           // create updated varsion
           populateOperation(op, opIndex)
-          // @ts-expect-error
-          window.updateCodeOutput?.()
+          updateCodeOutput()
         }
 
         workbenchElement.addEventListener('mousemove', moveHandler)
@@ -1014,8 +1005,7 @@ export const populateOperation = (op: Operation, opIndex: number) => {
         if (e.buttons === 4) {
           // delete
           ops.splice(opIndex, 1)
-          // @ts-expect-error
-          window.updateCodeOutput()
+          updateCodeOutput()
 
           clearOps()
           populateOps()
@@ -1099,8 +1089,7 @@ export const populateOperation = (op: Operation, opIndex: number) => {
 
           // create updated varsion
           populateOperation(op, opIndex)
-          // @ts-expect-error
-          window.updateCodeOutput?.()
+          updateCodeOutput()
         }
 
         workbenchElement.addEventListener('mousemove', moveHandler)
@@ -1163,8 +1152,7 @@ export const populateOperation = (op: Operation, opIndex: number) => {
         if (e.buttons === 4) {
           // delete
           ops.splice(opIndex, 1)
-          // @ts-expect-error
-          window.updateCodeOutput()
+          updateCodeOutput()
 
           clearOps()
           populateOps()
@@ -1251,8 +1239,7 @@ export const populateOperation = (op: Operation, opIndex: number) => {
 
           // create updated varsion
           populateOperation(op, opIndex)
-          // @ts-expect-error
-          window.updateCodeOutput?.()
+          updateCodeOutput()
         }
 
         workbenchElement.addEventListener('mousemove', moveHandler)
@@ -1317,8 +1304,7 @@ export const populateOperation = (op: Operation, opIndex: number) => {
         async () => {
           for (;;) {
             const newNamePrompt = await new Promise<string | null>(
-              // @ts-expect-error
-              (res) => window.alertify.prompt(
+              (res) => alertify.prompt(
                 'Quantographer',
                 'Enter gate parameter, you can use the constant <code>pi</code>',
                 // @ts-expect-error
@@ -1338,8 +1324,7 @@ export const populateOperation = (op: Operation, opIndex: number) => {
             // @ts-expect-error
             op.params[0] = newNamePrompt
 
-            // @ts-expect-error
-            window.updateCodeOutput()
+            updateCodeOutput()
 
             clearOps()
             populateOps()
@@ -1388,8 +1373,7 @@ export const populateOperation = (op: Operation, opIndex: number) => {
         if (e.buttons === 4) {
           // delete
           ops.splice(opIndex, 1)
-          // @ts-expect-error
-          window.updateCodeOutput()
+          updateCodeOutput()
 
           clearOps()
           populateOps()
@@ -1472,8 +1456,7 @@ export const populateOperation = (op: Operation, opIndex: number) => {
 
           // create updated varsion
           populateOperation(op, opIndex)
-          // @ts-expect-error
-          window.updateCodeOutput?.()
+          updateCodeOutput()
         }
 
         workbenchElement.addEventListener('mousemove', moveHandler)

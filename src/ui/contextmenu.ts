@@ -5,6 +5,8 @@ import {adjustWorkbenchSize, clearOps, populateOps} from '../render'
 import {deepClone} from '../util'
 import {getLocationInfo} from '../render/util'
 
+import {updateCodeOutput} from '../translator'
+
 const ctxmenu = document.querySelector<HTMLElement>('#contextmenu')!
 
 const cutMenu = ctxmenu.querySelector<HTMLElement>('.cut')!
@@ -14,7 +16,7 @@ const pasteMenu = ctxmenu.querySelector<HTMLElement>('.paste')!
 const deleteMenu = ctxmenu.querySelector<HTMLElement>('.delete')!
 const selectAllMenu = ctxmenu.querySelector<HTMLElement>('.select-all')!
 
-const gateSelectAll = () => {
+export const gateSelectAll = () => {
   circuitData.ops.forEach(
     (op) => op.active = true
   )
@@ -23,7 +25,7 @@ const gateSelectAll = () => {
   hideCtx()
 }
 
-const gateDeleteSelected = () => {
+export const gateDeleteSelected = () => {
   const {ops} = circuitData
   let i = ops.length
   while (i) {
@@ -31,8 +33,7 @@ const gateDeleteSelected = () => {
     if (ops[i].active)
       ops.splice(i, 1)
   }
-  // @ts-expect-error
-  window.updateCodeOutput?.()
+  updateCodeOutput()
   clearOps()
   populateOps()
   adjustWorkbenchSize()
@@ -42,7 +43,7 @@ const gateDeleteSelected = () => {
 let workbenchLocation: LocationInfo | null = null
 let clipboardData: Operation[] = []
 
-const gateCopySelected = () => {
+export const gateCopySelected = () => {
   clipboardData = circuitData.ops
     .filter(
       (op) => op.active
@@ -53,13 +54,13 @@ const gateCopySelected = () => {
   hideCtx()
 }
 
-const gateCutSelected = () => {
+export const gateCutSelected = () => {
   gateCopySelected()
   gateDeleteSelected()
   hideCtx()
 }
 
-const gatePasteClipboard = () => {
+export const gatePasteClipboard = () => {
   if (clipboardData.length === 0) return
   const {ops} = circuitData
   const maxStep =
@@ -84,8 +85,7 @@ const gatePasteClipboard = () => {
   )
   ops.push(... newSection)
 
-  // @ts-expect-error
-  window.updateCodeOutput?.()
+  updateCodeOutput()
   clearOps()
   populateOps()
   adjustWorkbenchSize()
@@ -141,8 +141,7 @@ pasteMenu.addEventListener(
       ... newSection2
     )
 
-    // @ts-expect-error
-    window.updateCodeOutput?.()
+    updateCodeOutput()
     clearOps()
     populateOps()
     adjustWorkbenchSize()
@@ -154,17 +153,6 @@ cutMenu.addEventListener('click', gateCutSelected)
 copyMenu.addEventListener('click', gateCopySelected)
 deleteMenu.addEventListener('click', gateDeleteSelected)
 selectAllMenu.addEventListener('click', gateSelectAll)
-
-Object.assign(
-  window,
-  {
-    gateSelectAll,
-    gateDeleteSelected,
-    gateCutSelected,
-    gateCopySelected,
-    gatePasteClipboard
-  }
-)
 
 const updateCtx = async (target: HTMLElement | { getBoundingClientRect: () => any }) => {
   const {x, y} = await computePosition(

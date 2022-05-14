@@ -1,7 +1,4 @@
 import {createApp} from 'vue'
-import Menubar from './components/Menubar.vue'
-
-createApp(Menubar).mount('#menu')
 
 import './styles/main.scss'
 
@@ -15,15 +12,35 @@ const toggleCodeButton = document.getElementById('btn-toggle-code')!
 const accordionGroups = document.querySelectorAll('details')
 
 import './ui/gate_tooltip'
-import './ui/contextmenu'
+import {
+  gateSelectAll,
+  gateDeleteSelected,
+  gateCopySelected,
+  gateCutSelected,
+  gatePasteClipboard
+} from './ui/contextmenu'
 
 import {addButtonDraglistener} from './render/util'
 
 for (const gateButton of gateButtons)
   addButtonDraglistener(gateButton)
 
-import './translator/index'
-import './render'
+import {translateCircuit} from './translator'
+
+import {
+  chooseAndLoadFile,
+  saveFile,
+  getApiKey,
+  isCircuitEmpty,
+  setFileName,
+  setApiKey,
+  getFileName,
+  resetProgram,
+  appendNewQubit,
+  appendNewBit
+} from './render'
+
+import {Store} from './store'
 
 // -----------------------------------------------------------------------------
 // Shortcuts
@@ -65,33 +82,28 @@ const handlingShortcuts = (e: KeyboardEvent) => {
   if (e.ctrlKey && e.key === 'o') {
     e.stopPropagation()
     e.preventDefault()
-    // @ts-expect-error
-    window.chooseAndLoadFile()
+    chooseAndLoadFile()
   }
 
   if (e.ctrlKey && e.key === 's') {
     e.stopPropagation()
     e.preventDefault()
-    // @ts-expect-error
-    window.saveFile()
+    saveFile()
   }
 
   if (e.ctrlKey && e.key === 'a') {
     e.stopPropagation()
     e.preventDefault()
-    // @ts-expect-error
-    window.gateSelectAll()
+    gateSelectAll()
   }
 
   if (e.key == 'Delete') {
     e.stopPropagation()
     e.preventDefault()
-    // @ts-expect-error
-    window.gateDeleteSelected()
+    gateDeleteSelected()
   }
 
   // if (e.key === 'F11' || e.key === 'F12' || e.key === 'F5') return 0
-
 
   // e.stopPropagation()
   // e.preventDefault()
@@ -272,15 +284,12 @@ let isExecuteDialogOpen = false
 const openExecuteDialog = async () => {
   if (isExecuteDialogOpen) return
 
-  // @ts-expect-error
-  if (window.getApiKey() === '') return alertify.alert('No IBMQ API Key Present', 'You must enter your IBM Cloud API key before executing a circuit.')
-  // @ts-expect-error
-  if (window.isCircuitEmpty()) return alertify.alert('Circuit is Empty!', 'Your circuit is empty. Try to add some gates.')
+  if (getApiKey() === '') return alertify.alert('No IBMQ API Key Present', 'You must enter your IBM Cloud API key before executing a circuit.')
+  if (isCircuitEmpty()) return alertify.alert('Circuit is Empty!', 'Your circuit is empty. Try to add some gates.')
 
   isExecuteDialogOpen = true
 
-  // @ts-expect-error
-  initExecuteDialog()
+  Store.initExecuteDialog?.()
 
   new window.WinBox({
     title: 'Transpile & Execute',
@@ -301,12 +310,11 @@ import Export from './components/Export.vue'
 createApp(Export).mount('#export-circuit-dialog')
 
 let isExportDialogOpen = false
-const openExportDialog = (choice: 'qasm' | 'png') => {
+const openExportDialog = (choice: 'qasm' | 'png' = 'qasm') => {
   if (isExportDialogOpen) return
   isExportDialogOpen = true
 
-  // @ts-expect-error
-  initExportDialog(choice)
+  Store.initExportDialog?.(choice)
 
   new window.WinBox({
     title: 'Export',
@@ -326,22 +334,19 @@ const openExportDialog = (choice: 'qasm' | 'png') => {
 import NewGate from './components/NewGate.vue'
 createApp(NewGate).mount('#new-gate-dialog')
 
-let newGateDialogInstance: any = null
 let isNewGateDialogOpen = false
 const openNewGateDialog = () => {
   if (isNewGateDialogOpen) return
   isNewGateDialogOpen = true
-  // @ts-expect-error
-  initNewGateDialog()
-  newGateDialogInstance = new window.WinBox({
+
+  Store.initNewGateDialog?.()
+
+  Store.newGateDialogInstance = new window.WinBox({
     title: 'New Gate',
     border: 4,
     mount: document.getElementById('new-gate-dialog') as Node,
     onclose: () => {
       isNewGateDialogOpen = false
-      Object.assign(window, {
-        newGateDialogInstance
-      })
       return false
     },
     width: 750,
@@ -349,17 +354,12 @@ const openNewGateDialog = () => {
     x: 'center',
     y: 'center'
   })
-  Object.assign(window, {
-    newGateDialogInstance
-  })
 }
 
 // -----------------------------------------------------------------------------
 // Alertify
 // -----------------------------------------------------------------------------
-// @ts-expect-error
 alertify.defaults = {
-  // @ts-expect-error
   ...alertify.defaults,
   transitionOff: true,
   // theme settings
@@ -374,25 +374,15 @@ alertify.defaults = {
 }
 
 const renameFile = () => {
-  // @ts-expect-error
-  alertify.prompt('Rename File', 'Please enter the name of your file', window.getFileName(), (evt, value) => {
-    // @ts-expect-error
-    window.setFileName(value)
-  }, () => {
-    // alertify.error('Cancel')
-    /* do nothing when cancel */
-  })
+  alertify.prompt('Rename File', 'Please enter the name of your file', getFileName(), (_: any, value: any) => {
+    setFileName(value)
+  }, () => {})
 }
 
 const changeIbmKey = () => {
-  // @ts-expect-error
-  alertify.prompt('Connect to IBMQ', 'Please enter the API Key of your IBMQ<br>Your key will only be used when executing the circuit on particular system. We *will not* store your key in any ways.', window.getApiKey(), (evt, value) => {
-    // @ts-expect-error
-    window.setApiKey(value.trim())
-  }, () => {
-    // alertify.error('Cancel')
-    /* do nothing when cancel */
-  })
+  alertify.prompt('Connect to IBMQ', 'Please enter the API Key of your IBMQ<br>Your key will only be used when executing the circuit on particular system. We *will not* store your key in any ways.', getApiKey(), (_: any, value: any) => {
+    setApiKey(value.trim())
+  }, () => {})
 }
 
 // -----------------------------------------------------------------------------
@@ -400,17 +390,11 @@ const changeIbmKey = () => {
 // -----------------------------------------------------------------------------
 const copyQiskitCode = () => {
   const copyText = document.getElementById('qiskit-code-copy-btn')!
-  // @ts-expect-error
-  navigator.clipboard.writeText(window.translateCircuit())
+  navigator.clipboard.writeText(translateCircuit())
   copyText.textContent = 'Copied!'
   setTimeout(() => {
     copyText.textContent = 'Copy'
   }, 1000)
-}
-
-const scrollWorkbenchRight = () => {
-  const space = workspaceElement.getElementsByClassName('space')[0]
-  space.scrollLeft = space.scrollWidth
 }
 
 const toggleFullscreen = () => {
@@ -427,22 +411,6 @@ const toggleFullscreen = () => {
 // -----------------------------------------------------------------------------
 // Global Things
 // -----------------------------------------------------------------------------
-Object.assign(window, {
-  openExportDialog,
-  openExecuteDialog,
-  openNewGateDialog,
-  togglePalette,
-  toggleCode,
-  renameFile,
-  changeIbmKey,
-  newGateDialogInstance,
-  copyQiskitCode,
-  scrollWorkbenchRight,
-  toggleFullscreen
-  // updateTranspileResult,
-  // copyRecommendTranspile
-})
-
 // If everything loaded correctly, show the content
 requestAnimationFrame(() => {
   document.documentElement.style.opacity = ''
@@ -471,15 +439,49 @@ const changeIntroductionDialogPref = (el: HTMLInputElement) => {
     localStorage.setItem('quantoHideIntroduction', 'true')
 }
 
-Object.assign(window, {
-  changeIntroductionDialogPref,
-  introductionDialogInstance
-})
-
 document.body.onmousedown = function (e) {
   if (e.button === 1) return false
   return true
 }
+
+const attachOnClick = (el_id: string, fn: () => void) => {
+  document.getElementById(el_id)!.addEventListener('click', fn)
+}
+
+attachOnClick('fullscreen-btn', toggleFullscreen)
+attachOnClick('filename', renameFile)
+attachOnClick('ibm-key-btn', changeIbmKey)
+attachOnClick('exec-btn', openExecuteDialog)
+attachOnClick('toolbar-reset-program-btn', resetProgram)
+attachOnClick('toolbar-choose-and-load-file-btn', chooseAndLoadFile)
+attachOnClick('toolbar-save-file-btn', saveFile)
+attachOnClick('toolbar-open-export-dialog-btn', () => openExportDialog())
+attachOnClick('toolbar-gate-cut-selected-btn', gateCutSelected)
+attachOnClick('toolbar-gate-copy-selected-btn', gateCopySelected)
+attachOnClick('toolbar-gate-paste-clipboard-btn', gatePasteClipboard)
+attachOnClick('toolbar-gate-delete-selected-btn', gateDeleteSelected)
+attachOnClick('btn-toggle-palette', togglePalette)
+attachOnClick('toolbar-secondary-open-new-gate-dialog-btn', openNewGateDialog)
+attachOnClick('toolbar-secondary-append-new-qubit-btn', appendNewQubit)
+attachOnClick('toolbar-secondary-append-new-bit-btn', appendNewBit)
+attachOnClick('btn-toggle-code', toggleCode)
+attachOnClick('palette-open-new-gate-dialog-btn', openNewGateDialog)
+attachOnClick('palette-append-new-qubit-btn', appendNewQubit)
+attachOnClick('palette-append-new-bit-btn', appendNewBit)
+attachOnClick('qiskit-code-copy-btn', copyQiskitCode)
+attachOnClick('code-get-qasm-btn', () => openExportDialog('qasm'))
+attachOnClick('intro-dialog-new-file-btn', () => {
+  resetProgram(true)
+  introductionDialogInstance.close(true)
+})
+attachOnClick('intro-dialog-open-file-btn', () => {
+  chooseAndLoadFile()
+  introductionDialogInstance.close(true)
+})
+
+document.getElementById('intro-dialog-never-show-chk')!.addEventListener('change', function () {
+  changeIntroductionDialogPref(this as HTMLInputElement)
+})
 
 try {
   fetch('https://quantum-backend-flask.herokuapp.com')

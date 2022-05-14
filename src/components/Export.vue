@@ -69,6 +69,9 @@
 
 <script setup lang="ts">
 import { ref, watch, computed } from 'vue'
+import { getFileName } from '../render'
+import { Store } from '../store';
+import { translateCircuit } from '../translator';
 
 type EXPORT_ABLE_TYPE = "qasm" | "qiskit" | "png"
 const selectedType = ref<EXPORT_ABLE_TYPE>("qasm")
@@ -97,19 +100,18 @@ const exportDialogCompile = async () => {
   switch (selectedType.value) {
     case "qasm":
       try {
-        const resp = await fetch("https://quantum-backend-flask.herokuapp.com/qasm", {
+        const resp = await fetch("https://quantum-backend-flask.herokuapp.com/convert_qasm", {
           method: "POST",
           headers: {
             "Content-Type": "application/json"
           },
           body: JSON.stringify({
-            // @ts-expect-error
-            "code": window.translateCircuit()
+            "code": translateCircuit()
           }),
         })
         const data = await resp.json()
         if (data.error) throw new Error(data.error)
-        result.value = data.code
+        result.value = data.result
         fetching.value = 'IDLE'
       } catch (e) {
         result.value = (e as Error)?.message ?? "Some error happened"
@@ -118,18 +120,17 @@ const exportDialogCompile = async () => {
       break
     case "png":
       try {
-        const resp = await fetch("https://quantum-backend-flask.herokuapp.com/qiskit_draw", {
+        const resp = await fetch("https://quantum-backend-flask.herokuapp.com/convert_image", {
           method: "POST",
           headers: {
             "Content-Type": "application/json"
           },
           body: JSON.stringify({
-            // @ts-expect-error
-            "code": window.translateCircuit()
+            "code": translateCircuit()
           }),
         })
         const data = await resp.json()
-        result.value = data.pic
+        result.value = data.result
         fetching.value = 'IDLE'
       } catch (e) {
         result.value = (e as Error)?.message ?? "Some error happened"
@@ -137,8 +138,7 @@ const exportDialogCompile = async () => {
       }
       break
     case "qiskit":
-      // @ts-expect-error
-      result.value = window.translateCircuit()
+      result.value = translateCircuit()
       fetching.value = 'IDLE'
       break;
   }
@@ -165,10 +165,7 @@ const initExportDialog = (choice: EXPORT_ABLE_TYPE) => {
   exportDialogCompile()
 }
 
-Object.assign(
-  window,
-  { initExportDialog }
-)
+Store.initExportDialog = initExportDialog
 
 const saveData = () => {
   let urlData = null
@@ -188,8 +185,7 @@ const saveData = () => {
   const linkElement = document.createElement('a')
 
   linkElement.href = urlData
-  // @ts-expect-error
-  linkElement.download = `${window.getFileName()}.${fileType.value.ext}`
+  linkElement.download = `${getFileName()}.${fileType.value.ext}`
 
   linkElement.click()
 
