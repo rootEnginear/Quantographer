@@ -199,7 +199,7 @@
         </div>
       </template>
       <template v-else-if="overlay_status === 'EXEC_RESULT_CHART'">
-        <div class="box" style="margin: 0 16px">
+        <div class="box" style="margin: 0 16px;width:calc(100% - 32px)">
           <div class="row">
             <h2 class="col">Results:</h2>
             <button class="button is-ghost is-small" @click="switchResult('EXEC_RESULT')">
@@ -477,13 +477,30 @@ const executeCircuit = async () => {
             break;
           case 'QUEUED':
             // console.log('QUEUED', r)
-            const time_label = ['h', 'm', 's']
-            const time_split = r.est_time.split(".")[0].split(":").map((t: string, i: number) => ([t, time_label[i]]));
-            let time_process = time_split;
-            if (time_split[0][0] === '0')
-              time_process = time_split.splice(0, 1)
-            const time_string = time_process.map((t: string[]) => t.join('')).join(':')
+            const {
+              queue,
+              est_time // -> "12:34:56.7890"
+            } = r
+
+            if (!queue) {
+              overlay_status_text.value = `Your circuit is queued.`;
+              break;
+            }
+
+            if (!est_time) {
+              overlay_status_text.value = `Your circuit is queued, ${queue}.`;
+              break;
+            }
+
+            let time_label = ['h', 'm', 's']
+            let time_split = est_time.split(".")[0].split(":"); // ["12","34","56"]
+            if (time_split[0] === '0') {
+              time_label = time_label.splice(1)
+              time_split = time_split.splice(1)
+            }
+            const time_string = time_split.map((t: string, i: number) => t + time_label[i]).join(':')
             overlay_status_text.value = `Your circuit is queued, ${r.queue} left. (~${time_string})`
+
             break;
           case 'VALIDATING':
             // console.log('VALIDATING', r)
