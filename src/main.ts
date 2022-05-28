@@ -484,7 +484,7 @@ document.getElementById('intro-dialog-never-show-chk')!.addEventListener('change
 })
 
 try {
-  fetch('https://quantum-backend-flask.herokuapp.com')
+  fetch(import.meta.env.VITE_BACKEND)
 } catch (e: any) {
   //
 }

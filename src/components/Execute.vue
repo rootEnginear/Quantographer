@@ -310,7 +310,7 @@ const fetchAvailableBackends = async () => {
   overlay_status_text.value = 'Connecting to Backends...'
 
   try {
-    const resp = await fetch('https://quantum-backend-flask.herokuapp.com/available_backend', {
+    const resp = await fetch(import.meta.env.VITE_BACKEND + '/available_backend', {
       method: 'POST',
       headers: {
         'Content-Type': 'application/json'
@@ -343,7 +343,7 @@ const fetchAvailableBackends = async () => {
 const updateTranspileResult = async () => {
   transpile_result_status.value = 'FETCHING'
   try {
-    const resp = await fetch('https://quantum-backend-flask.herokuapp.com/transpile', {
+    const resp = await fetch(import.meta.env.VITE_BACKEND + '/transpile', {
       method: 'POST',
       headers: {
         'Content-Type': 'application/json'
@@ -374,7 +374,7 @@ const getRecommendation = async () => {
 
   try {
 
-    const resp = await fetch('https://quantum-backend-flask.herokuapp.com/recommend', {
+    const resp = await fetch(import.meta.env.VITE_BACKEND + '/recommend', {
       method: 'POST',
       headers: {
         'Content-Type': 'application/json'
@@ -441,7 +441,7 @@ const executeCircuit = async () => {
   overlay_status.value = 'FETCHING'
   overlay_status_text.value = 'Sending circuit information...'
 
-  const ws = new WebSocket('wss://quantum-backend-flask.herokuapp.com/run')
+  const ws = new WebSocket(import.meta.env.VITE_BACKEND.replace(/^http/, 'ws') + '/run')
 
   try {
     await new Promise((res, rej) => {

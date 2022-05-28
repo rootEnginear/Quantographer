@@ -100,7 +100,7 @@ const exportDialogCompile = async () => {
   switch (selectedType.value) {
     case "qasm":
       try {
-        const resp = await fetch("https://quantum-backend-flask.herokuapp.com/convert_qasm", {
+        const resp = await fetch(import.meta.env.VITE_BACKEND + "/convert_qasm", {
           method: "POST",
           headers: {
             "Content-Type": "application/json"
@@ -120,7 +120,7 @@ const exportDialogCompile = async () => {
       break
     case "png":
       try {
-        const resp = await fetch("https://quantum-backend-flask.herokuapp.com/convert_image", {
+        const resp = await fetch(import.meta.env.VITE_BACKEND + "/convert_image", {
           method: "POST",
           headers: {
             "Content-Type": "application/json"
