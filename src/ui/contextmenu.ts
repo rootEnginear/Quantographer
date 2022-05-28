@@ -178,7 +178,7 @@ const updateCtx = async (target: HTMLElement | { getBoundingClientRect: () => an
 }
 
 
-let ctx_timeout: number | undefined
+let ctx_timeout: NodeJS.Timeout | undefined
 
 const showCtx = (event: MouseEvent) => {
   workbenchLocation = getLocationInfo(event.offsetX, event.offsetY)

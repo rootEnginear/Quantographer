@@ -25,7 +25,7 @@ const updateTooltip = (target: HTMLElement | { getBoundingClientRect: () => any 
 const isMouseMoveEvent = (event: Event | MouseEvent): event is MouseEvent =>
   event.type === 'mousemove'
 
-let tooltip_timeout: number | undefined
+let tooltip_timeout: NodeJS.Timeout | undefined
 
 const showTooltip = (target: HTMLElement, event: Event | MouseEvent) => {
   clearTimeout(tooltip_timeout)
