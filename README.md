@@ -2,7 +2,7 @@
 
 # Quantographer
 
-> This project is a part of CPE401 Computer Engineering Project I and CPE402 Computer Engineering Project II, King Mongkut's University of Technology Thonburi. For detailed information, please read the project report (soon).
+> This project is a part of CPE401 Computer Engineering Project I and CPE402 Computer Engineering Project II, King Mongkut's University of Technology Thonburi. For detailed information, please read the project report [here](https://github.com/rootEnginear/Quantographer/blob/main/No49_FullReport.pdf).
 
 In this project, we have created a quantum circuit editor to help end users comprehend,
 analyze, optimize, and select the statistically optimum transpiler for their quantum circuit.
